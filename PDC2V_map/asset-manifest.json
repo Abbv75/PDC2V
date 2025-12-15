@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/PDC2V_map/static/css/main.ee8e2cf0.css",
-    "main.js": "/PDC2V_map/static/js/main.d8a5a446.js",
+    "main.js": "/PDC2V_map/static/js/main.f0dde7c5.js",
     "static/js/729.73f7dcbd.chunk.js": "/PDC2V_map/static/js/729.73f7dcbd.chunk.js",
     "static/js/453.fb987967.chunk.js": "/PDC2V_map/static/js/453.fb987967.chunk.js",
     "static/media/IvoryCoast.zip": "/PDC2V_map/static/media/IvoryCoast.c9963ce7bb369f695bbe.zip",
@@ -17,12 +17,12 @@
     "static/media/toggle.svg": "/PDC2V_map/static/media/toggle.4cb77f5b444ed35e8e2e.svg",
     "index.html": "/PDC2V_map/index.html",
     "main.ee8e2cf0.css.map": "/PDC2V_map/static/css/main.ee8e2cf0.css.map",
-    "main.d8a5a446.js.map": "/PDC2V_map/static/js/main.d8a5a446.js.map",
+    "main.f0dde7c5.js.map": "/PDC2V_map/static/js/main.f0dde7c5.js.map",
     "729.73f7dcbd.chunk.js.map": "/PDC2V_map/static/js/729.73f7dcbd.chunk.js.map",
     "453.fb987967.chunk.js.map": "/PDC2V_map/static/js/453.fb987967.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ee8e2cf0.css",
-    "static/js/main.d8a5a446.js"
+    "static/js/main.f0dde7c5.js"
   ]
 }
