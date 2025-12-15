@@ -1,8 +1,12 @@
 export const COUCHE_DE_DONNEES_LISTE = [
     {
-        name: "Abidjan",
-        filePath: require("../assets/leaflet.shapefile/Abidjan.zip"),
-        // imageUrl: require("../assets/images/region/bamako.png")
+        name: "Côte d'Ivoire",
+        filePath: require("../assets/leaflet.shapefile/IvoryCoast.zip"),
+        bound: [
+        [4.3, -8.6],   // Sud-Ouest
+        [10.7, -2.5]   // Nord-Est
+    ],
+    coordonnee: [7.54, -5.55]
     },
     {
         name: "Bamako",

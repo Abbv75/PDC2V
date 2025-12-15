@@ -26,7 +26,7 @@ const Header = () => {
                 ))}
 
                 <Typography level='h1' fontSize={15} width={300}>
-                    Programme Sectoriel Forêts et Environnement (PDC2V-Cameroun)
+                    Projet de Développement des Chaînes de Valeurs Vivrières (PDC2V)
                 </Typography>
             </Stack>
 
@@ -36,7 +36,7 @@ const Header = () => {
                 color='success'
                 variant='plain'
                 onClick={() => {
-                    window.location.href = 'https://sise.fc-PDC2V.org/'
+                    window.location.href = 'https://sise-pdc2v.org/'
                 }}
             />
 

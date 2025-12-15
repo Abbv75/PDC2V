@@ -21,7 +21,7 @@ const Cartographie = () => {
         zoomLevel
     } = useContext(AppContext);
 
-    const mainCouche = COUCHE_DE_DONNEES_LISTE[7];
+    const mainCouche = COUCHE_DE_DONNEES_LISTE[0];
 
     return (
         <Stack
