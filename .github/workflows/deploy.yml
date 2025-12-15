@@ -19,6 +19,6 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./build/
-          server-dir: /web/
+          local-dir: ./PDC2V_map/
+          server-dir: /web/PDC2V_map/
           protocol: ftp
