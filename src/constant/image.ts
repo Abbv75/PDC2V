@@ -1,11 +1,10 @@
 import logo from "../assets/images/logo.png";
-import ruche from "../assets/images/ruche.png";
-import minister from "../assets/images/minister.png";
-import jhgv from "../assets/images/jhgv.png";
+import bankMondiale from "../assets/images/bank-mondiale.jpg";
+import armorieLogo from "../assets/images/armorieLogo.png";
+
 
 export const IMAGE = {
     logo,
-    ruche,
-    minister,
-    jhgv,
+    bankMondiale,
+    armorieLogo,
 }

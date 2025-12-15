@@ -1,17 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.2ae13fff.css",
-    "main.js": "/static/js/main.3a481528.js",
+    "main.js": "/static/js/main.1fac24a1.js",
     "static/js/729.73f7dcbd.chunk.js": "/static/js/729.73f7dcbd.chunk.js",
     "static/js/453.fb987967.chunk.js": "/static/js/453.fb987967.chunk.js",
     "static/media/IvoryCoast.zip": "/static/media/IvoryCoast.c9963ce7bb369f695bbe.zip",
     "static/media/Cameroun.zip": "/static/media/Cameroun.08389eb9c007877dddfc.zip",
+    "static/media/armorieLogo.png": "/static/media/armorieLogo.ab9e4fda31497482fe78.png",
     "static/media/BF.zip": "/static/media/BF.441c658eda4b4fd9a95e.zip",
-    "static/media/logo.png": "/static/media/logo.d629e80938dbb69f57d4.png",
+    "static/media/bank-mondiale.jpg": "/static/media/bank-mondiale.eeb71a53d6fbd900bdb8.jpg",
     "static/media/CO01010.zip": "/static/media/CO01010.2c52033cc0a2438bacf7.zip",
-    "static/media/minister.png": "/static/media/minister.1d65644c8d8501e50994.png",
-    "static/media/jhgv.png": "/static/media/jhgv.7700857ade60121b83d7.png",
-    "static/media/ruche.png": "/static/media/ruche.b5c0c08807a9f886f080.png",
     "static/media/Bandiagara.zip": "/static/media/Bandiagara.215559757dc8ece73674.zip",
     "static/media/Dioila.zip": "/static/media/Dioila.7ae9f824deb667714006.zip",
     "static/media/Bamako.zip": "/static/media/Bamako.ccbcea189a2510953130.zip",
@@ -19,12 +17,12 @@
     "static/media/toggle.svg": "/static/media/toggle.4cb77f5b444ed35e8e2e.svg",
     "index.html": "/index.html",
     "main.2ae13fff.css.map": "/static/css/main.2ae13fff.css.map",
-    "main.3a481528.js.map": "/static/js/main.3a481528.js.map",
+    "main.1fac24a1.js.map": "/static/js/main.1fac24a1.js.map",
     "729.73f7dcbd.chunk.js.map": "/static/js/729.73f7dcbd.chunk.js.map",
     "453.fb987967.chunk.js.map": "/static/js/453.fb987967.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2ae13fff.css",
-    "static/js/main.3a481528.js"
+    "static/js/main.1fac24a1.js"
   ]
 }
