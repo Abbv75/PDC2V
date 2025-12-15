@@ -2,7 +2,7 @@
   "name": "PDC2V-map",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "/PDC2V_map/",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.11.4",
