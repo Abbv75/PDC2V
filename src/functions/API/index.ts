@@ -1,0 +1,7 @@
+export { getVillage } from "./village/get"
+export { getCommune } from "./commune/get"
+export { getCoucheDonnee } from "./coucheDonnee/get"
+export { getProvince } from "./province/get"
+export { getRegion } from "./region/get"
+export {default as getAllRapportCarto} from "./rapportCarto/getAllRapport"
+export {default as getRapportCarto} from "./rapportCarto/getRapport"
