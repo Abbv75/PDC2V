@@ -139,7 +139,7 @@ const App = () => {
         <Header />
 
         <Stack flex={1} direction="row">
-          <NavBar />
+          {/* <NavBar /> */}
           <Cartographie />
         </Stack>
 
@@ -147,9 +147,7 @@ const App = () => {
         <SideBar />
 
         <ShapeFileColorEditer />
-
-
-
+        
         <AddIconForm isOpen={addImageIsOpen} setIsOpen={setaddImageIsOpen} />
 
       </Stack>
