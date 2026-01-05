@@ -3,10 +3,12 @@ import ShapeFileContainer from 'components/Cartographie/ShapeFileContainer';
 import { REACT_APP_SHAPE_FILE_URL } from 'constant';
 import { AppContext } from 'providers';
 import { useContext } from 'react';
+import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
 import { SHAPE_OBJECT_T } from 'types';
 
 const CommuneShapFiles = () => {
-    const { localite, coucheDeDonneesElementConfig } = useContext(AppContext);
+    const { localite, } = useContext(AppContext);
+    const { coucheDeDonneesElementConfig } = useCoucheDeDonneeStore();
 
     return (
         <ShapeFileContainer

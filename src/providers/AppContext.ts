@@ -39,6 +39,4 @@ export const AppContext = createContext({} as {
     } | undefined>,
     allRapportCartoSelected: { data: RAPORT_CARTO_T, color?: string }[],
     setallRapportCartoSelected: USE_STATE_T<{ data: RAPORT_CARTO_T, color?: string }[]>,
-    coucheDeDonneesElementConfig: coucheDeDonneesElementConfig_T,
-    setcoucheDeDonneesElementConfig: USE_STATE_T<coucheDeDonneesElementConfig_T>
 });

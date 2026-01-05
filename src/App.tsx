@@ -3,7 +3,7 @@ import Cartographie from "./components/Cartographie"
 //@ts-ignore
 import "./assets/css/leaflet.css"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { COUCHE_DE_DONNEES_LISTE, FOND_DE_CARTE, ICON } from "./constant"
+import { ICON } from "./constant"
 import SideBar from "./components/SideBar"
 import { ToastContainer } from "react-toastify"
 import { COMMUNE_T, GET_ALL_FEUILLE, GET_ALL_REQUETE_CARTE_T, PROVINCE_T, RAPORT_CARTO_T, REGION_T, VILLAGE_T } from "types"
@@ -14,7 +14,6 @@ import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import { coucheDeDonneesElementConfig_T } from "types/AppT"
 import CartoMenu from "components/CartoMenu"
-import NavBar from "components/Cartographie/NavBar"
 
 export const urlparams = new URLSearchParams(window.location.search);
 
@@ -24,12 +23,6 @@ const App = () => {
   const [getAllFicheData, setgetAllFicheData] = useState(null as GET_ALL_FEUILLE | null);
   const [ficheDynamiquesData, setficheDynamiquesData] = useState([] as { title: string, icon: any }[]);
   const [legendeSection, setlegendeSection] = useState({});
-
-  // couche de donnees
-  const [coucheDeDonneesElementConfig, setcoucheDeDonneesElementConfig] = useState<coucheDeDonneesElementConfig_T>({
-    showShapefileName: true,
-    showShapefilePopup: false
-  });
 
   // rapport cartographique
   const [allRapportCartoSelected, setallRapportCartoSelected] = useState<{ data: RAPORT_CARTO_T, color?: string }[]>([]);
@@ -118,8 +111,6 @@ const App = () => {
         setShapeFileColorEditerDefaultValues,
         allRapportCartoSelected,
         setallRapportCartoSelected,
-        coucheDeDonneesElementConfig,
-        setcoucheDeDonneesElementConfig
       }}
     >
       <Stack

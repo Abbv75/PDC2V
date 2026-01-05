@@ -1,12 +1,8 @@
 import ShapeFileContainer from 'components/Cartographie/ShapeFileContainer';
-import { AppContext } from 'providers';
-import { useContext } from 'react';
 import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
 
 const CoucheDonneeElement = () => {
-    const { coucheDeDonneesElementConfig } = useContext(AppContext);
-
-    const {coucheDeDonneesSelectedListe} = useCoucheDeDonneeStore();
+    const { coucheDeDonneesSelectedListe, coucheDeDonneesElementConfig } = useCoucheDeDonneeStore();
 
     return (
         <ShapeFileContainer
