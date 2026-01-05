@@ -5,12 +5,14 @@ import getAllRequeteCarte from "functions/API/requeteCartographique/getAllRequet
 import { AppContext } from "providers";
 import ImagePicker from "components/ImagePicker/ImagePicker";
 import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
+import useIconMapStore from "stores/iconMap/useIconMapStore";
 
 const FicheDeDonnee = () => {
     const {
         setlegendeSection,
-        iconList,
     } = useContext(AppContext);
+    const { iconList } = useIconMapStore();
+
     const {
         allRequeteCartoSelected,
     } = useRequeteCartoStore();

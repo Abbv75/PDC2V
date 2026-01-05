@@ -12,8 +12,6 @@ export const AppContext = createContext({} as {
         rapportCarto?: JSX.Element
     }, setlegendeSection: USE_STATE_T,
     addImageIsOpen: boolean, setaddImageIsOpen: USE_STATE_T,
-    loadIconList: any,
-    iconList: string[],
     showFiligram?: boolean, setshowFiligram?: USE_STATE_T,
     showShapeFileColorEditer: boolean, setshowShapeFileColorEditer: USE_STATE_T<boolean>,
     ShapeFileColorEditerSubmitFunction?: ((borderColor?: string, backgroundColor?: string, reset?: boolean) => any),

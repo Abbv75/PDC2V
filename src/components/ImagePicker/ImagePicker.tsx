@@ -6,9 +6,11 @@ import { green } from '@mui/material/colors'
 import { useContext, useState } from 'react'
 import { AppContext } from 'providers'
 import IconItem from './IconItem'
+import useIconMapStore from 'stores/iconMap/useIconMapStore'
 
 const ImagePicker = ({ onchange }: { onchange?: (value: string) => any }) => {
-    const { setaddImageIsOpen, iconList } = useContext(AppContext);
+    const { setaddImageIsOpen } = useContext(AppContext);
+    const { iconList } = useIconMapStore();
 
     const [isOpen, setisOpen] = useState(false);
     const [selectedIndex, setselectedIndex] = useState(undefined as number | undefined);

@@ -5,12 +5,14 @@ import getAllFeuille from "functions/API/feuille/getAllFeuille";
 import ImagePicker from "components/ImagePicker/ImagePicker";
 import { CardMedia } from "@mui/material";
 import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
+import useIconMapStore from "stores/iconMap/useIconMapStore";
 
 const FichesDynamiques = () => {
     const {
         setlegendeSection,
-        iconList
     } = useContext(AppContext);
+    
+    const { iconList } = useIconMapStore();
 
     const {
         getAllFicheData,

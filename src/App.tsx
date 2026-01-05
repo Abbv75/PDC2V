@@ -13,15 +13,19 @@ import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import CartoMenu from "components/CartoMenu"
 import NavBar from "components/Cartographie/NavBar"
+import useIconMapStore from "stores/iconMap/useIconMapStore"
 
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
+  const {loadIconList} = useIconMapStore();
+  const setIconMapData = useIconMapStore((state) => state.set);
+  
+
   const [legendeSection, setlegendeSection] = useState({});
 
   // imagePicker element
   const [addImageIsOpen, setaddImageIsOpen] = useState(false);
-  const [iconList, seticonList] = useState(Object.values(ICON) as string[]);
 
   // FiliGramZone
   const [showFiligram, setshowFiligram] = useState(false);
@@ -37,18 +41,6 @@ const App = () => {
     backgroundColor?: string
   } | undefined>(undefined)
 
-  const loadIconList = useCallback(async () => {
-    try {
-      const res = await getAllIcon();
-
-      seticonList([...Object.values(ICON), ...res?.map(
-        ({ file }) => `https://sise-pdc2v.org/icon_carto/${file}`
-      ) ?? []]);
-    } catch (error) {
-      return;
-    }
-  }, [])
-
   useEffect(() => {
     loadIconList();
   }, []);
@@ -63,8 +55,6 @@ const App = () => {
         setlegendeSection,
         addImageIsOpen,
         setaddImageIsOpen,
-        loadIconList,
-        iconList,
         showFiligram,
         setshowFiligram,
         showShapeFileColorEditer,
