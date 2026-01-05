@@ -1,7 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Checkbox, LinearProgress, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../providers";
-import { LOADING_STATE_T, LOCALITE_REGION_T } from "types";
+import { LOADING_STATE_T } from "types";
 import { getAllRegion } from "functions/API/region/getAll";
 import useLocaliteStore from "stores/localite/useLocaliteStore";
 
@@ -9,6 +9,7 @@ const LocaliteCouche = () => {
     const {
         setlegendeSection,
     } = useContext(AppContext);
+    
     const {
         data,
         localiteRegionsSelected,
@@ -39,56 +40,24 @@ const LocaliteCouche = () => {
                 setLocaliteData({localiteRegionsSelected : localiteRegionsSelected.includes(element) 
                     ? localiteRegionsSelected.filter(item => item.code_region !== element.code_region) 
                     : [...localiteRegionsSelected, element]});
-                // setlocaliteRegionsSelected((prev: any) => {
-                //     const exists = prev.find((item: any) => item.code_region === element.code_region);
-                //     if (exists) {
-                //         return prev.filter((item: any) => item.code_region !== element.code_region);
-                //     } else {
-                //         return [...prev, element];
-                //     }
-                // });
                 break;
 
             case 'departement':
                 setLocaliteData({localiteDepartementsSelected : localiteRegionsSelected.includes(element) 
                     ? localiteDepartementsSelected.filter(item => item.code_departement !== element.code_departement) 
                     : [...localiteRegionsSelected, element]});
-                // setlocaliteDepartementsSelected((prev: any) => {
-                //     const exists = prev.find((item: any) => item.code_departement === element.code_departement);
-                //     if (exists) {
-                //         return prev.filter((item: any) => item.code_departement !== element.code_departement);
-                //     } else {
-                //         return [...prev, element];
-                //     }
-                // });
                 break;
 
             case 'commune':
                 setLocaliteData({localiteCommunesSelected : localiteRegionsSelected.includes(element) 
                     ? localiteCommunesSelected.filter(item => item.code_commune !== element.code_commune) 
                     : [...localiteRegionsSelected, element]});
-                // setlocaliteCommunesSelected((prev: any) => {
-                //     const exists = prev.find((item: any) => item.code_commune === element.code_commune);
-                //     if (exists) {
-                //         return prev.filter((item: any) => item.code_commune !== element.code_commune);
-                //     } else {
-                //         return [...prev, element];
-                //     }
-                // });
                 break;
 
             case 'village':
                 setLocaliteData({localiteVillagesSelected : localiteRegionsSelected.includes(element) 
                     ? localiteVillagesSelected.filter(item => item.nom_village !== element.nom_village) 
                     : [...localiteRegionsSelected, element]});
-                // setlocaliteVillagesSelected((prev: any) => {
-                //     const exists = prev.find((item: any) => item.code_village === element.code_village);
-                //     if (exists) {
-                //         return prev.filter((item: any) => item.code_village !== element.code_village);
-                //     } else {
-                //         return [...prev, element];
-                //     }
-                // });
                 break;
 
             default:
