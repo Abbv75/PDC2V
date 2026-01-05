@@ -68,14 +68,6 @@ const CartoMenu = () => {
                 >
                     <Stack
                         gap={1}
-                        // maxHeight={350}
-                        sx={{
-                            // overflowY: "scroll",
-                            // pr: 1,
-                            // "&::-webkit-scrollbar": {
-                            //     display: "none"
-                            // }
-                        }}
                     >
                         <FontAwesomeIcon
                             icon={faArrowAltCircleDown}

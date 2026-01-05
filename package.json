@@ -33,6 +33,7 @@
     "leaflet": "^1.9.4",
     "leaflet-minimap": "^3.6.1",
     "nth-check": "^2.1.1",
+    "PDC2V-map": "file:",
     "postcss": "^8.4.31",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
@@ -43,7 +44,6 @@
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.3",
-    "PDC2V-map": "file:",
     "shapefile": "^0.6.6",
     "shpjs": "^6.1.0",
     "svgo": "^3.3.2",
@@ -80,6 +80,7 @@
     ]
   },
   "devDependencies": {
+    "@iconify/react": "^6.0.2",
     "@types/downloadjs": "^1.4.6",
     "@types/file-saver": "^2.0.7",
     "@types/leaflet": "^1.9.12",

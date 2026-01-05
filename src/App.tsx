@@ -14,6 +14,7 @@ import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import { coucheDeDonneesElementConfig_T } from "types/AppT"
 import CartoMenu from "components/CartoMenu"
+import NavBar from "components/Cartographie/NavBar"
 
 export const urlparams = new URLSearchParams(window.location.search);
 
@@ -137,13 +138,17 @@ const App = () => {
 
         <Header />
 
+        <Stack flex={1} direction="row">
+          <NavBar />
+          <Cartographie />
+        </Stack>
+
+        <CartoMenu />
         <SideBar />
 
         <ShapeFileColorEditer />
 
-        <CartoMenu />
 
-        <Cartographie />
 
         <AddIconForm isOpen={addImageIsOpen} setIsOpen={setaddImageIsOpen} />
 

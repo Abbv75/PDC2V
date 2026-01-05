@@ -7,7 +7,7 @@ import CurrentCommuneElement from "../../features/CurrentCommuneElement";
 import CoucheDonneeElement from "../../features/CoucheDonneeElement";
 import CurrentProvinceElement from "features/CurrentProvinceElement";
 import CurrentRegionElement from "features/CurrentRegionElement";
-import { COLOR, COUCHE_DE_DONNEES_LISTE, LOCATION } from "constant";
+import { COLOR, COUCHE_DE_DONNEES_LISTE } from "constant";
 import FicheDeDonneeElement from "features/FicheDeDonneeElement";
 import FichesDynamiquesElement from "features/FichesDynamiquesElement";
 import ConfigZone from "./ConfigZone";
@@ -25,13 +25,9 @@ const Cartographie = () => {
 
     return (
         <Stack
-            height={'100%'}
-            bgcolor={COLOR.white}
-            borderRadius={10}
-            direction={"row"}
+            width={'100%'}
         >
             <Stack
-                width={"100%"}
                 height={"100%"}
                 ref={mapRef}
             >
@@ -49,7 +45,7 @@ const Cartographie = () => {
                     maxBounds={mainCouche.bound as any}
                     maxBoundsViscosity={1} // 1.0 = Bloque totalement. 0.5 = Effet élastique.
                 >
-                    <ConfigZone />
+                    {/* <ConfigZone /> */}
 
                     <CurrentVillageElement />
 
