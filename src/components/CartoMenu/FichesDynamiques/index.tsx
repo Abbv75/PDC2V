@@ -6,18 +6,21 @@ import getAllFeuille from "functions/API/feuille/getAllFeuille";
 import { ICON } from "constant";
 import ImagePicker from "components/ImagePicker/ImagePicker";
 import { CardMedia } from "@mui/material";
+import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
 
 const FichesDynamiques = () => {
     const {
-        ficheTitleSelected,
-        setficheTitleSelected,
-        getAllFicheData,
-        setgetAllFicheData,
-        ficheDynamiquesData,
-        setficheDynamiquesData,
         setlegendeSection,
         iconList
     } = useContext(AppContext);
+
+    const {
+        getAllFicheData,
+        ficheDynamiquesData,
+        ficheTitleSelected,
+    } = useFicheDynamiquesStore();
+    const setficheDynamiquesData = useFicheDynamiquesStore((state) => state.set);
+
 
     const [ficheTitle, setficheTitle] = useState([] as string[]);
     const [loadingState, setloadingState] = useState(null as LOADING_STATE_T);
@@ -33,12 +36,12 @@ const FichesDynamiques = () => {
             setficheTitle(titles);
 
             // Initialiser les icônes par défaut
-            setficheDynamiquesData(titles.map(title => ({
+            setficheDynamiquesData({ficheDynamiquesData: titles.map(title => ({
                 title,
                 icon: iconList[0]
-            })));
-
-            setgetAllFicheData(res);
+            }))});
+  
+            setficheDynamiquesData({ getAllFicheData: res });
         } finally {
             setloadingState(null);
         }
@@ -48,9 +51,9 @@ const FichesDynamiques = () => {
         const isInList = ficheTitleSelected.includes(element);
 
         if (isInList) {
-            setficheTitleSelected((prev: string[]) => prev.filter(v => v !== element));
+            setficheDynamiquesData({ficheTitleSelected: ficheTitleSelected.filter(v => v !== element)});
         } else {
-            setficheTitleSelected((prev: string[]) => [...prev, element]);
+            setficheDynamiquesData({ficheTitleSelected: [...ficheTitleSelected, element]});
         }
     }
 

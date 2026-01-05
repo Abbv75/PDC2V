@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { ICON } from "./constant"
 import SideBar from "./components/SideBar"
 import { ToastContainer } from "react-toastify"
-import { GET_ALL_FEUILLE, RAPORT_CARTO_T } from "types"
 import { AppContext } from "providers"
 import AddIconForm from "features/AddIconForm"
 import getAllIcon from "functions/API/icon/getAllIcon"
@@ -17,9 +16,6 @@ import CartoMenu from "components/CartoMenu"
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
-  const [ficheTitleSelected, setficheTitleSelected] = useState([] as string[]);
-  const [getAllFicheData, setgetAllFicheData] = useState(null as GET_ALL_FEUILLE | null);
-  const [ficheDynamiquesData, setficheDynamiquesData] = useState([] as { title: string, icon: any }[]);
   const [legendeSection, setlegendeSection] = useState({});
 
   // imagePicker element
@@ -62,12 +58,6 @@ const App = () => {
     <AppContext.Provider
       value={{
         mapRef,
-        ficheTitleSelected,
-        setficheTitleSelected,
-        getAllFicheData,
-        setgetAllFicheData,
-        ficheDynamiquesData,
-        setficheDynamiquesData,
         legendeSection,
         setlegendeSection,
         addImageIsOpen,

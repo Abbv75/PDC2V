@@ -2,21 +2,17 @@ import { faDownload, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Option, Select, Stack, Typography } from '@mui/joy';
 import { green } from '@mui/material/colors';
-import { useCallback, useContext, useState } from 'react';
-import { AppContext } from 'providers';
+import { useCallback, useState } from 'react';
 import { LOADING_STATE_T } from 'types';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import RapportDocument from './RapportDocument'; // Le composant PDF que tu dois créer
 import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
+import useFicheDynamiquesStore from 'stores/ficheDynamiques/useFicheDynamiquesStore';
 
 const RapportZone = () => {
-    const {
-        ficheTitleSelected,
-        ficheDynamiquesData,
-        getAllFicheData
-    } = useContext(AppContext);
+    const { getAllFicheData, ficheDynamiquesData, ficheTitleSelected } = useFicheDynamiquesStore();
     
     const {allRequeteCartoSelected} = useRequeteCartoStore();
 
