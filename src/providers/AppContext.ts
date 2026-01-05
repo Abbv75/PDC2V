@@ -4,10 +4,7 @@ import { FOND_DE_CARTE } from "../constant";
 import { coucheDeDonneesElementConfig_T } from "types/AppT";
 
 export const AppContext = createContext({} as {
-    currentMapSelected: typeof FOND_DE_CARTE[0], setcurrentMapSelected: USE_STATE_T,
     mapRef: React.RefObject<HTMLDivElement>,
-    coucheDeDonneesSelectedListe: SHAPE_OBJECT_T[], setcoucheDeDonneesSelectedListe: USE_STATE_T,
-    zoomLevel: number, setzoomLevel?: USE_STATE_T,
     allRequeteCartoSelected: { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[], setallRequeteCartoSelected: USE_STATE_T,
     ficheTitleSelected: string[], setficheTitleSelected: USE_STATE_T,
     getAllFicheData: null | GET_ALL_FEUILLE, setgetAllFicheData: USE_STATE_T,

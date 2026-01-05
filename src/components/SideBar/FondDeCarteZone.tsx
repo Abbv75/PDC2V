@@ -2,12 +2,12 @@ import { Divider, Radio, Stack } from '@mui/joy'
 import { grey } from '@mui/material/colors'
 import { FOND_DE_CARTE } from 'constant'
 import { Fragment } from 'react/jsx-runtime'
-import { useContext, useState } from 'react'
-import { AppContext } from '../../providers'
+import { useState } from 'react'
+import useMapStore from 'stores/map/useMapStore'
 
 const FondDeCarteZone = () => {
     const [currentIndex, setcurrentIndex] = useState(0);
-    const { setcurrentMapSelected } = useContext(AppContext);
+    const setMapData = useMapStore((state) => state.set);
 
     return (
         <Stack
@@ -29,7 +29,7 @@ const FondDeCarteZone = () => {
                             onChange={({ target }) => {
                                 if (target.checked) {
                                     setcurrentIndex(index);
-                                    setcurrentMapSelected(FOND_DE_CARTE[index]);
+                                    setMapData({ currentMapSelected: FOND_DE_CARTE[index] });
                                 }
                             }}
                             sx={{

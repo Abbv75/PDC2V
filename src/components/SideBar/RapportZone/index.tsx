@@ -8,15 +8,17 @@ import { LOADING_STATE_T } from 'types';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import RapportDocument from './RapportDocument'; // Le composant PDF que tu dois créer
+import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
 
 const RapportZone = () => {
     const {
-        coucheDeDonneesSelectedListe,
         allRequeteCartoSelected,
         ficheTitleSelected,
         ficheDynamiquesData,
         getAllFicheData
     } = useContext(AppContext);
+
+    const {coucheDeDonneesSelectedListe} = useCoucheDeDonneeStore();
 
     const [printLoadingState, setprintLoadingState] = useState<LOADING_STATE_T>(null);
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { urlparams } from '../../App';
 import { toast } from 'react-toastify';
@@ -6,13 +6,12 @@ import { getProvince } from '../../functions/API';
 import ShapeFileContainer from '../../components/Cartographie/ShapeFileContainer';
 import { PROVINCE_T, SHAPE_OBJECT_T } from 'types';
 import { blue, orange } from '@mui/material/colors';
-import { AppContext } from 'providers';
 import { REACT_APP_SHAPE_FILE_URL } from 'constant';
+import useMapStore from 'stores/map/useMapStore';
 
 const CurrentProvinceElement = () => {
     const [codeProvince] = useState(urlparams.get('codeDepartement'));
-
-    const { zoomLevel } = useContext(AppContext);
+    const { zoomLevel } = useMapStore();
 
     const [currentProvince, setcurrentProvince] = useState(undefined as PROVINCE_T | undefined);
 

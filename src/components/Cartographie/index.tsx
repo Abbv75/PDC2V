@@ -7,19 +7,20 @@ import CurrentCommuneElement from "../../features/CurrentCommuneElement";
 import CoucheDonneeElement from "../../features/CoucheDonneeElement";
 import CurrentProvinceElement from "features/CurrentProvinceElement";
 import CurrentRegionElement from "features/CurrentRegionElement";
-import { COLOR, COUCHE_DE_DONNEES_LISTE } from "constant";
+import { COUCHE_DE_DONNEES_LISTE } from "constant";
 import FicheDeDonneeElement from "features/FicheDeDonneeElement";
 import FichesDynamiquesElement from "features/FichesDynamiquesElement";
-import ConfigZone from "./ConfigZone";
 import LocaliteElement from "features/LocaliteElement";
 import RapportCartoElement from "features/RapportCartoElement";
 import CountryMask from "./CountryMask";
+import useMapStore from "stores/map/useMapStore";
 
 const Cartographie = () => {
     const {
         mapRef,
-        zoomLevel
     } = useContext(AppContext);
+    
+    const { zoomLevel } = useMapStore();
 
     const mainCouche = COUCHE_DE_DONNEES_LISTE[0];
 

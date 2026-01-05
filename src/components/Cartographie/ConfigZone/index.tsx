@@ -1,17 +1,16 @@
-import { ScaleControl, TileLayer } from "react-leaflet";
-import { useContext } from "react";
+import { TileLayer } from "react-leaflet";
 import { MiniMapControle } from "./MiniMapControle";
-import { AppContext } from "../../../providers";
 import MapZoomHandler from "./MapZoomHandler";
 import LegendeZone from "../LegendeZone";
 import CompassControl from "./CompassControl";
 import EchelleControle from "./EchelleControle";
 import FiliGramZone from "../FiliGramZone.tsx";
+import useMapStore from "stores/map/useMapStore";
 
 const ConfigZone = () => {
     const {
         currentMapSelected,
-    } = useContext(AppContext);
+    } = useMapStore();
 
     return (
         <>

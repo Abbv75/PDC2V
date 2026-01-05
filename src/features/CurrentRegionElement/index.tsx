@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { urlparams } from '../../App';
 import { toast } from 'react-toastify';
@@ -6,13 +6,13 @@ import { getRegion } from '../../functions/API';
 import ShapeFileContainer from '../../components/Cartographie/ShapeFileContainer';
 import { REGION_T, SHAPE_OBJECT_T } from 'types';
 import { blue, orange, red } from '@mui/material/colors';
-import { AppContext } from 'providers';
 import { REACT_APP_SHAPE_FILE_URL } from 'constant';
+import useMapStore from 'stores/map/useMapStore';
 
 const CurrentRegionElement = () => {
+    const { zoomLevel } = useMapStore();
+    
     const [codeRegion] = useState(urlparams.get('codeRegion'));
-
-    const { zoomLevel } = useContext(AppContext);
 
     const [currentRegion, setcurrentRegion] = useState(undefined as REGION_T | undefined);
 

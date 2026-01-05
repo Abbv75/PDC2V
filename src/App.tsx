@@ -19,8 +19,6 @@ import NavBar from "components/Cartographie/NavBar"
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
-  const [currentMapSelected, setcurrentMapSelected] = useState(FOND_DE_CARTE[0]);
-  const [zoomLevel, setzoomLevel] = useState(7);
   const [allRequeteCartoSelected, setallRequeteCartoSelected] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
   const [ficheTitleSelected, setficheTitleSelected] = useState([] as string[]);
   const [getAllFicheData, setgetAllFicheData] = useState(null as GET_ALL_FEUILLE | null);
@@ -28,7 +26,6 @@ const App = () => {
   const [legendeSection, setlegendeSection] = useState({});
 
   // couche de donnees
-  const [coucheDeDonneesSelectedListe, setcoucheDeDonneesSelectedListe] = useState([] as typeof COUCHE_DE_DONNEES_LISTE);
   const [coucheDeDonneesElementConfig, setcoucheDeDonneesElementConfig] = useState<coucheDeDonneesElementConfig_T>({
     showShapefileName: true,
     showShapefilePopup: false
@@ -91,13 +88,7 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
-        currentMapSelected,
         mapRef,
-        coucheDeDonneesSelectedListe,
-        setcoucheDeDonneesSelectedListe,
-        setcurrentMapSelected,
-        zoomLevel,
-        setzoomLevel,
         allRequeteCartoSelected,
         setallRequeteCartoSelected,
         ficheTitleSelected,
@@ -147,7 +138,7 @@ const App = () => {
         <SideBar />
 
         <ShapeFileColorEditer />
-        
+
         <AddIconForm isOpen={addImageIsOpen} setIsOpen={setaddImageIsOpen} />
 
       </Stack>

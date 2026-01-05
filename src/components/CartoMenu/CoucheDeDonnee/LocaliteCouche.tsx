@@ -1,12 +1,11 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, LinearProgress, Stack, Typography } from "@mui/joy";
+import { Accordion, AccordionDetails, AccordionSummary, Checkbox, LinearProgress, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../providers";
-import { LOADING_STATE_T, LOCALITE_REGION_T, SHAPE_OBJECT_T } from "types";
+import { LOADING_STATE_T, LOCALITE_REGION_T } from "types";
 import { getAllRegion } from "functions/API/region/getAll";
 
 const LocaliteCouche = () => {
     const {
-        coucheDeDonneesSelectedListe,
         setlegendeSection,
         setlocaliteRegionsSelected,
         setlocaliteDepartementsSelected,
