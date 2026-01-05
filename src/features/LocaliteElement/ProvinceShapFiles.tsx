@@ -1,18 +1,17 @@
 import { blue } from '@mui/material/colors';
 import ShapeFileContainer from 'components/Cartographie/ShapeFileContainer';
 import { REACT_APP_SHAPE_FILE_URL } from 'constant';
-import { AppContext } from 'providers';
-import { useContext } from 'react';
 import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
+import useLocaliteStore from 'stores/localite/useLocaliteStore';
 import { SHAPE_OBJECT_T } from 'types';
 
 const ProvinceShapFiles = () => {
-    const { localite, } = useContext(AppContext);
     const { coucheDeDonneesElementConfig } = useCoucheDeDonneeStore();
+    const {localiteDepartementsSelected} = useLocaliteStore();
 
     return (
         <ShapeFileContainer
-            coucheDeDonneesListe={localite.departement.map(value => ({
+            coucheDeDonneesListe={localiteDepartementsSelected.map(value => ({
                 filePath: `${REACT_APP_SHAPE_FILE_URL}/${value.code_departement}.zip`,
                 opacity: 0.002,
                 couleur_c: blue[700],

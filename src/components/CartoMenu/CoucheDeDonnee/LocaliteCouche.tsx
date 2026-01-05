@@ -3,27 +3,28 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../providers";
 import { LOADING_STATE_T, LOCALITE_REGION_T } from "types";
 import { getAllRegion } from "functions/API/region/getAll";
+import useLocaliteStore from "stores/localite/useLocaliteStore";
 
 const LocaliteCouche = () => {
     const {
         setlegendeSection,
-        setlocaliteRegionsSelected,
-        setlocaliteDepartementsSelected,
-        setlocaliteCommunesSelected,
-        setlocaliteVillagesSelected
     } = useContext(AppContext);
+    const {
+        data,
+        localiteRegionsSelected,
+        localiteDepartementsSelected,
+        localiteVillagesSelected,
+        localiteCommunesSelected
+    } = useLocaliteStore();
+    const setLocaliteData = useLocaliteStore((state) => state.set);
 
-    const [data, setdata] = useState<LOCALITE_REGION_T[]>([]);
     const [loadingState, setloadingState] = useState<LOADING_STATE_T>(null);
 
     /** Charger les couches depuis l'API */
     const loadData = async () => {
         try {
             setloadingState("En cours de chargement");
-            const res = await getAllRegion();
-            if (res) {
-                setdata(res);
-            }
+            getAllRegion().then((res) => res && setLocaliteData({ data: res }));
         } catch (error) {
             console.error("Erreur lors du chargement des couches", error);
         } finally {
@@ -35,47 +36,59 @@ const LocaliteCouche = () => {
     const toogleElementInCoucheDonnesListe = (element: any, type: 'region' | 'departement' | 'commune' | 'village') => {
         switch (type) {
             case 'region':
-                setlocaliteRegionsSelected((prev: any) => {
-                    const exists = prev.find((item: any) => item.code_region === element.code_region);
-                    if (exists) {
-                        return prev.filter((item: any) => item.code_region !== element.code_region);
-                    } else {
-                        return [...prev, element];
-                    }
-                });
+                setLocaliteData({localiteRegionsSelected : localiteRegionsSelected.includes(element) 
+                    ? localiteRegionsSelected.filter(item => item.code_region !== element.code_region) 
+                    : [...localiteRegionsSelected, element]});
+                // setlocaliteRegionsSelected((prev: any) => {
+                //     const exists = prev.find((item: any) => item.code_region === element.code_region);
+                //     if (exists) {
+                //         return prev.filter((item: any) => item.code_region !== element.code_region);
+                //     } else {
+                //         return [...prev, element];
+                //     }
+                // });
                 break;
 
             case 'departement':
-                setlocaliteDepartementsSelected((prev: any) => {
-                    const exists = prev.find((item: any) => item.code_departement === element.code_departement);
-                    if (exists) {
-                        return prev.filter((item: any) => item.code_departement !== element.code_departement);
-                    } else {
-                        return [...prev, element];
-                    }
-                });
+                setLocaliteData({localiteDepartementsSelected : localiteRegionsSelected.includes(element) 
+                    ? localiteDepartementsSelected.filter(item => item.code_departement !== element.code_departement) 
+                    : [...localiteRegionsSelected, element]});
+                // setlocaliteDepartementsSelected((prev: any) => {
+                //     const exists = prev.find((item: any) => item.code_departement === element.code_departement);
+                //     if (exists) {
+                //         return prev.filter((item: any) => item.code_departement !== element.code_departement);
+                //     } else {
+                //         return [...prev, element];
+                //     }
+                // });
                 break;
 
             case 'commune':
-                setlocaliteCommunesSelected((prev: any) => {
-                    const exists = prev.find((item: any) => item.code_commune === element.code_commune);
-                    if (exists) {
-                        return prev.filter((item: any) => item.code_commune !== element.code_commune);
-                    } else {
-                        return [...prev, element];
-                    }
-                });
+                setLocaliteData({localiteCommunesSelected : localiteRegionsSelected.includes(element) 
+                    ? localiteCommunesSelected.filter(item => item.code_commune !== element.code_commune) 
+                    : [...localiteRegionsSelected, element]});
+                // setlocaliteCommunesSelected((prev: any) => {
+                //     const exists = prev.find((item: any) => item.code_commune === element.code_commune);
+                //     if (exists) {
+                //         return prev.filter((item: any) => item.code_commune !== element.code_commune);
+                //     } else {
+                //         return [...prev, element];
+                //     }
+                // });
                 break;
 
             case 'village':
-                setlocaliteVillagesSelected((prev: any) => {
-                    const exists = prev.find((item: any) => item.code_village === element.code_village);
-                    if (exists) {
-                        return prev.filter((item: any) => item.code_village !== element.code_village);
-                    } else {
-                        return [...prev, element];
-                    }
-                });
+                setLocaliteData({localiteVillagesSelected : localiteRegionsSelected.includes(element) 
+                    ? localiteVillagesSelected.filter(item => item.nom_village !== element.nom_village) 
+                    : [...localiteRegionsSelected, element]});
+                // setlocaliteVillagesSelected((prev: any) => {
+                //     const exists = prev.find((item: any) => item.code_village === element.code_village);
+                //     if (exists) {
+                //         return prev.filter((item: any) => item.code_village !== element.code_village);
+                //     } else {
+                //         return [...prev, element];
+                //     }
+                // });
                 break;
 
             default:

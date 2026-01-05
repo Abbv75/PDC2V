@@ -15,13 +15,6 @@ export const AppContext = createContext({} as {
         ficheDynamique?: JSX.Element,
         rapportCarto?: JSX.Element
     }, setlegendeSection: USE_STATE_T,
-    localite: {
-        region: REGION_T[],
-        departement: PROVINCE_T[],
-        commune: COMMUNE_T[],
-        village: VILLAGE_T[]
-    },
-    setlocaliteRegionsSelected: USE_STATE_T, setlocaliteDepartementsSelected: USE_STATE_T, setlocaliteCommunesSelected: USE_STATE_T, setlocaliteVillagesSelected: USE_STATE_T,
     addImageIsOpen: boolean, setaddImageIsOpen: USE_STATE_T,
     loadIconList: any,
     iconList: string[],

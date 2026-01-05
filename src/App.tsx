@@ -27,12 +27,6 @@ const App = () => {
   // rapport cartographique
   const [allRapportCartoSelected, setallRapportCartoSelected] = useState<{ data: RAPORT_CARTO_T, color?: string }[]>([]);
 
-  // localite element
-  const [localiteRegionsSelected, setlocaliteRegionsSelected] = useState([] as REGION_T[]);
-  const [localiteDepartementsSelected, setlocaliteDepartementsSelected] = useState([] as PROVINCE_T[]);
-  const [localiteCommunesSelected, setlocaliteCommunesSelected] = useState([] as COMMUNE_T[]);
-  const [localiteVillagesSelected, setlocaliteVillagesSelected] = useState([] as VILLAGE_T[]);
-
   // imagePicker element
   const [addImageIsOpen, setaddImageIsOpen] = useState(false);
   const [iconList, seticonList] = useState(Object.values(ICON) as string[]);
@@ -63,15 +57,6 @@ const App = () => {
     }
   }, [])
 
-  const localite = useMemo(() => (
-    {
-      region: localiteRegionsSelected,
-      departement: localiteDepartementsSelected,
-      commune: localiteCommunesSelected,
-      village: localiteVillagesSelected
-    }
-  ), [localiteRegionsSelected, localiteDepartementsSelected, localiteCommunesSelected, localiteVillagesSelected]);
-
   useEffect(() => {
     loadIconList();
   }, []);
@@ -92,11 +77,6 @@ const App = () => {
         setficheDynamiquesData,
         legendeSection,
         setlegendeSection,
-        localite,
-        setlocaliteRegionsSelected,
-        setlocaliteDepartementsSelected,
-        setlocaliteCommunesSelected,
-        setlocaliteVillagesSelected,
         addImageIsOpen,
         setaddImageIsOpen,
         loadIconList,

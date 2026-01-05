@@ -1,14 +1,13 @@
 import ElementContainer from 'components/Cartographie/ElementContainer';
 import { ICON } from 'constant';
-import { AppContext } from 'providers';
-import { useContext } from 'react';
+import useLocaliteStore from 'stores/localite/useLocaliteStore';
 
 const VillagePoints = () => {
-    const { localite } = useContext(AppContext);
+    const {localiteVillagesSelected} = useLocaliteStore();
 
     return (
         <ElementContainer
-            data={localite.village}
+            data={localiteVillagesSelected}
             nomListe={'La liste des villages'}
             fieldKeyListe={[
                 {
