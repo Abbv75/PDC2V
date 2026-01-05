@@ -1,4 +1,4 @@
-import { GET_ALL_FEUILLE, GET_REQUETE_CARTE_T } from "types";
+import { GET_ALL_FEUILLE, GET_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
 import { create } from "zustand";
 
 interface REQUETE_DATA_T {
@@ -15,7 +15,9 @@ interface Props_T {
     getAllFicheData : GET_ALL_FEUILLE | null,
     ficheDynamiquesData: { title: string, icon: any }[],
     ficheTitleSelected: string[],
+    ficheTitle: string[],
     elementListe: REQUETE_DATA_T[],
+    loadingState: LOADING_STATE_T
 }
 
 export default create<Props_T>((set, get) => ({
@@ -24,4 +26,6 @@ export default create<Props_T>((set, get) => ({
     ficheDynamiquesData: [],
     ficheTitleSelected: [],
     elementListe: [],
+    ficheTitle: [],
+    loadingState: null
 }));

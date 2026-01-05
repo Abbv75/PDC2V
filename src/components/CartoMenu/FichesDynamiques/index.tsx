@@ -1,9 +1,7 @@
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, LinearProgress, Radio, Stack } from "@mui/joy";
-import { useContext, useEffect, useState } from "react";
-import { LOADING_STATE_T } from "types";
+import { useContext, useEffect } from "react";
 import { AppContext } from "providers";
 import getAllFeuille from "functions/API/feuille/getAllFeuille";
-import { ICON } from "constant";
 import ImagePicker from "components/ImagePicker/ImagePicker";
 import { CardMedia } from "@mui/material";
 import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
@@ -18,22 +16,21 @@ const FichesDynamiques = () => {
         getAllFicheData,
         ficheDynamiquesData,
         ficheTitleSelected,
+        ficheTitle,
+        loadingState,
     } = useFicheDynamiquesStore();
     const setficheDynamiquesData = useFicheDynamiquesStore((state) => state.set);
 
-
-    const [ficheTitle, setficheTitle] = useState([] as string[]);
-    const [loadingState, setloadingState] = useState(null as LOADING_STATE_T);
-
     const loadData = async () => {
         try {
-            setloadingState("En cours de chargement");
+            setficheDynamiquesData({loadingState: "En cours de chargement"});
+
             const res = await getAllFeuille();
 
             if (!res) return;
 
             const titles = Object.keys(res);
-            setficheTitle(titles);
+            setficheDynamiquesData({ficheTitle: titles});
 
             // Initialiser les icônes par défaut
             setficheDynamiquesData({ficheDynamiquesData: titles.map(title => ({
@@ -43,7 +40,7 @@ const FichesDynamiques = () => {
   
             setficheDynamiquesData({ getAllFicheData: res });
         } finally {
-            setloadingState(null);
+            setficheDynamiquesData({loadingState: null});
         }
     }
 
@@ -66,7 +63,7 @@ const FichesDynamiques = () => {
     };
 
     useEffect(() => {
-        loadData();
+        !ficheTitle.length && loadData();
     }, []);
 
     useEffect(() => {
