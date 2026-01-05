@@ -12,6 +12,7 @@ import getAllIcon from "functions/API/icon/getAllIcon"
 import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import CartoMenu from "components/CartoMenu"
+import NavBar from "components/Cartographie/NavBar"
 
 export const urlparams = new URLSearchParams(window.location.search);
 
@@ -82,11 +83,11 @@ const App = () => {
         <Header />
 
         <Stack flex={1} direction="row">
-          {/* <NavBar /> */}
+          <NavBar />
           <Cartographie />
         </Stack>
 
-        <CartoMenu />
+        {/* <CartoMenu /> */}
         <SideBar />
 
         <ShapeFileColorEditer />
