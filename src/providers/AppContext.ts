@@ -29,6 +29,4 @@ export const AppContext = createContext({} as {
         borderColor?: string,
         backgroundColor?: string
     } | undefined>,
-    allRapportCartoSelected: { data: RAPORT_CARTO_T, color?: string }[],
-    setallRapportCartoSelected: USE_STATE_T<{ data: RAPORT_CARTO_T, color?: string }[]>,
 });

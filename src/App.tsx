@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { ICON } from "./constant"
 import SideBar from "./components/SideBar"
 import { ToastContainer } from "react-toastify"
-import { GET_ALL_FEUILLE, GET_ALL_REQUETE_CARTE_T, RAPORT_CARTO_T } from "types"
+import { GET_ALL_FEUILLE, RAPORT_CARTO_T } from "types"
 import { AppContext } from "providers"
 import AddIconForm from "features/AddIconForm"
 import getAllIcon from "functions/API/icon/getAllIcon"
@@ -17,14 +17,10 @@ import CartoMenu from "components/CartoMenu"
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
-  const [allRequeteCartoSelected, setallRequeteCartoSelected] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
   const [ficheTitleSelected, setficheTitleSelected] = useState([] as string[]);
   const [getAllFicheData, setgetAllFicheData] = useState(null as GET_ALL_FEUILLE | null);
   const [ficheDynamiquesData, setficheDynamiquesData] = useState([] as { title: string, icon: any }[]);
   const [legendeSection, setlegendeSection] = useState({});
-
-  // rapport cartographique
-  const [allRapportCartoSelected, setallRapportCartoSelected] = useState<{ data: RAPORT_CARTO_T, color?: string }[]>([]);
 
   // imagePicker element
   const [addImageIsOpen, setaddImageIsOpen] = useState(false);
@@ -86,8 +82,6 @@ const App = () => {
         ShapeFileColorEditerSubmitFunction,
         ShapeFileColorEditerDefaultValues,
         setShapeFileColorEditerDefaultValues,
-        allRapportCartoSelected,
-        setallRapportCartoSelected,
       }}
     >
       <Stack

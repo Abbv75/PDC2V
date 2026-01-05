@@ -1,17 +1,19 @@
-import { Box, Button, ButtonGroup, Checkbox, LinearProgress, Sheet, Stack, Typography } from "@mui/joy";
+import { ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 import { LOADING_STATE_T, RAPORT_CARTO_T } from "types";
 import { AppContext } from "providers";
 import { getAllRapportCarto } from "functions/API";
 import { green } from "@mui/material/colors";
 import ItemBtn from "./ItemBtn";
+import useRapportCartoStore from "stores/rapportCarto/useRapportCartoStore";
 
 export default () => {
     const {
-        allRapportCartoSelected,
-        setallRapportCartoSelected,
         setlegendeSection,
     } = useContext(AppContext);
+
+    const { allRapportCartoSelected } = useRapportCartoStore();
+    const setRapportCartoData = useRapportCartoStore(state => state.set);
 
     const [isAllCocher, setisAllCocher] = useState(false);
     const [data, setdata] = useState<RAPORT_CARTO_T[]>([]);
@@ -30,7 +32,11 @@ export default () => {
     }
 
     const toutCocherHandle = () => {
-        setallRapportCartoSelected(isAllCocher ? [] : data.map((item) => ({ data: item, color: green[400] })));
+        setRapportCartoData({
+            allRapportCartoSelected: isAllCocher
+                ? []
+                : data.map((item) => ({ data: item, color: green[400] }))
+        });
         setisAllCocher(!isAllCocher);
     }
 
@@ -44,7 +50,7 @@ export default () => {
     useEffect(
         () => {
             let res = data.filter((element) => allRapportCartoSelected.find(({ data }) => data.code === element.code));
-            setallRapportCartoSelected(res.map((item) => ({ data: item, color: green[400] })));
+            // setallRapportCartoSelected(res.map((item) => ({ data: item, color: green[400] })));
         },
         [data]
     )

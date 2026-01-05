@@ -1,14 +1,12 @@
 import { Button } from '@mui/joy';
 import { green } from '@mui/material/colors';
-import { AppContext } from 'providers';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useRapportCartoStore from 'stores/rapportCarto/useRapportCartoStore';
 import { RAPORT_CARTO_T } from 'types';
 
 const ItemBtn = ({ value }: { value: RAPORT_CARTO_T }) => {
-    const {
-        allRapportCartoSelected,
-        setallRapportCartoSelected,
-    } = useContext(AppContext);
+    const { allRapportCartoSelected, } = useRapportCartoStore();
+    const setRapportCartoData = useRapportCartoStore(state => state.set);
 
     const [currentColor, setcurrentColor] = useState<string>(green[400]);
 
@@ -17,13 +15,15 @@ const ItemBtn = ({ value }: { value: RAPORT_CARTO_T }) => {
 
         if (!!isInListe) {
             let res = allRapportCartoSelected.filter(({ data }) => data.code != value.code);
-
-            setallRapportCartoSelected(res);
+            setRapportCartoData({ allRapportCartoSelected: res });
         }
         else {
-            setallRapportCartoSelected(
-                (prev) => [...prev, { data: value, color: green[400] }]
-            );
+            setRapportCartoData({
+                allRapportCartoSelected: [
+                    ...allRapportCartoSelected,
+                    { data: value, color: currentColor }
+                ]
+            });
         }
     }
 
@@ -39,7 +39,7 @@ const ItemBtn = ({ value }: { value: RAPORT_CARTO_T }) => {
                 return element;
             }
         });
-        setallRapportCartoSelected(dataEdited);
+        setRapportCartoData({ allRapportCartoSelected: dataEdited });
     }
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const ItemBtn = ({ value }: { value: RAPORT_CARTO_T }) => {
                 <input
                     type="color"
                     value={currentColor}
-                    onClick={(e)=>{
+                    onClick={(e) => {
                         e.stopPropagation();
                     }}
                     onChange={(e) => {

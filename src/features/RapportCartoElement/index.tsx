@@ -1,27 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { toast } from 'react-toastify';
-import { GET_RAPORT_CARTO_T } from '../../types';
-import { AppContext } from 'providers';
 import { getRapportCarto } from 'functions/API';
-import { green } from '@mui/material/colors';
+import useRapportCartoStore from 'stores/rapportCarto/useRapportCartoStore';
 
 export default () => {
-    const { allRapportCartoSelected } = useContext(AppContext);
-    const [requetesData, setrequetesData] = useState([] as { data: GET_RAPORT_CARTO_T, color?: string }[]);
+    const { allRapportCartoSelected, requetesData } = useRapportCartoStore();
+    const setRapportCartoData = useRapportCartoStore(state => state.set);
 
     const loadListe = async () => {
         try {
-            setrequetesData([]);
+            setRapportCartoData({ requetesData: [] });
 
             allRapportCartoSelected?.forEach(async (element) => {
                 try {
-                    const res = await getRapportCarto(element.data.code);
-                    res && setrequetesData(prev => [
-                        ...prev, 
-                        {data : res, color: element.color}
-                    ]);
-
+                    getRapportCarto(element.data.code).then(res => {
+                        if (res) {
+                            setRapportCartoData(prev => ({
+                                requetesData: [
+                                    ...prev.requetesData,
+                                    { data: res, color: element.color }
+                                ]
+                            }));
+                        }
+                    });
                 } catch (error) {
                     toast.error(`Une erreur est survenue lors du chargement des ${element.data.title}`)
                 }
