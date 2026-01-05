@@ -5,7 +5,6 @@ import { coucheDeDonneesElementConfig_T } from "types/AppT";
 
 export const AppContext = createContext({} as {
     mapRef: React.RefObject<HTMLDivElement>,
-    allRequeteCartoSelected: { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[], setallRequeteCartoSelected: USE_STATE_T,
     ficheTitleSelected: string[], setficheTitleSelected: USE_STATE_T,
     getAllFicheData: null | GET_ALL_FEUILLE, setgetAllFicheData: USE_STATE_T,
     ficheDynamiquesData: { title: string, icon: any }[], setficheDynamiquesData: USE_STATE_T,

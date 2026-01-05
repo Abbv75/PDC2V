@@ -2,17 +2,16 @@ import { Stack } from "@mui/joy"
 import Cartographie from "./components/Cartographie"
 //@ts-ignore
 import "./assets/css/leaflet.css"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { ICON } from "./constant"
 import SideBar from "./components/SideBar"
 import { ToastContainer } from "react-toastify"
-import { COMMUNE_T, GET_ALL_FEUILLE, GET_ALL_REQUETE_CARTE_T, PROVINCE_T, RAPORT_CARTO_T, REGION_T, VILLAGE_T } from "types"
+import { GET_ALL_FEUILLE, GET_ALL_REQUETE_CARTE_T, RAPORT_CARTO_T } from "types"
 import { AppContext } from "providers"
 import AddIconForm from "features/AddIconForm"
 import getAllIcon from "functions/API/icon/getAllIcon"
 import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
-import { coucheDeDonneesElementConfig_T } from "types/AppT"
 import CartoMenu from "components/CartoMenu"
 
 export const urlparams = new URLSearchParams(window.location.search);
@@ -67,8 +66,6 @@ const App = () => {
     <AppContext.Provider
       value={{
         mapRef,
-        allRequeteCartoSelected,
-        setallRequeteCartoSelected,
         ficheTitleSelected,
         setficheTitleSelected,
         getAllFicheData,

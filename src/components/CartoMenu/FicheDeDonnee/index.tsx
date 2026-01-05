@@ -1,18 +1,21 @@
 import { Button, ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
-import { useContext, useEffect, useMemo, useState } from "react";
-import { COUCHE_DE_DONNEES_LISTE, ICON } from "constant";
+import { useContext, useEffect, useState } from "react";
 import { GET_ALL_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
 import getAllRequeteCarte from "functions/API/requeteCartographique/getAllRequeteCarte";
 import { AppContext } from "providers";
 import ImagePicker from "components/ImagePicker/ImagePicker";
+import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
 
 const FicheDeDonnee = () => {
     const {
-        allRequeteCartoSelected,
-        setallRequeteCartoSelected,
         setlegendeSection,
         iconList,
     } = useContext(AppContext);
+    const {
+        allRequeteCartoSelected,
+    } = useRequeteCartoStore();
+
+    const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
     const [isAllCocher, setisAllCocher] = useState(false);
     const [data, setdata] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
@@ -45,17 +48,18 @@ const FicheDeDonnee = () => {
         if (!!isInListe) {
             let res: { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[] = allRequeteCartoSelected.filter(({ data }, index) => data.Nom_View != element.data.Nom_View);
 
-            setallRequeteCartoSelected(res);
+            setRequeteCartoData({ allRequeteCartoSelected: res });
         }
         else {
-            setallRequeteCartoSelected(
-                (prev: typeof COUCHE_DE_DONNEES_LISTE) => [...prev, element]
-            );
+            setRequeteCartoData({ allRequeteCartoSelected: [
+                ...allRequeteCartoSelected, 
+                element
+            ] });
         }
     }
 
     const toutCocherHandle = () => {
-        setallRequeteCartoSelected(isAllCocher ? [] : data);
+        setRequeteCartoData({ allRequeteCartoSelected: isAllCocher ? [] : data });
         setisAllCocher(!isAllCocher);
     }
 
@@ -69,7 +73,7 @@ const FicheDeDonnee = () => {
     useEffect(
         () => {
             let res = data.filter((element) => allRequeteCartoSelected.find(({ data }) => data.Nom_View === element.data.Nom_View));
-            setallRequeteCartoSelected(res);
+            setRequeteCartoData({ allRequeteCartoSelected: res });
         },
         [data]
     )

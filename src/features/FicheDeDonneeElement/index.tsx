@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { toast } from 'react-toastify';
 import { GET_REQUETE_CARTE_T } from '../../types';
-import { AppContext } from 'providers';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
+import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
 
 interface REQUETE_DATA_T {
     title?: string,
@@ -11,23 +11,24 @@ interface REQUETE_DATA_T {
     icon?: any
 }
 
-const FicheDeDonneeElement = () => {
-    const { allRequeteCartoSelected } = useContext(AppContext);
-    const [requetesData, setrequetesData] = useState([] as REQUETE_DATA_T[]);
+const FicheDeDonneeElement = () => {    
+    const { allRequeteCartoSelected, requetesData } = useRequeteCartoStore();
+    const setrequetesData = useRequeteCartoStore(state => state.set);
 
     const loadListe = async () => {
         try {
             if (!allRequeteCartoSelected.length) return;
 
-            setrequetesData([]);
+            setrequetesData({ requetesData: [] });
 
             allRequeteCartoSelected.forEach(async (element) => {
                 try {
-                    const res = await getRequeteCarte(element.data.Nom_View);
-                    if (res) {
-                        setrequetesData(prev => [...prev, { data: res, title: element.data.intitule, icon: element.icon }]);
-                    }
-
+                    getRequeteCarte(element.data.Nom_View).then(res => {
+                        res && setrequetesData({requetesData : [
+                            ...requetesData,
+                            { data: res, title: element.data.intitule, icon: element.icon }
+                        ]});
+                    });
                 } catch (error) {
                     toast.error(`Une erreur est survenue lors du chargement des ${element.data.intitule}`)
                 }
