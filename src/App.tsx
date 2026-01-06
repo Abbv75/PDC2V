@@ -18,9 +18,7 @@ import useIconMapStore from "stores/iconMap/useIconMapStore"
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
-  const {loadIconList} = useIconMapStore();
-  const setIconMapData = useIconMapStore((state) => state.set);
-  
+  const {loadIconList} = useIconMapStore();  
 
   const [legendeSection, setlegendeSection] = useState({});
 

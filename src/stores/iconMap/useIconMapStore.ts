@@ -13,18 +13,17 @@ interface Props_T {
 
 export default create<Props_T>((set, get) => ({
     set: set,
-    elementfailedList : [],
-    iconList: Object.values(ICON),
-    loadIconList :() => {
+    iconList: [],
+    loadIconList: () => {
         getAllIcon().then(res => {
-          set({
-            iconList: [
-              ...Object.values(ICON),
-              ...res?.map(
-                ({ file }) => `https://sise-pdc2v.org/icon_carto/${file}`
-              ) ?? []
-            ]
-          });
+            set({
+                iconList: [
+                    ...Object.values(ICON),
+                    ...res?.map(
+                        ({ file }) => `https://sise-pdc2v.org/icon_carto/${file}`
+                    ) ?? []
+                ]
+            });
         });
-      }
+    }
 }));

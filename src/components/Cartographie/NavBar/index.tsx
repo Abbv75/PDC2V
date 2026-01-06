@@ -16,7 +16,7 @@ export default () => {
                 width: isOpen ? 400 : 50,
                 gap: 3,
                 overflowY : 'auto',
-                height: 'calc(100% - 40px)',
+                height: 'calc(100vh - 80px)',
             }}
             variant="outlined"
         >
