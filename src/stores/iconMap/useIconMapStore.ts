@@ -9,6 +9,8 @@ interface Props_T {
     }
     iconList: string[];
     loadIconList: () => void;
+    showImagePicker : boolean,
+    onChange ?: (value : string)=>any
 }
 
 export default create<Props_T>((set, get) => ({
@@ -25,5 +27,6 @@ export default create<Props_T>((set, get) => ({
                 ]
             });
         });
-    }
+    },
+    showImagePicker : false
 }));

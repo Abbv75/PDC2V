@@ -12,8 +12,9 @@ import getAllIcon from "functions/API/icon/getAllIcon"
 import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import CartoMenu from "components/CartoMenu"
-import NavBar from "components/Cartographie/NavBar"
+import NavBar from "components/NavBar"
 import useIconMapStore from "stores/iconMap/useIconMapStore"
+import ImagePicker2 from "components/ImagePicker2"
 
 export const urlparams = new URLSearchParams(window.location.search);
 
@@ -74,6 +75,8 @@ const App = () => {
           <NavBar />
           <Cartographie />
         </Stack>
+
+        <ImagePicker2/>
 
         {/* <CartoMenu /> */}
         <SideBar />

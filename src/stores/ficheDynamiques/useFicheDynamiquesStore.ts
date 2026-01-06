@@ -8,16 +8,17 @@ interface REQUETE_DATA_T {
 }
 
 interface Props_T {
-    set : {
+    set: {
         (partial: Props_T | Partial<Props_T> | ((state: Props_T) => Props_T | Partial<Props_T>), replace?: false): void;
         (state: Props_T | ((state: Props_T) => Props_T), replace: true): void;
     }
-    getAllFicheData : GET_ALL_FEUILLE | null,
+    getAllFicheData: GET_ALL_FEUILLE | null,
     ficheDynamiquesData: { title: string, icon: any }[],
     ficheTitleSelected: string[],
     ficheTitle: string[],
     elementListe: REQUETE_DATA_T[],
-    loadingState: LOADING_STATE_T
+    loadingState: LOADING_STATE_T,
+    toogleElementInFicheTitleSelected: (element: string) => void
 }
 
 export default create<Props_T>((set, get) => ({
@@ -27,5 +28,14 @@ export default create<Props_T>((set, get) => ({
     ficheTitleSelected: [],
     elementListe: [],
     ficheTitle: [],
-    loadingState: null
+    loadingState: null,
+    toogleElementInFicheTitleSelected: (element: string) => {
+        const isInList = get().ficheTitleSelected.includes(element);
+
+        if (isInList) {
+            set({ ficheTitleSelected: get().ficheTitleSelected.filter(v => v !== element) });
+        } else {
+            set({ ficheTitleSelected: [...get().ficheTitleSelected, element] });
+        }
+    },
 }));

@@ -1,11 +1,11 @@
-import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, LinearProgress, Radio, Stack } from "@mui/joy";
+import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, LinearProgress, Stack } from "@mui/joy";
 import { useContext, useEffect } from "react";
 import { AppContext } from "providers";
 import getAllFeuille from "functions/API/feuille/getAllFeuille";
-import ImagePicker from "components/ImagePicker/ImagePicker";
 import { CardMedia } from "@mui/material";
 import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
+import Item from "./Item";
 
 const FichesDynamiques = () => {
     const {
@@ -45,24 +45,6 @@ const FichesDynamiques = () => {
             setficheDynamiquesData({loadingState: null});
         }
     }
-
-    const toogleElementInFicheTitleSelected = (element: string) => {
-        const isInList = ficheTitleSelected.includes(element);
-
-        if (isInList) {
-            setficheDynamiquesData({ficheTitleSelected: ficheTitleSelected.filter(v => v !== element)});
-        } else {
-            setficheDynamiquesData({ficheTitleSelected: [...ficheTitleSelected, element]});
-        }
-    }
-
-    const updateIcon = (feuille: string, icon: any) => {
-        setficheDynamiquesData((prev: any) =>
-            prev.some((item: any) => item.feuille === feuille)
-                ? prev.map((item: any) => item.feuille === feuille ? { ...item, icon } : item)
-                : [...prev, { feuille, icon }]
-        );
-    };
 
     useEffect(() => {
         !ficheTitle.length && loadData();
@@ -126,23 +108,7 @@ const FichesDynamiques = () => {
                                 gap={1}
                             >
                                 {getAllFicheData && getAllFicheData[title]?.map((value, idx) => (
-                                    <Stack
-                                        key={idx}
-                                        direction={"row"}
-                                        justifyContent={"space-between"}
-                                        alignItems="center"
-                                    >
-                                        <Radio
-                                            value={value.feuille.Libelle_Feuille}
-                                            label={value.feuille.Libelle_Feuille}
-                                            sx={{ fontSize: 10 }}
-                                            checked={ficheTitleSelected.includes(value.feuille.Libelle_Feuille)}
-                                            onClick={() => toogleElementInFicheTitleSelected(value.feuille.Libelle_Feuille)}
-                                        />
-                                        <ImagePicker
-                                            onchange={(icon) => updateIcon(value.feuille.Libelle_Feuille, icon)}
-                                        />
-                                    </Stack>
+                                    <Item value={value} key={idx}/>
                                 ))}
                             </Stack>
                         </AccordionDetails>
