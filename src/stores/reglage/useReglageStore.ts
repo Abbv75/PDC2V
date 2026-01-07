@@ -7,10 +7,25 @@ interface Props_T {
     }
     showShapefileName: boolean;
     showShapefilePopup: boolean;
+    keyToHides: string[];
+    addKeyToHide: (key: string) => void;
+    removeKeyToHide: (key: string) => void;
 }
 
 export default create<Props_T>((set, get) => ({
     set: set,
     showShapefileName: true,
-    showShapefilePopup: false
+    showShapefilePopup: false,
+    keyToHides: [],
+    addKeyToHide: (key: string) =>
+        set((state) => ({
+            keyToHides: state.keyToHides.includes(key)
+                ? state.keyToHides
+                : [...state.keyToHides, key],
+        })),
+
+    removeKeyToHide: (key: string) =>
+        set((state) => ({
+            keyToHides: state.keyToHides.filter((k) => k !== key),
+        })),
 }));
