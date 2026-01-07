@@ -9,9 +9,12 @@ import 'swiper/css/parallax';
 import 'swiper/css/pagination';
 import { EffectCoverflow, Autoplay, Navigation, Thumbs, Parallax, Pagination } from 'swiper/modules';
 
+
+// { photosListe }:
+//         { photosListe: string[] }
+
 const CustomSwipper = (
-    { photosListe }:
-        { photosListe: string[] }
+    { photosListe }
 ) => {
     return (
         <Swiper
@@ -44,6 +47,7 @@ const CustomSwipper = (
                                 borderRadius: 12
                             }}
                             src={photo}
+                            alt=''
                         />
                     </SwiperSlide>
                 ))
