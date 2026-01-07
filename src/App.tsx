@@ -69,7 +69,11 @@ const App = () => {
         <Header />
 
         <Grid container flex={1} >
-          <Grid height={'100%'} bgcolor={'red'}>
+          <Grid height={'100%'} bgcolor={'red'} sx={{
+            overflowY: 'auto',
+            maxHeight: '100%',
+            pr: 0.5,
+          }} >
             <NavBar />
           </Grid>
 

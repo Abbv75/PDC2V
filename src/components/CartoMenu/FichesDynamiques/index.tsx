@@ -11,7 +11,7 @@ const FichesDynamiques = () => {
     const {
         setlegendeSection,
     } = useContext(AppContext);
-    
+
     const { iconList } = useIconMapStore();
 
     const {
@@ -25,24 +25,26 @@ const FichesDynamiques = () => {
 
     const loadData = async () => {
         try {
-            setficheDynamiquesData({loadingState: "En cours de chargement"});
+            setficheDynamiquesData({ loadingState: "En cours de chargement" });
 
             const res = await getAllFeuille();
 
             if (!res) return;
 
             const titles = Object.keys(res);
-            setficheDynamiquesData({ficheTitle: titles});
+            setficheDynamiquesData({ ficheTitle: titles });
 
             // Initialiser les icônes par défaut
-            setficheDynamiquesData({ficheDynamiquesData: titles.map(title => ({
-                title,
-                icon: iconList[0]
-            }))});
-  
+            setficheDynamiquesData({
+                ficheDynamiquesData: titles.map(title => ({
+                    title,
+                    icon: iconList[0]
+                }))
+            });
+
             setficheDynamiquesData({ getAllFicheData: res });
         } finally {
-            setficheDynamiquesData({loadingState: null});
+            setficheDynamiquesData({ loadingState: null });
         }
     }
 
@@ -55,7 +57,7 @@ const FichesDynamiques = () => {
             const legendContent = (
                 <Stack gap={0.5}>
                     {ficheTitleSelected.map((feuille, idx) => {
-                        const found = ficheDynamiquesData.find((item:any) => item.feuille === feuille);
+                        const found = ficheDynamiquesData.find((item: any) => item.feuille === feuille);
                         return (
                             <Stack key={idx} direction="row" alignItems="center" gap={0.5}>
                                 {found?.icon && (
@@ -81,7 +83,15 @@ const FichesDynamiques = () => {
     }, [ficheTitleSelected, ficheDynamiquesData, setlegendeSection]);
 
     return (
-        <Stack gap={1} pr={0.5} >
+        <Stack
+            gap={1}
+            pr={0.5}
+            sx={{
+                maxHeight: 350,
+                overflowY: 'scroll',
+                pr: 0.5,
+            }}
+        >
             {loadingState && (<LinearProgress color="success" />)}
 
             <AccordionGroup sx={{ gap: 1 }} >
@@ -108,7 +118,7 @@ const FichesDynamiques = () => {
                                 gap={1}
                             >
                                 {getAllFicheData && getAllFicheData[title]?.map((value, idx) => (
-                                    <Item value={value} key={idx}/>
+                                    <Item value={value} key={idx} />
                                 ))}
                             </Stack>
                         </AccordionDetails>
