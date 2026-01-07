@@ -1,9 +1,8 @@
-import { Button, ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
+import { ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
-import { GET_ALL_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
+import { LOADING_STATE_T } from "types";
 import getAllRequeteCarte from "functions/API/requeteCartographique/getAllRequeteCarte";
 import { AppContext } from "providers";
-import ImagePicker from "components/ImagePicker/ImagePicker";
 import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 import Item from "./FicheDeDonneeItem";
@@ -120,11 +119,9 @@ const FicheDeDonnee = () => {
             >
                 {loadingState && (<LinearProgress color="success" />)}
 
-                {
-                    data.map((value, index) => (
-                        <Item index={index} value={value} key={index} />
-                    ))
-                }
+                {data.map((value, index) => (
+                    <Item index={index} value={value} key={index} />
+                ))}
 
             </ButtonGroup>
         </Stack>

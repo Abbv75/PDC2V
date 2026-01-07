@@ -1,9 +1,6 @@
-import { Avatar, Button, ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
-import { useContext, useEffect, useState } from "react";
-import { GET_ALL_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
-import getAllRequeteCarte from "functions/API/requeteCartographique/getAllRequeteCarte";
-import { AppContext } from "providers";
-import ImagePicker from "components/ImagePicker/ImagePicker";
+import { Avatar, Button } from "@mui/joy";
+import { useState } from "react";
+import { GET_ALL_REQUETE_CARTE_T } from "types";
 import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 import { CardMedia } from "@mui/material";
@@ -21,18 +18,17 @@ export default ({ value, index }: {
     const {
         allRequeteCartoSelected,
         toogleElementInSelectedListe,
+        data
     } = useRequeteCartoStore();
-
+    const setRequeteCartoData = useRequeteCartoStore(state => state.set);
+    
     const [selectedIcon, setselectedIcon] = useState(iconList[0]);
-
-    const [data, setdata] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
 
     const updateDataIcon = (icon: any) => {
         const newData = [...data];
         newData[index].icon = icon;
-        setdata(newData);
+        setRequeteCartoData({ data: newData });
         setselectedIcon(icon);
-        // setIconMapData({showImagePicker : false})
     }
 
     return (
@@ -44,9 +40,6 @@ export default ({ value, index }: {
             sx={{
                 fontSize: 12
             }}
-            // endDecorator={<ImagePicker
-            //     onchange={(icon) => updateDataIcon(icon)}
-            // />}
             endDecorator={
                 <Avatar
                     size="sm"
