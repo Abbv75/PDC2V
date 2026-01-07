@@ -6,6 +6,7 @@ import { AppContext } from "providers";
 import ImagePicker from "components/ImagePicker/ImagePicker";
 import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
+import Item from "./FicheDeDonneeItem";
 
 const FicheDeDonnee = () => {
     const {
@@ -15,19 +16,12 @@ const FicheDeDonnee = () => {
 
     const {
         allRequeteCartoSelected,
+        data
     } = useRequeteCartoStore();
-
     const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
     const [isAllCocher, setisAllCocher] = useState(false);
-    const [data, setdata] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
     const [loadingState, setloadingState] = useState(null as LOADING_STATE_T);
-
-    const updateDataIcon = (index: number, icon: any) => {
-        const newData = [...data];
-        newData[index].icon = icon;
-        setdata(newData);
-    }
 
     const loadData = async () => {
         try {
@@ -35,28 +29,15 @@ const FicheDeDonnee = () => {
             const res = await getAllRequeteCarte();
             if (!res) return;
 
-            setdata(res.map(value => ({
-                data: value,
-                icon: iconList[0]
-            })));
+            setRequeteCartoData({
+                data: res.map(value => ({
+                    data: value,
+                    icon: iconList[0]
+                }))
+            })
+
         } finally {
             setloadingState(null);
-        }
-    }
-
-    const toogleElementInSelectedListe = (element: { icon?: any, data: GET_ALL_REQUETE_CARTE_T }) => {
-        let isInListe = allRequeteCartoSelected.find(({ data }) => data.Nom_View === element.data.Nom_View);
-
-        if (!!isInListe) {
-            let res: { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[] = allRequeteCartoSelected.filter(({ data }, index) => data.Nom_View != element.data.Nom_View);
-
-            setRequeteCartoData({ allRequeteCartoSelected: res });
-        }
-        else {
-            setRequeteCartoData({ allRequeteCartoSelected: [
-                ...allRequeteCartoSelected, 
-                element
-            ] });
         }
     }
 
@@ -141,23 +122,7 @@ const FicheDeDonnee = () => {
 
                 {
                     data.map((value, index) => (
-                        <Button
-                            key={index}
-                            variant={allRequeteCartoSelected.find(({ data }) => data.Nom_View === value.data.Nom_View) ? "solid" : "soft"}
-                            onClick={() => toogleElementInSelectedListe(value)}
-                            color={allRequeteCartoSelected.find(({ data }) => data.Nom_View === value.data.Nom_View) ? "success" : "neutral"}
-                            size="sm"
-                            sx={{
-                                fontSize: 12
-                            }}
-                            endDecorator={<ImagePicker
-                                onchange={(icon) => updateDataIcon(index, icon)}
-                            />}
-                        >
-                            <p style={{ width: '100%', textAlign: "left" }} >
-                                {value.data.intitule}
-                            </p>
-                        </Button>
+                        <Item index={index} value={value} key={index} />
                     ))
                 }
 
