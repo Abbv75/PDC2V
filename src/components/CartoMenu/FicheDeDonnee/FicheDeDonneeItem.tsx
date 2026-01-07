@@ -25,20 +25,23 @@ export default ({ value, index }: {
     const [selectedIcon, setselectedIcon] = useState(iconList[0]);
 
     const updateDataIcon = (icon: string) => {
-        // Crée une nouvelle copie du tableau
-        const newData = data.map((item, i) => {
-            if (i === index) {
-                return {
-                    ...item,
-                    icon, // remplace l'ancienne icône
-                };
-            }
-            return item; // les autres restent inchangés
-        });
+    // Crée une NOUVELLE liste entière en remplaçant uniquement l'élément ciblé
+    const newData = data.map((item, i) => {
+        if (i === index) {
+            return {
+                ...item,
+                icon, // remplace l'ancienne icône
+            };
+        }
+        return { ...item }; // créer copie des autres éléments pour forcer rerender
+    });
 
-        setRequeteCartoData({ data: newData });
-        setselectedIcon(icon); // mise à jour locale
-    }
+    // Mettre à jour le state global
+    setRequeteCartoData({ data: newData });
+
+    // Mettre à jour l'état local pour l'affichage immédiat
+    setselectedIcon(icon);
+};
 
     return (
         <Button
