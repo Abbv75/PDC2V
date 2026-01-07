@@ -12,6 +12,7 @@ interface FieldKey {
 interface WorkerInputData {
     data: ElementData[];
     fieldKeyListe: FieldKey[] | '*';
+    keyToHides?: string[]; // champs à masquer dynamiquement
 }
 
 export interface PopUpDataItem {
@@ -33,29 +34,33 @@ export const LNG_KEYS = ['longitude','lng','LG','LONG','LONGITUDE'];
  */
 const findValidKey = (obj: Record<string, any>, keys: string[]): string | null => {
     for (const key of keys) {
-        const k = key in obj ? key : key.toLowerCase() in obj ? key.toLowerCase() : null;
-        if (k && obj[k] !== null && obj[k] !== undefined && obj[k] !== '') {
-            return k;
+        if (key in obj && obj[key] !== null && obj[key] !== undefined && obj[key] !== '') {
+            return key;
+        }
+        const lower = key.toLowerCase();
+        if (lower in obj && obj[lower] !== null && obj[lower] !== undefined && obj[lower] !== '') {
+            return lower;
         }
     }
     return null;
 };
 
 (globalThis as any).onmessage = (event: MessageEvent<WorkerInputData>) => {
-    const { data, fieldKeyListe } = event.data;
+    const { data = [], fieldKeyListe = '*', keyToHides = [] } = event.data || {};
     const processedPoints: ProcessedPoint[] = [];
     const chunkSize = 20;
 
-    console.log('Worker: received data', data.length);
-
-    if (!Array.isArray(data) || data.length === 0) return;
+    if (!Array.isArray(data) || data.length === 0) {
+        console.warn('Worker: No valid data array');
+        return;
+    }
 
     data.forEach((element: ElementData, idx: number) => {
         const latKey = findValidKey(element, LAT_KEYS);
         const lngKey = findValidKey(element, LNG_KEYS);
 
         if (!latKey || !lngKey) {
-            console.warn('Worker: Ignoring element, no valid lat/lng key', element);
+            console.warn('Worker: Ignoring element, no valid lat/lng', element);
             return;
         }
 
@@ -68,8 +73,10 @@ const findValidKey = (obj: Record<string, any>, keys: string[]): string | null =
         }
 
         const popUpData: PopUpDataItem[] = [];
+
         for (const key in element) {
             if (key === 'textIcon') continue;
+            if (keyToHides.includes(key)) continue; // ignorer les champs à masquer
 
             const field = fieldKeyListe === '*' 
                 ? { originaleName: key, renamed: key } 
@@ -88,14 +95,14 @@ const findValidKey = (obj: Record<string, any>, keys: string[]): string | null =
             popUpData
         });
 
-        // Envoyer par paquet
+        // Envoi par paquet pour l'affichage progressif
         if (processedPoints.length > 0 && ((idx + 1) % chunkSize === 0 || (idx + 1) === data.length)) {
             (globalThis as any).postMessage(structuredClone(processedPoints));
             processedPoints.length = 0;
         }
     });
 
-    // Dernier paquet
+    // Dernier paquet si nécessaire
     if (processedPoints.length > 0) {
         (globalThis as any).postMessage(structuredClone(processedPoints));
     }
