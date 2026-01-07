@@ -44,10 +44,10 @@ const SideBar = () => {
 
     return (
         <Stack
-            position={"fixed"}
-            top={70}
-            right={10}
-            zIndex={999}
+            // position={"fixed"}
+            // top={70}
+            // right={10}
+            // zIndex={999}
             direction={'row'}
             gap={1}
             alignItems={'flex-start'}

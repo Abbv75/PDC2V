@@ -12,11 +12,12 @@ export default () => {
         <Card
             sx={{
                 borderRadius: 0,
-                p: 1,
+                p: '10px',
                 width: isOpen ? 400 : 50,
                 gap: 3,
                 overflowY : 'auto',
-                height: 'calc(100vh - 80px)',
+                height:'calc(100% - 22px)',
+                transition:`all 0.3s ease-in-out`
             }}
             variant="outlined"
         >

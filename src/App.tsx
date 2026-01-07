@@ -1,4 +1,4 @@
-import { Stack } from "@mui/joy"
+import { Grid, Stack } from "@mui/joy"
 import Cartographie from "./components/Cartographie"
 //@ts-ignore
 import "./assets/css/leaflet.css"
@@ -16,7 +16,7 @@ import ImagePicker2 from "components/ImagePicker2"
 export const urlparams = new URLSearchParams(window.location.search);
 
 const App = () => {
-  const {loadIconList} = useIconMapStore();  
+  const { loadIconList } = useIconMapStore();
 
   const [legendeSection, setlegendeSection] = useState({});
 
@@ -68,15 +68,23 @@ const App = () => {
 
         <Header />
 
-        <Stack flex={1} direction="row">
-          <NavBar />
-          <Cartographie />
-        </Stack>
+        <Grid container flex={1} >
+          <Grid height={'100%'} bgcolor={'red'}>
+            <NavBar />
+          </Grid>
 
-        <ImagePicker2/>
+          <Grid flex={1} >
+            <Cartographie />
+          </Grid>
+
+          <Grid p={1}>
+            <SideBar />
+          </Grid>
+        </Grid>
+
+        <ImagePicker2 />
 
         {/* <CartoMenu /> */}
-        <SideBar />
 
         <ShapeFileColorEditer />
 
