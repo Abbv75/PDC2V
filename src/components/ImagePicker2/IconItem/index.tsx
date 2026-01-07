@@ -9,7 +9,8 @@ const IconItem = ({ value }: { value: string,}) => {
         <CardMedia
             component="img"
             sx={{
-                height: '100%',
+                height: 100,
+                width: 100,
                 aspectRatio: 1,
             }}
             src={value}

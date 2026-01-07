@@ -21,14 +21,23 @@ export default ({ value, index }: {
         data
     } = useRequeteCartoStore();
     const setRequeteCartoData = useRequeteCartoStore(state => state.set);
-    
+
     const [selectedIcon, setselectedIcon] = useState(iconList[0]);
 
-    const updateDataIcon = (icon: any) => {
-        const newData = [...data];
-        newData[index].icon = icon;
+    const updateDataIcon = (icon: string) => {
+        // Crée une nouvelle copie du tableau
+        const newData = data.map((item, i) => {
+            if (i === index) {
+                return {
+                    ...item,
+                    icon, // remplace l'ancienne icône
+                };
+            }
+            return item; // les autres restent inchangés
+        });
+
         setRequeteCartoData({ data: newData });
-        setselectedIcon(icon);
+        setselectedIcon(icon); // mise à jour locale
     }
 
     return (
@@ -43,7 +52,8 @@ export default ({ value, index }: {
             endDecorator={
                 <Avatar
                     size="sm"
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         setIconMapData({
                             onChange: updateDataIcon,
                             showImagePicker: true,

@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 
 const CompassControl = () => {
     const [isDragging, setIsDragging] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 90 });
+    const [position, setPosition] = useState({ x: 420, y: 90 });
 
     const offset = useRef({ x: 0, y: 0 });
 

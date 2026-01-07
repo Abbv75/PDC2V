@@ -10,6 +10,7 @@ import LocaliteElement from "features/LocaliteElement";
 import RapportCartoElement from "features/RapportCartoElement";
 import CountryMask from "./CountryMask";
 import useMapStore from "stores/map/useMapStore";
+import ConfigZone from "./ConfigZone";
 
 const Cartographie = () => {
     const {
@@ -24,6 +25,7 @@ const Cartographie = () => {
         <Stack
             height={"100%"}
             ref={mapRef}
+            width={"100%"}
         >
             <MapContainer
                 center={mainCouche.coordonnee as any}
@@ -39,7 +41,7 @@ const Cartographie = () => {
                 maxBounds={mainCouche.bound as any}
                 maxBoundsViscosity={1} // 1.0 = Bloque totalement. 0.5 = Effet élastique.
             >
-                {/* <ConfigZone /> */}
+                <ConfigZone />
 
                 <CoucheDonneeElement />
 

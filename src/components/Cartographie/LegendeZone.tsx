@@ -7,7 +7,7 @@ const LegendeZone = () => {
     const { legendeSection } = useContext(AppContext);
 
     const [isDragging, setIsDragging] = useState(false);
-    const [position, setPosition] = useState({ x: 60, y: 70 });
+    const [position, setPosition] = useState({ x: 430, y: 210 });
 
     const offset = useRef({ x: 0, y: 0 });
 

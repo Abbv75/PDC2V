@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import ElementContainer from '../../components/Cartographie/ElementContainer';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { GET_REQUETE_CARTE_T } from '../../types';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
-
-interface REQUETE_DATA_T {
-    title?: string,
-    data: GET_REQUETE_CARTE_T[],
-    icon?: any
-}
+import ElementContainer from 'components/Cartographie/ElementContainer';
 
 const FicheDeDonneeElement = () => {    
     const { allRequeteCartoSelected, requetesData } = useRequeteCartoStore();
@@ -44,7 +37,7 @@ const FicheDeDonneeElement = () => {
             loadListe()
         },
         [allRequeteCartoSelected]
-    )
+    );
 
 
     if (!allRequeteCartoSelected.length) {

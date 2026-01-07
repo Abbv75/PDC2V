@@ -6,17 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { Marker } from "react-leaflet";
 import { toast } from "react-toastify";
 import PopupContent from "./PopupContent";
-
-// Définition des types pour les données traitées par le worker
-interface PopUpDataItem {
-    label: string;
-    value: any;
-}
-
-export interface ProcessedPoint {
-    coor: [number, number];
-    popUpData: PopUpDataItem[];
-}
+import type { ProcessedPoint } from "../../../workers/ElementContainerWorker";
 
 const ElementContainer = ({
     data,
@@ -26,15 +16,15 @@ const ElementContainer = ({
     icon = ICON.location1,
     markerText
 }: {
-    data: { [key: string]: any, longitude?: number | string, latitude?: number | string }[],
-    fieldKeyListe: { originaleName: string, renamed?: string }[] | '*',
-    show: boolean,
+    data: { [key: string]: any }[],
+    fieldKeyListe: { originaleName: string; renamed?: string }[] | '*',
+    show?: boolean,
     nomListe?: string,
     icon?: string,
     markerText?: {
-        field: string,
-        color?: string
-    }
+        field: string;
+        color?: string;
+    };
 }) => {
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
     const workerRef = useRef<Worker | null>(null);
@@ -46,79 +36,62 @@ const ElementContainer = ({
         }
     }
 
-    const loadPoint = async () => {
+    const loadPoints = () => {
+        cleanWorker();
+
         try {
-            // toast.info(`Compilation des ${nomListe}`);
-
-            cleanWorker()
-
-            const worker = new Worker(new URL('../../workers/ElementContainerWorker.ts', import.meta.url));
+            const worker = new Worker(new URL('../../../workers/ElementContainerWorker.ts', import.meta.url));
             workerRef.current = worker;
 
             worker.postMessage({ data, fieldKeyListe });
 
             worker.onmessage = (event) => {
-                const newPointsChunk: ProcessedPoint[] = event.data;
-                console.log('La liste des points recu par le worker:', newPointsChunk);
-                setProcessedPoints(prevPoints => [...prevPoints, ...newPointsChunk]);
+                const newPoints: ProcessedPoint[] = event.data;
+                setProcessedPoints(prev => [...prev, ...newPoints]);
             };
 
-            worker.onerror = (error) => {
-                console.error("Worker error:", error);
-                toast.error("Erreur lors du traitement des données par le worker.");
+            worker.onerror = (err) => {
+                console.error('Worker error', err);
+                toast.error('Erreur dans le worker');
             };
-        } catch (error) {
-            toast.error('Une erreur est survenue lors de la compilation');
+        } catch (err) {
+            console.error(err);
+            toast.error('Impossible de charger les points');
         }
     }
 
     useEffect(() => {
         if (show) {
             setProcessedPoints([]);
-            loadPoint();
-
-            return () => {
-                cleanWorker()
-            };
+            loadPoints();
+            return cleanWorker;
         } else {
-            // Si show est false, vider les points et terminer le worker
             setProcessedPoints([]);
             cleanWorker();
         }
-    }, [data, show, icon]);
+    }, [data, show]);
 
-
-    useEffect(() => {
-        console.log('====================================');
-        console.log(processedPoints);
-        console.log('====================================');
-    }, [processedPoints])
-
-    if (!show) {
-        return <></>;
-    }
-
-    console.log('Rendering ElementContainer. Current processedPoints count:', processedPoints.length);
-
+    if (!show) return null;
 
     return (
-        processedPoints.map((value, index) => (
-            <Marker
-                position={value.coor as any}
-                key={index}
-                icon={
-                    markerText
+        <>
+            {processedPoints.map((point, idx) => (
+                <Marker
+                    position={point.coor}
+                    key={idx}
+                    icon={markerText
                         ? getCustomeTextIcon({
-                            text: value.popUpData.find(item => item.label === markerText.field)?.value,
+                            text: point.popUpData.find(p => p.label === markerText.field)?.value,
                             bgcolor: markerText.color || green[600],
                             padding: '5px 10px'
                         })
-                        : getCustomeIcon(icon || ICON.location1)
-                }
-            >
-                <PopupContent popUpData={value.popUpData} />
-            </Marker>
-        ))
+                        : getCustomeIcon(icon)
+                    }
+                >
+                    <PopupContent popUpData={point.popUpData} />
+                </Marker>
+            ))}
+        </>
     );
 }
 
