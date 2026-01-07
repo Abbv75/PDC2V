@@ -15,9 +15,11 @@ export default () => {
                 p: '10px',
                 width: isOpen ? 400 : 50,
                 gap: 3,
-                overflowY : 'auto',
-                height:'calc(100% - 22px)',
-                transition:`all 0.3s ease-in-out`
+                overflowY: 'scroll',
+                height: 'calc(100% - 22px)',
+                maxHeight: 'calc(100% - 22px)',
+                transition: `all 0.3s ease-in-out`,
+                pr: 0.5,
             }}
             variant="outlined"
         >
