@@ -6,16 +6,17 @@ import { getCustomeTextIcon } from "../../../helper/getCustomeTextIcon";
 import { toast } from "react-toastify";
 import addMetaDataToLayer from "./addMetaDataToLayer";
 import useShapeFileContainerStore from "stores/shapeFileContainer/useShapeFileContainerStore";
+import useReglageStore from "stores/reglage/useReglageStore";
 
 const ShapeFileContainer = ({
     coucheDeDonneesListe,
     setcurrentRegionName = () => { },
-    showName = true,
-    showPopUp = false
 }) => {
     // Récupération de l'état et de la fonction de mise à jour du store
     const { elementfailedList } = useShapeFileContainerStore();
     const setShapeFileContainerData = useShapeFileContainerStore((state) => state.set);
+
+    const { showShapefileName, showShapefilePopup } = useReglageStore();
 
     const layersRef = useRef({});
     const regionMarkersRef = useRef({});
@@ -53,7 +54,7 @@ const ShapeFileContainer = ({
             // Tentative de récupération du GeoJSON
             let geojson = await shp(coucheObject.filePath).catch((err) => {
                 console.error(`Erreur réseau/parsing pour ${coucheObject.filePath}:`, err);
-                return null; 
+                return null;
             });
 
             // Si shpjs retourne null ou échoue
@@ -112,7 +113,7 @@ const ShapeFileContainer = ({
                         const nameMarker = L.marker(center, { icon: regionIcon });
                         addNameMarker(coucheObject.filePath, nameMarker);
 
-                        if (showName) {
+                        if (showShapefileName) {
                             if (!map.hasLayer(nameLayerGroupsRef.current[coucheObject.filePath])) {
                                 map.addLayer(nameLayerGroupsRef.current[coucheObject.filePath]);
                             }
@@ -176,7 +177,7 @@ const ShapeFileContainer = ({
         });
     }, [map, coucheDeDonneesListe, elementfailedList]); // Ajout de elementfailedList en dépendance
 
-    // ... (rest of the useEffects for showName and showPopUp remain the same)
+    // ... (rest of the useEffects for showShapefileName and showPopUp remain the same)
 
     return null;
 };

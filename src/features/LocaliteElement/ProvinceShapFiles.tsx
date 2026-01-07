@@ -1,12 +1,10 @@
 import { blue } from '@mui/material/colors';
 import ShapeFileContainer from 'components/Cartographie/ShapeFileContainer';
 import { REACT_APP_SHAPE_FILE_URL } from 'constant';
-import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
 import useLocaliteStore from 'stores/localite/useLocaliteStore';
 import { SHAPE_OBJECT_T } from 'types';
 
 const ProvinceShapFiles = () => {
-    const { coucheDeDonneesElementConfig } = useCoucheDeDonneeStore();
     const {localiteDepartementsSelected} = useLocaliteStore();
 
     return (
@@ -20,9 +18,7 @@ const ProvinceShapFiles = () => {
                 metaData: {
                     "Nom du département": value.nom_departement
                 }
-            } as SHAPE_OBJECT_T))}
-            showName={coucheDeDonneesElementConfig.showShapefileName}
-            showPopUp={coucheDeDonneesElementConfig.showShapefilePopup}
+            } as SHAPE_OBJECT_T))}      
         />
     )
 }

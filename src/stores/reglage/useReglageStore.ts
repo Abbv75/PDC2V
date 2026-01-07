@@ -1,15 +1,16 @@
-import { COUCHE_DE_DONNEES_LISTE } from "constant";
 import { create } from "zustand";
 
 interface Props_T {
-    set : {
+    set: {
         (partial: Props_T | Partial<Props_T> | ((state: Props_T) => Props_T | Partial<Props_T>), replace?: false): void;
         (state: Props_T | ((state: Props_T) => Props_T), replace: true): void;
     }
-    coucheDeDonneesSelectedListe : typeof COUCHE_DE_DONNEES_LISTE;
+    showShapefileName: boolean;
+    showShapefilePopup: boolean;
 }
 
 export default create<Props_T>((set, get) => ({
     set: set,
-    coucheDeDonneesSelectedListe: [],
+    showShapefileName: true,
+    showShapefilePopup: false
 }));

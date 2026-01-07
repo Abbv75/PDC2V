@@ -1,14 +1,13 @@
 import ShapeFileContainer from 'components/Cartographie/ShapeFileContainer';
 import useCoucheDeDonneeStore from 'stores/coucheDeDonnee/useCoucheDeDonneeStore';
+import useReglageStore from 'stores/reglage/useReglageStore';
 
 const CoucheDonneeElement = () => {
-    const { coucheDeDonneesSelectedListe, coucheDeDonneesElementConfig } = useCoucheDeDonneeStore();
+    const { coucheDeDonneesSelectedListe } = useCoucheDeDonneeStore();
 
     return (
         <ShapeFileContainer
             coucheDeDonneesListe={coucheDeDonneesSelectedListe}
-            showName={coucheDeDonneesElementConfig.showShapefileName}
-            showPopUp={coucheDeDonneesElementConfig.showShapefilePopup}
         />
     )
 }
