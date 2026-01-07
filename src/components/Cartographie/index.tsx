@@ -2,11 +2,7 @@ import { MapContainer } from "react-leaflet";
 import { Stack } from "@mui/joy";
 import { useContext } from "react";
 import { AppContext } from "../../providers";
-import CurrentVillageElement from "../../features/CurrentVillageElement";
-import CurrentCommuneElement from "../../features/CurrentCommuneElement";
 import CoucheDonneeElement from "../../features/CoucheDonneeElement";
-import CurrentProvinceElement from "features/CurrentProvinceElement";
-import CurrentRegionElement from "features/CurrentRegionElement";
 import { COUCHE_DE_DONNEES_LISTE } from "constant";
 import FicheDeDonneeElement from "features/FicheDeDonneeElement";
 import FichesDynamiquesElement from "features/FichesDynamiquesElement";
@@ -44,14 +40,6 @@ const Cartographie = () => {
                 maxBoundsViscosity={1} // 1.0 = Bloque totalement. 0.5 = Effet élastique.
             >
                 {/* <ConfigZone /> */}
-
-                <CurrentVillageElement />
-
-                <CurrentCommuneElement />
-
-                <CurrentProvinceElement />
-
-                <CurrentRegionElement />
 
                 <CoucheDonneeElement />
 

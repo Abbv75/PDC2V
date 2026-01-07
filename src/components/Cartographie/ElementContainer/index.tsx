@@ -1,11 +1,11 @@
-import { Divider, Stack, Typography } from "@mui/joy";
-import { blue, green } from "@mui/material/colors";
+import { green } from "@mui/material/colors";
 import { ICON } from "constant";
 import { getCustomeIcon } from "helper/getCustomeIcon";
 import { getCustomeTextIcon } from "helper/getCustomeTextIcon";
-import { Fragment, useCallback, useEffect, useState, useRef } from "react";
-import { Marker, Popup } from "react-leaflet";
+import { useEffect, useState, useRef } from "react";
+import { Marker } from "react-leaflet";
 import { toast } from "react-toastify";
+import PopupContent from "./PopupContent";
 
 // Définition des types pour les données traitées par le worker
 interface PopUpDataItem {
@@ -87,48 +87,6 @@ const ElementContainer = ({
         }
     }, [data, show, icon]);
 
-    const renderPopupContent = useCallback((popUpData: PopUpDataItem[]) => (
-        <Popup>
-            <Stack
-                gap={1}
-                sx={{
-                    "& *": {
-                        height: "fit-content"
-                    }
-                }}
-                width={300}
-            >
-                {popUpData.map((item, idx) => (
-                    <Fragment key={idx}>
-                        <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            justifyContent={"space-between"}
-                            gap={3}
-                        >
-                            <Typography
-                                maxWidth={"75%"}
-                                textColor={blue[600]}
-                                fontSize={11}
-                                fontWeight={700}
-                            >
-                                {item.label}
-                            </Typography>
-                            <Typography
-                                textAlign={"right"}
-                                minWidth={"25%"}
-                                fontSize={11}
-                            >
-                                {item.value}
-                            </Typography>
-                        </Stack>
-                        <Divider />
-                    </Fragment>
-                ))}
-            </Stack>
-        </Popup>
-    ), []);
-
 
     useEffect(() => {
         console.log('====================================');
@@ -144,26 +102,23 @@ const ElementContainer = ({
 
 
     return (
-        <>
-            {/* Afficher les marqueurs au fur et à mesure qu'ils sont traités */}
-            {processedPoints.map((value, index) => (
-                <Marker
-                    position={value.coor as any}
-                    key={index}
-                    icon={
-                        markerText
-                            ? getCustomeTextIcon({
-                                text: value.popUpData.find(item => item.label === markerText.field)?.value,
-                                bgcolor: markerText.color || green[600],
-                                padding: '5px 10px'
-                            })
-                            : getCustomeIcon(icon || ICON.location1)
-                    }
-                >
-                    {renderPopupContent(value.popUpData)}
-                </Marker>
-            ))}
-        </>
+        processedPoints.map((value, index) => (
+            <Marker
+                position={value.coor as any}
+                key={index}
+                icon={
+                    markerText
+                        ? getCustomeTextIcon({
+                            text: value.popUpData.find(item => item.label === markerText.field)?.value,
+                            bgcolor: markerText.color || green[600],
+                            padding: '5px 10px'
+                        })
+                        : getCustomeIcon(icon || ICON.location1)
+                }
+            >
+                <PopupContent popUpData={value.popUpData} />
+            </Marker>
+        ))
     );
 }
 
