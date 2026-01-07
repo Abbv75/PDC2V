@@ -1,3 +1,4 @@
+import { LAT_KEYS, LNG_KEYS } from "workers/ElementContainerWorker";
 import { create } from "zustand";
 
 interface Props_T {
@@ -16,7 +17,7 @@ export default create<Props_T>((set, get) => ({
     set: set,
     showShapefileName: true,
     showShapefilePopup: false,
-    keyToHides: [],
+    keyToHides: [LAT_KEYS, LNG_KEYS].flat(),
     addKeyToHide: (key: string) =>
         set((state) => ({
             keyToHides: state.keyToHides.includes(key)

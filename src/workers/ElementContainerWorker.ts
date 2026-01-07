@@ -25,8 +25,8 @@ export interface ProcessedPoint {
 }
 
 // Toutes les variantes possibles
-const LAT_KEYS = ['latitude','lat','l','LAT','LATITUDE','LT'];
-const LNG_KEYS = ['longitude','lng','LG','LONG','LONGITUDE'];
+export const LAT_KEYS = ['latitude','lat','LAT','LATITUDE','LT'];
+export const LNG_KEYS = ['longitude','lng','LG','LONG','LONGITUDE'];
 
 /**
  * Trouve la première clé avec une valeur valide
