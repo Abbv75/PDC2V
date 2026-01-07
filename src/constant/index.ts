@@ -11,3 +11,6 @@ export { default as ICON } from './icon';
 export const REACT_APP_SHAPE_FILE_URL = process.env.NODE_ENV == "production"
     ? process.env.REACT_APP_SHAPE_FILE_URL_PROD
     : process.env.REACT_APP_SHAPE_FILE_URL_DEV;
+
+export const LAT_KEYS = ['latitude', 'lat', 'LAT', 'LATITUDE', 'LT'];
+export const LNG_KEYS = ['longitude', 'lng', 'LG', 'LONG', 'LONGITUDE'];
