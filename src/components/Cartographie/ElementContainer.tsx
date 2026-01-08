@@ -1,11 +1,14 @@
 import { Divider, Stack, Typography } from "@mui/joy";
 import { blue, green } from "@mui/material/colors";
+import CustomSwipper from "components/CustomSwipper";
 import { ICON } from "constant";
 import { getCustomeIcon } from "helper/getCustomeIcon";
 import { getCustomeTextIcon } from "helper/getCustomeTextIcon";
+import { isImageValue } from "helper/isImageValue";
 import { Fragment, useCallback, useEffect, useState, useRef } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { toast } from "react-toastify";
+import useReglageStore from "stores/reglage/useReglageStore";
 
 // Définition des types pour les données traitées par le worker
 interface PopUpDataItem {
@@ -18,7 +21,7 @@ export interface ProcessedPoint {
     popUpData: PopUpDataItem[];
 }
 
-export default ({
+const ElementContainer = ({
     data,
     fieldKeyListe,
     show = true,
@@ -52,7 +55,7 @@ export default ({
 
             cleanWorker()
 
-            const worker = new Worker(new URL('../../../workers/ElementContainerWorker.ts', import.meta.url));
+            const worker = new Worker(new URL('../../workers/ElementContainerWorker.ts', import.meta.url));
             workerRef.current = worker;
 
             worker.postMessage({ data, fieldKeyListe });
@@ -87,47 +90,79 @@ export default ({
         }
     }, [data, show, icon]);
 
-    const renderPopupContent = useCallback((popUpData: PopUpDataItem[]) => (
-        <Popup>
-            <Stack
-                gap={1}
-                sx={{
-                    "& *": {
-                        height: "fit-content"
-                    }
-                }}
-                width={300}
-            >
-                {popUpData.map((item, idx) => (
-                    <Fragment key={idx}>
-                        <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            justifyContent={"space-between"}
-                            gap={3}
-                        >
-                            <Typography
-                                maxWidth={"75%"}
-                                textColor={blue[600]}
-                                fontSize={11}
-                                fontWeight={700}
-                            >
-                                {item.label}
-                            </Typography>
-                            <Typography
-                                textAlign={"right"}
-                                minWidth={"25%"}
-                                fontSize={11}
-                            >
-                                {item.value}
-                            </Typography>
-                        </Stack>
-                        <Divider />
-                    </Fragment>
-                ))}
-            </Stack>
-        </Popup>
-    ), []);
+    const RenderPopupContent = (popUpData: PopUpDataItem[]) => {
+        const keyToHides = useReglageStore((state) => state.keyToHides);
+
+        // Filtrer les champs masqués
+        const filteredData = popUpData.filter(item => !keyToHides.includes(item.label));
+
+        if (filteredData.length === 0) {
+            return (
+                <Popup>
+                    <Typography fontSize={11} textColor="neutral.500">
+                        Aucun champ visible
+                    </Typography>
+                </Popup>
+            );
+        }
+
+        return (
+            <Popup>
+                <Stack gap={1} width={300} sx={{ "& *": { height: "fit-content" } }}>
+                    {filteredData.map((item, idx) => {
+                        let valueToRender = item.value;
+
+                        // Si c'est une seule image, transformer en tableau pour CustomSwipper
+                        if (isImageValue(valueToRender)) {
+                            valueToRender = [valueToRender];
+                        }
+
+                        // Si c'est un tableau d'images, afficher CustomSwipper
+                        if (Array.isArray(valueToRender) && valueToRender.every(isImageValue)) {
+                            return (
+                                <Fragment key={idx}>
+                                    <Typography
+                                        fontSize={11}
+                                        fontWeight={700}
+                                        textColor={blue[600]}
+                                    >
+                                        {item.label}
+                                    </Typography>
+                                    <CustomSwipper photosListe={valueToRender as string[]} />
+                                    <Divider />
+                                </Fragment>
+                            );
+                        }
+
+                        // Sinon, afficher sous forme de ligne de tableau
+                        return (
+                            <Fragment key={idx}>
+                                <Stack
+                                    direction="row"
+                                    alignItems="center"
+                                    justifyContent="space-between"
+                                    gap={2}
+                                >
+                                    <Typography
+                                        fontSize={11}
+                                        fontWeight={700}
+                                        textColor={blue[600]}
+                                        maxWidth="40%"
+                                    >
+                                        {item.label}
+                                    </Typography>
+                                    <Typography fontSize={11} maxWidth="60%" textAlign="right">
+                                        {String(valueToRender)}
+                                    </Typography>
+                                </Stack>
+                                <Divider />
+                            </Fragment>
+                        );
+                    })}
+                </Stack>
+            </Popup>
+        );
+    }
 
 
     useEffect(() => {
@@ -160,9 +195,11 @@ export default ({
                             : getCustomeIcon(icon || ICON.location1)
                     }
                 >
-                    {renderPopupContent(value.popUpData)}
+                    {RenderPopupContent(value.popUpData)}
                 </Marker>
             ))}
         </>
     );
 }
+
+export default ElementContainer;

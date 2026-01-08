@@ -1,6 +1,6 @@
+import ElementContainer from 'components/Cartographie/ElementContainer';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import ElementContainer from 'components/Cartographie/ElementContainer';
 import useFicheDynamiquesStore from 'stores/ficheDynamiques/useFicheDynamiquesStore';
 
 const FichesDynamiquesElement = () => {

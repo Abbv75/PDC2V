@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { toast } from 'react-toastify';
 import { getRapportCarto } from 'functions/API';
 import useRapportCartoStore from 'stores/rapportCarto/useRapportCartoStore';
+import ElementContainer from 'components/Cartographie/ElementContainer';
 
 export default () => {
     const { allRapportCartoSelected, requetesData } = useRapportCartoStore();

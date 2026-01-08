@@ -11,11 +11,8 @@ export interface PopUpDataItem {
     value: unknown;
 }
 
-interface PopupContentProps {
-    popUpData: PopUpDataItem[];
-}
 
-const PopupContent = ({ popUpData }: PopupContentProps) => {
+const PopupContent = ({ popUpData }: {popUpData: PopUpDataItem[]}) => {
     const keyToHides = useReglageStore((state) => state.keyToHides);
 
     // Filtrer les champs masqués
