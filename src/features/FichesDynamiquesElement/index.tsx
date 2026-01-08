@@ -1,4 +1,4 @@
-import ElementContainer from 'components/Cartographie/ElementContainer';
+import ElementContainerTmp from 'components/Cartographie/ElementContainerTmp';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import useFicheDynamiquesStore from 'stores/ficheDynamiques/useFicheDynamiquesStore';
@@ -86,7 +86,7 @@ const FichesDynamiquesElement = () => {
     return (
         <>
             {elementListe.map((value, index) => (
-                <ElementContainer
+                <ElementContainerTmp
                     key={index}
                     data={value.data.map(element => ({ ...element, latitude: element?.LT, longitude: element?.LG }))}
                     fieldKeyListe={'*'}

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getRapportCarto } from 'functions/API';
 import useRapportCartoStore from 'stores/rapportCarto/useRapportCartoStore';
-import ElementContainer from 'components/Cartographie/ElementContainer';
+import ElementContainerTmp from 'components/Cartographie/ElementContainerTmp';
 
 export default () => {
     const { allRapportCartoSelected, requetesData } = useRapportCartoStore();
@@ -49,7 +49,7 @@ export default () => {
     return (
         <>
             {requetesData.map((value, index) => (
-                <ElementContainer
+                <ElementContainerTmp
                     data={value.data.rows.map((element) => (
                         {
                             ...element,

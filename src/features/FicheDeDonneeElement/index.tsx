@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
-import ElementContainer from 'components/Cartographie/ElementContainer';
 import ElementContainerTmp from 'components/Cartographie/ElementContainerTmp';
 
 const FicheDeDonneeElement = () => {    

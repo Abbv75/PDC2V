@@ -40,59 +40,66 @@ export default ({
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
     const workerRef = useRef<Worker | null>(null);
 
+    const requestIdRef = useRef(0);
+
     const cleanWorker = () => {
         if (workerRef.current) {
+            
             workerRef.current.terminate();
             workerRef.current = null;
         }
     }
 
-    const loadPoint = async () => {
-        try {
-            // toast.info(`Compilation des ${nomListe}`);
+    const loadPoint = () => {
+        if (workerRef.current) return; // ⛔ déjà en cours
 
-            cleanWorker()
+        const currentRequestId = ++requestIdRef.current;
 
-            const worker = new Worker(new URL('../../../workers/ElementContainerWorker.ts', import.meta.url));
-            workerRef.current = worker;
+        const worker = new Worker(
+            new URL('../../../workers/ElementContainerWorker.ts', import.meta.url)
+        );
 
-            worker.postMessage({ data, fieldKeyListe });
+        workerRef.current = worker;
 
-            worker.onmessage = (event) => {
-                const newPointsChunk: ProcessedPoint[] = event.data;
-                console.log('La liste des points recu par le worker:', newPointsChunk);
-                setProcessedPoints(prevPoints => [...prevPoints, ...newPointsChunk]);
-            };
+        worker.postMessage({ data, fieldKeyListe });
 
-            worker.onerror = (error) => {
-                console.error("Worker error:", error);
-                toast.error("Erreur lors du traitement des données par le worker.");
-            };
-        } catch (error) {
-            toast.error('Une erreur est survenue lors de la compilation');
-        }
-    }
+        worker.onmessage = (event) => {
+            if (currentRequestId !== requestIdRef.current) return;
+
+            setProcessedPoints(prev => [...prev, ...event.data]);
+        };
+
+        worker.onerror = () => {
+            workerRef.current = null;
+        };
+    };
+
+
 
     useEffect(() => {
-        if (show) {
-            setProcessedPoints([]);
-            loadPoint();
-
-            return () => {
-                cleanWorker()
-            };
-        } else {
-            // Si show est false, vider les points et terminer le worker
+        if (!show) {
+            requestIdRef.current++;
             setProcessedPoints([]);
             cleanWorker();
+            return;
         }
-    }, [data, show, icon]);
+
+        requestIdRef.current++;
+        setProcessedPoints([]);
+        loadPoint();
+
+        return () => {
+            cleanWorker();
+        };
+
+    }, [show, data, fieldKeyListe]);
 
     useEffect(() => {
         console.log('====================================');
         console.log(processedPoints);
         console.log('====================================');
-    }, [processedPoints])
+    }, [processedPoints]);
+
 
     if (!show) {
         return <></>;
@@ -107,7 +114,7 @@ export default ({
             {processedPoints.map((value, index) => (
                 <Marker
                     position={value.coor as any}
-                    key={index}
+                    key={`${value.coor[0]}-${value.coor[1]}`}
                     icon={
                         markerText
                             ? getCustomeTextIcon({

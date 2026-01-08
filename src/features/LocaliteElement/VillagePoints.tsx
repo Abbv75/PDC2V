@@ -1,4 +1,4 @@
-import ElementContainer from 'components/Cartographie/ElementContainer';
+import ElementContainerTmp from 'components/Cartographie/ElementContainerTmp';
 import { ICON } from 'constant';
 import useLocaliteStore from 'stores/localite/useLocaliteStore';
 
@@ -6,7 +6,7 @@ const VillagePoints = () => {
     const {localiteVillagesSelected} = useLocaliteStore();
 
     return (
-        <ElementContainer
+        <ElementContainerTmp
             data={localiteVillagesSelected}
             nomListe={'La liste des villages'}
             fieldKeyListe={[
