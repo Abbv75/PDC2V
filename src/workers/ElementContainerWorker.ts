@@ -11,10 +11,19 @@ interface FieldKey {
     renamed?: string;
 }
 
-interface WorkerInputData {
+interface WorkerStartMessage {
+    type: 'START';
+    jobId: number;
     data: ElementData[];
     fieldKeyListe: FieldKey[] | '*';
 }
+
+interface WorkerCancelMessage {
+    type: 'CANCEL';
+    jobId: number;
+}
+
+type WorkerMessage = WorkerStartMessage | WorkerCancelMessage;
 
 interface PopUpDataItem {
     label: string;
@@ -26,70 +35,86 @@ interface ProcessedPoint {
     popUpData: PopUpDataItem[];
 }
 
-(globalThis as any).onmessage = function (event: MessageEvent<WorkerInputData>) {
-    const { data, fieldKeyListe } = event.data;
-    const processedPoints: ProcessedPoint[] = [];
-    const chunkSize = 20;
+let cancelledJobId: number | null = null;
 
-    if (!Array.isArray(data) || data.length === 0) {
-        console.warn('Worker: No valid data array to process.');
-        globalThis.close(); // 🔥 fermeture immédiate
+(globalThis as any).onmessage = async (event: MessageEvent<WorkerMessage>) => {
+    const msg = event.data;
+
+    if (msg.type === 'CANCEL') {
+        cancelledJobId = msg.jobId;
         return;
     }
 
-    const LATITUDE_KEY = 'latitude';
-    const LONGITUDE_KEY = 'longitude';
+    if (msg.type !== 'START') return;
 
-    data.forEach((currentElement: ElementData, index: number) => {
-        const lat = parseFloat(String(currentElement[LATITUDE_KEY]));
-        const lg = parseFloat(String(currentElement[LONGITUDE_KEY]));
+    const { jobId, data, fieldKeyListe } = msg;
+    cancelledJobId = null;
 
-        if (!isNaN(lat) && !isNaN(lg)) {
+    if (!Array.isArray(data) || data.length === 0) {
+        (globalThis as any).postMessage({ type: 'DONE', jobId });
+        globalThis.close();
+        return;
+    }
+
+    const chunkSize = 20;
+    let buffer: ProcessedPoint[] = [];
+
+    const LAT = 'latitude';
+    const LNG = 'longitude';
+
+    for (let i = 0; i < data.length; i++) {
+
+        // 🛑 stream stoppé
+        if (cancelledJobId === jobId) {
+            (globalThis as any).postMessage({ type: 'DONE', jobId });
+            globalThis.close();
+            return;
+        }
+
+        const el = data[i];
+        const lat = parseFloat(String(el[LAT]));
+        const lng = parseFloat(String(el[LNG]));
+
+        if (!isNaN(lat) && !isNaN(lng)) {
             const popUpData: PopUpDataItem[] = [];
 
-            for (const key in currentElement) {
+            for (const key in el) {
                 if (key === 'textIcon') continue;
 
                 const field = fieldKeyListe === '*'
                     ? { originaleName: key, renamed: key }
-                    : fieldKeyListe.find(x => x.originaleName === key);
+                    : fieldKeyListe.find(f => f.originaleName === key);
 
                 if (field) {
                     popUpData.push({
                         label: field.renamed || field.originaleName,
-                        value: currentElement[key]
+                        value: el[key]
                     });
                 }
             }
 
-            processedPoints.push({
-                coor: [lat, lg],
+            buffer.push({
+                coor: [lat, lng],
                 popUpData
             });
         }
 
-        // envoi par chunks
-        if (
-            processedPoints.length > 0 &&
-            (
-                (index + 1) % chunkSize === 0 ||
-                (index + 1) === data.length
-            )
-        ) {
-            (globalThis as any).postMessage(structuredClone(processedPoints));
-            processedPoints.length = 0;
+        // 📦 envoi chunk
+        if (buffer.length === chunkSize || i === data.length - 1) {
+            (globalThis as any).postMessage({
+                type: 'CHUNK',
+                jobId,
+                payload: structuredClone(buffer)
+            });
+            buffer = [];
         }
-    });
 
-    // sécurité finale
-    if (processedPoints.length > 0) {
-        (globalThis as any).postMessage(structuredClone(processedPoints));
+        // ⏳ yield (évite blocage CPU)
+        await new Promise(r => setTimeout(r, 0));
     }
 
-    console.log('Worker: traitement terminé, fermeture.');
-
-    globalThis.close(); // 🔥🔥🔥 TRÈS IMPORTANT
+    (globalThis as any).postMessage({ type: 'DONE', jobId });
+    globalThis.close();
 };
 
-console.log('Worker: ElementContainerWorker.ts chargé.');
 export { };

@@ -38,58 +38,77 @@ export default ({
     }
 }) => {
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
-    const workerRef = useRef<Worker | null>(null);
 
-    const requestIdRef = useRef(0);
+    const workerRef = useRef<Worker | null>(null);
+    const jobIdRef = useRef(0);
 
     const cleanWorker = () => {
         if (workerRef.current) {
-            
+
             workerRef.current.terminate();
             workerRef.current = null;
         }
     }
 
-    const loadPoint = () => {
-        if (workerRef.current) return; // ⛔ déjà en cours
+    const startStream = () => {
+        cleanWorker();
 
-        const currentRequestId = ++requestIdRef.current;
+        const jobId = ++jobIdRef.current;
 
         const worker = new Worker(
             new URL('../../../workers/ElementContainerWorker.ts', import.meta.url)
         );
 
         workerRef.current = worker;
+        setProcessedPoints([]);
 
-        worker.postMessage({ data, fieldKeyListe });
+        worker.postMessage({
+            type: 'START',
+            jobId,
+            data,
+            fieldKeyListe
+        });
 
-        worker.onmessage = (event) => {
-            if (currentRequestId !== requestIdRef.current) return;
+        worker.onmessage = (e) => {
+            const msg = e.data;
 
-            setProcessedPoints(prev => [...prev, ...event.data]);
+            if (msg.jobId !== jobIdRef.current) return;
+
+            if (msg.type === 'CHUNK') {
+                setProcessedPoints(prev => [...prev, ...msg.payload]);
+            }
+
+            if (msg.type === 'DONE') {
+                cleanWorker();
+            }
         };
 
-        worker.onerror = () => {
-            workerRef.current = null;
-        };
+        worker.onerror = () => cleanWorker();
     };
 
+    const stopStream = () => {
+        if (!workerRef.current) return;
 
+        workerRef.current.postMessage({
+            type: 'CANCEL',
+            jobId: jobIdRef.current
+        });
+
+        cleanWorker();
+    };
 
     useEffect(() => {
         if (!show) {
-            requestIdRef.current++;
+            stopStream();
             setProcessedPoints([]);
-            cleanWorker();
             return;
         }
 
-        requestIdRef.current++;
-        setProcessedPoints([]);
-        loadPoint();
+        startStream();
 
         return () => {
-            cleanWorker();
+            stopStream();
+            setProcessedPoints([]);
         };
 
     }, [show, data, fieldKeyListe]);

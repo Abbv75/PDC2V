@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/PDC2V_map/static/css/main.e80b2b7b.css",
-    "main.js": "/PDC2V_map/static/js/main.d2a293d8.js",
-    "static/js/729.f98ae98b.chunk.js": "/PDC2V_map/static/js/729.f98ae98b.chunk.js",
+    "main.js": "/PDC2V_map/static/js/main.2bb3e15a.js",
+    "static/js/729.f8f64e72.chunk.js": "/PDC2V_map/static/js/729.f8f64e72.chunk.js",
     "static/js/453.fb987967.chunk.js": "/PDC2V_map/static/js/453.fb987967.chunk.js",
     "static/media/IvoryCoast.zip": "/PDC2V_map/static/media/IvoryCoast.c9963ce7bb369f695bbe.zip",
     "static/media/Cameroun.zip": "/PDC2V_map/static/media/Cameroun.08389eb9c007877dddfc.zip",
@@ -17,12 +17,12 @@
     "static/media/toggle.svg": "/PDC2V_map/static/media/toggle.4cb77f5b444ed35e8e2e.svg",
     "index.html": "/PDC2V_map/index.html",
     "main.e80b2b7b.css.map": "/PDC2V_map/static/css/main.e80b2b7b.css.map",
-    "main.d2a293d8.js.map": "/PDC2V_map/static/js/main.d2a293d8.js.map",
-    "729.f98ae98b.chunk.js.map": "/PDC2V_map/static/js/729.f98ae98b.chunk.js.map",
+    "main.2bb3e15a.js.map": "/PDC2V_map/static/js/main.2bb3e15a.js.map",
+    "729.f8f64e72.chunk.js.map": "/PDC2V_map/static/js/729.f8f64e72.chunk.js.map",
     "453.fb987967.chunk.js.map": "/PDC2V_map/static/js/453.fb987967.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e80b2b7b.css",
-    "static/js/main.d2a293d8.js"
+    "static/js/main.2bb3e15a.js"
   ]
 }
