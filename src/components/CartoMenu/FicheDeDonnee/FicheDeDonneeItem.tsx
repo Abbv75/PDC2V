@@ -21,18 +21,20 @@ export default ({ value, index }: {
     const {
         allRequeteCartoSelected,
         toogleElementInSelectedListe,
+        data: storeData
     } = useRequeteCartoStore();
+    const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
     const [selectedIcon, setselectedIcon] = useState(iconList[0]);
 
-    const [data, setdata] = useState([] as { icon?: any, data: GET_ALL_REQUETE_CARTE_T }[]);
-
     const updateDataIcon = (icon: any) => {
-        const newData = [...data];
-        newData[index].icon = icon;
-        setdata(newData);
+        // value contains the actual data from props, not from empty local state
+        const updatedItem = { ...value, icon };
         setselectedIcon(icon);
-        // setIconMapData({showImagePicker : false})
+        
+        // Update the store with the new icon
+        const updatedData = storeData.map((item, idx) => idx === index ? updatedItem : item);
+        setRequeteCartoData({ data: updatedData });
     }
 
     return (

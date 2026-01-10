@@ -50,7 +50,8 @@ const ElementContainer = ({
         try {
             // toast.info(`Compilation des ${nomListe}`);
 
-            cleanWorker()
+            // Clean up any existing worker before creating a new one
+            cleanWorker();
 
             const worker = new Worker(new URL('../../workers/ElementContainerWorker.ts', import.meta.url));
             workerRef.current = worker;
@@ -93,8 +94,10 @@ const ElementContainer = ({
                 gap={1}
                 sx={{
                     "& *": {
-                        height: "fit-content"
-                    }
+                        height: "fit-content",
+                    },
+                    maxHeight: 250,
+                    overflowY: "scroll"
                 }}
                 width={300}
             >

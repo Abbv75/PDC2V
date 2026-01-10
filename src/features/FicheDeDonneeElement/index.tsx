@@ -19,15 +19,21 @@ const FicheDeDonneeElement = () => {
         try {
             if (!allRequeteCartoSelected.length) return;
 
+            // Clear existing data first
             setrequetesData({ requetesData: [] });
 
             allRequeteCartoSelected.forEach(async (element) => {
                 try {
                     getRequeteCarte(element.data.Nom_View).then(res => {
-                        res && setrequetesData({requetesData : [
-                            ...requetesData,
-                            { data: res, title: element.data.intitule, icon: element.icon }
-                        ]});
+                        if (res) {
+                            // Use functional update to avoid stale closure
+                            setrequetesData((prevState) => ({
+                                requetesData: [
+                                    ...prevState.requetesData,
+                                    { data: res, title: element.data.intitule, icon: element.icon }
+                                ]
+                            }));
+                        }
                     });
                 } catch (error) {
                     toast.error(`Une erreur est survenue lors du chargement des ${element.data.intitule}`)
