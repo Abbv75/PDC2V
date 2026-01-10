@@ -18,6 +18,8 @@ interface ElementContainerProps {
     show?: boolean,
     nomListe?: string,
     icon?: string,
+    iconSize?: number,
+    selectedFields?: string[],
     markerText?: {
         field: string,
         color?: string
@@ -30,6 +32,8 @@ const ElementContainer = ({
     show = true,
     nomListe,
     icon = ICON.location1,
+    iconSize = 40,
+    selectedFields,
     markerText
 }: ElementContainerProps) => {
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
@@ -48,8 +52,6 @@ const ElementContainer = ({
         if (!mountedRef.current) return;
 
         try {
-            // toast.info(`Compilation des ${nomListe}`);
-
             // Clean up any existing worker before creating a new one
             cleanWorker();
 
@@ -95,7 +97,7 @@ const ElementContainer = ({
             setProcessedPoints([]);
             cleanWorker();
         }
-    }, [show, icon, cleanWorker]);
+    }, [show, icon, iconSize, cleanWorker]);
 
     useEffect(() => {
         console.log('====================================');
@@ -111,7 +113,6 @@ const ElementContainer = ({
 
     return (
         <>
-            {/* Afficher les marqueurs au fur et à mesure qu'ils sont traités */}
             {processedPoints.map((value, index) => (
                 <Marker
                     position={value.coor as any}
@@ -123,10 +124,10 @@ const ElementContainer = ({
                                 bgcolor: markerText.color || green[600],
                                 padding: '5px 10px'
                             })
-                            : getCustomeIcon(icon || ICON.location1)
+                            : getCustomeIcon(icon || ICON.location1, iconSize)
                     }
                 >
-                    <PopUpContent popUpData={value.popUpData} />
+                    <PopUpContent popUpData={value.popUpData} selectedFields={selectedFields} />
                 </Marker>
             ))}
         </>

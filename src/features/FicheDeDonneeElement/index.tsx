@@ -1,18 +1,12 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import ElementContainer from '../../components/Cartographie/ElementContainer';
 import { toast } from 'react-toastify';
-import { GET_REQUETE_CARTE_T } from '../../types';
+import { GET_REQUETE_CARTE_T, REQUETE_DATA_T } from '../../types';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
 
-interface REQUETE_DATA_T {
-    title?: string,
-    data: GET_REQUETE_CARTE_T[],
-    icon?: any
-}
-
 const FicheDeDonneeElement = () => {    
-    const { allRequeteCartoSelected, requetesData } = useRequeteCartoStore();
+    const { allRequeteCartoSelected, requetesData, requetesDataCache, set } = useRequeteCartoStore();
     const setrequetesData = useRequeteCartoStore(state => state.set);
     
     // Track previous selected items to avoid unnecessary reloads
@@ -23,7 +17,7 @@ const FicheDeDonneeElement = () => {
         const currentIds = allRequeteCartoSelected.map(item => item.data.Nom_View);
         const prevIds = prevSelectedRef.current;
 
-        // Check if the actual items changed (not just icons)
+        // Check if the actual items changed (not just icons, sizes, or selectedFields)
         const itemsChanged = 
             currentIds.length !== prevIds.length ||
             currentIds.some(id => !prevIds.includes(id));
@@ -33,18 +27,39 @@ const FicheDeDonneeElement = () => {
 
         // Only reload if items actually changed or if no data exists
         if (!itemsChanged && requetesData.length > 0) {
-            // Just update icons in existing data without reloading
+            // Just update props in existing data without reloading
             const updatedData = requetesData.map((reqData, idx) => {
                 const matchingItem = allRequeteCartoSelected[idx];
-                if (matchingItem && matchingItem.icon !== reqData.icon) {
-                    return { ...reqData, icon: matchingItem.icon };
+                if (matchingItem) {
+                    let needsUpdate = false;
+                    let updated = { ...reqData };
+                    
+                    if (matchingItem.icon !== reqData.icon) {
+                        updated.icon = matchingItem.icon;
+                        needsUpdate = true;
+                    }
+                    if (matchingItem.iconSize !== reqData.iconSize) {
+                        updated.iconSize = matchingItem.iconSize;
+                        needsUpdate = true;
+                    }
+                    if (JSON.stringify(matchingItem.selectedFields) !== JSON.stringify(reqData.selectedFields)) {
+                        updated.selectedFields = matchingItem.selectedFields;
+                        needsUpdate = true;
+                    }
+                    
+                    return needsUpdate ? updated : reqData;
                 }
                 return reqData;
             });
             
-            // Only update if icons actually changed
-            const iconsChanged = updatedData.some((item, idx) => item.icon !== requetesData[idx]?.icon);
-            if (iconsChanged) {
+            // Only update if props actually changed
+            const propsChanged = updatedData.some((item, idx) => {
+                const orig = requetesData[idx];
+                return item.icon !== orig?.icon || 
+                       item.iconSize !== orig?.iconSize ||
+                       JSON.stringify(item.selectedFields) !== JSON.stringify(orig?.selectedFields);
+            });
+            if (propsChanged) {
                 setrequetesData({ requetesData: updatedData });
             }
             return;
@@ -57,30 +72,74 @@ const FicheDeDonneeElement = () => {
                 return;
             }
 
-            // Use a simple for loop to wait for all requests to complete
+            // Build results - use cache when available, fetch when not
             const results: REQUETE_DATA_T[] = [];
+            const newCacheEntries: { [Nom_View: string]: GET_REQUETE_CARTE_T[] } = {};
             
             for (const element of allRequeteCartoSelected) {
-                try {
-                    const res = await getRequeteCarte(element.data.Nom_View);
-                    if (res) {
+                const nomView = element.data.Nom_View;
+                
+                // Check if we have cached data for this Nom_View
+                let cachedData = requetesDataCache[nomView];
+                
+                if (cachedData) {
+                    // Use cached data
+                    results.push({
+                        data: cachedData,
+                        title: element.data.intitule,
+                        icon: element.icon,
+                        iconSize: element.iconSize,
+                        selectedFields: element.selectedFields
+                    });
+                } else {
+                    // Check if data is already in requetesData (from a previous load before being unselected)
+                    const existingEntry = requetesData.find(r => r.title === element.data.intitule);
+                    if (existingEntry) {
+                        // Use existing data and add to cache
                         results.push({
-                            data: res,
+                            data: existingEntry.data,
                             title: element.data.intitule,
-                            icon: element.icon
+                            icon: element.icon,
+                            iconSize: element.iconSize,
+                            selectedFields: element.selectedFields
                         });
+                        newCacheEntries[nomView] = existingEntry.data;
+                    } else {
+                        // Need to fetch from API
+                        try {
+                            const res = await getRequeteCarte(nomView);
+                            if (res) {
+                                results.push({
+                                    data: res,
+                                    title: element.data.intitule,
+                                    icon: element.icon,
+                                    iconSize: element.iconSize,
+                                    selectedFields: element.selectedFields
+                                });
+                                // Cache the fetched data
+                                newCacheEntries[nomView] = res;
+                            }
+                        } catch (error) {
+                            toast.error(`Une erreur est survenue lors du chargement des ${element.data.intitule}`);
+                        }
                     }
-                } catch (error) {
-                    toast.error(`Une erreur est survenue lors du chargement des ${element.data.intitule}`);
                 }
             }
 
-            setrequetesData({ requetesData: results });
+            // Update store with results and cache
+            if (Object.keys(newCacheEntries).length > 0) {
+                set((state) => ({
+                    requetesData: results,
+                    requetesDataCache: { ...state.requetesDataCache, ...newCacheEntries }
+                }));
+            } else {
+                setrequetesData({ requetesData: results });
+            }
 
         } catch (error) {
             toast.error("Une erreur est survenue lors de la recuperation des elements");
         }
-    }, [allRequeteCartoSelected, requetesData, setrequetesData]);
+    }, [allRequeteCartoSelected, requetesData, requetesDataCache, set, setrequetesData]);
 
     useEffect(
         () => {
@@ -103,11 +162,13 @@ const FicheDeDonneeElement = () => {
                     show
                     nomListe={value?.title}
                     icon={value.icon}
+                    iconSize={value.iconSize}
+                    selectedFields={value.selectedFields}
                 />
             ))}
         </>
-
     )
 }
 
-export default FicheDeDonneeElement
+export default FicheDeDonneeElement;
+

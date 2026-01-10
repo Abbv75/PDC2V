@@ -1,10 +1,12 @@
 import L from 'leaflet';
 
-export const getCustomeIcon = (imageUrl: string) => (
-    new L.Icon({
+export const getCustomeIcon = (imageUrl: string, size: number = 40) => {
+    const halfSize = size / 2;
+    return new L.Icon({
         iconUrl: imageUrl,
-        iconSize: [40, 40], // Taille de l'icône
-        iconAnchor: [20, 40], // Point d'ancrage de l'icône (la base du marqueur)
-        popupAnchor: [0, -40], // Point d'ancrage du popup par rapport au marqueur
-    })
-)
+        iconSize: [size, size],
+        iconAnchor: [halfSize, size],
+        popupAnchor: [0, -size],
+    });
+};
+

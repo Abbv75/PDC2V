@@ -4,6 +4,7 @@ import { GET_ALL_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
 import getAllRequeteCarte from "functions/API/requeteCartographique/getAllRequeteCarte";
 import { AppContext } from "providers";
 import ImagePicker from "components/ImagePicker/ImagePicker";
+import ImagePicker2 from "components/ImagePicker2";
 import useRequeteCartoStore from "stores/requeteCarto/useRequeteCartoStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 import Item from "./FicheDeDonneeItem";
@@ -32,7 +33,9 @@ const FicheDeDonnee = () => {
             setRequeteCartoData({
                 data: res.map(value => ({
                     data: value,
-                    icon: iconList[0]
+                    icon: iconList[0],
+                    iconSize: 40,
+                    selectedFields: []
                 }))
             })
 
@@ -127,8 +130,12 @@ const FicheDeDonnee = () => {
                 }
 
             </ButtonGroup>
+
+            {/* ImagePicker2 component for icon selection */}
+            <ImagePicker2 />
         </Stack>
     )
 }
 
-export default FicheDeDonnee
+export default FicheDeDonnee;
+

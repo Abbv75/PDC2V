@@ -192,3 +192,12 @@ export interface GET_RAPORT_CARTO_T {
     headers: string[],
     rows: { [key: string]: string }[]
 }
+
+export interface REQUETE_DATA_T {
+    title?: string,
+    data: GET_REQUETE_CARTE_T[],
+    icon?: any,
+    iconSize?: number,
+    selectedFields?: string[]
+}
+
