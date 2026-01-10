@@ -1,6 +1,13 @@
-import { Divider, Stack, Typography } from "@mui/joy";
 import { blue } from "@mui/material/colors";
-import { Fragment } from "react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import { Popup } from "react-leaflet";
 
 export interface PopUpDataItem {
@@ -21,45 +28,47 @@ const PopUpContent = ({ popUpData, selectedFields }: PopUpContentProps) => {
 
     return (
         <Popup>
-            <Stack
-                gap={1}
-                sx={{
-                    "& *": {
-                        height: "fit-content",
-                    },
-                    maxHeight: 250,
-                    overflowY: "scroll"
-                }}
-                width={300}
-            >
-                {filteredPopUpData.map((item, idx) => (
-                    <Fragment key={idx}>
-                        <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            justifyContent={"space-between"}
-                            gap={3}
-                        >
-                            <Typography
-                                maxWidth={"75%"}
-                                textColor={blue[600]}
-                                fontSize={11}
-                                fontWeight={700}
-                            >
-                                {item.label}
-                            </Typography>
-                            <Typography
-                                textAlign={"right"}
-                                minWidth={"25%"}
-                                fontSize={11}
-                            >
-                                {item.value}
-                            </Typography>
-                        </Stack>
-                        <Divider />
-                    </Fragment>
-                ))}
-            </Stack>
+            <TableContainer sx={{ maxHeight: 200, width: 280 }}>
+                <Table size="small" stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ bgcolor: 'background.paper', fontWeight: 700, fontSize: 11 }}>
+                                Champ
+                            </TableCell>
+                            <TableCell sx={{ bgcolor: 'background.paper', fontWeight: 700, fontSize: 11, textAlign: 'right' }}>
+                                Valeur
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredPopUpData.map((item, idx) => (
+                            <TableRow key={idx}>
+                                <TableCell
+                                    sx={{
+                                        fontSize: 11,
+                                        color: blue[600],
+                                        fontWeight: 700,
+                                        maxWidth: '50%',
+                                        wordBreak: 'break-word'
+                                    }}
+                                >
+                                    {item.label}
+                                </TableCell>
+                                <TableCell
+                                    sx={{
+                                        fontSize: 11,
+                                        textAlign: 'right',
+                                        maxWidth: '50%',
+                                        wordBreak: 'break-word'
+                                    }}
+                                >
+                                    {item.value}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Popup>
     );
 };
