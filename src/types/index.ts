@@ -197,6 +197,10 @@ export interface GET_RAPORT_CARTO_T {
     rows: { [key: string]: string }[]
 }
 
+export type ShapeFileColorEditerSubmitFunctionT = 
+    | undefined
+    | ((borderColor?: string, backgroundColor?: string, reset?: boolean) => any)
+
 export interface REQUETE_DATA_T {
     title?: string,
     data: GET_REQUETE_CARTE_T[],
@@ -205,3 +209,8 @@ export interface REQUETE_DATA_T {
     selectedFields?: string[]
 }
 
+export interface coucheDeDonneesElementConfig_T {
+    showShapefileName: boolean,
+    showShapefilePopup: boolean,
+    selectedFields: string[]
+}

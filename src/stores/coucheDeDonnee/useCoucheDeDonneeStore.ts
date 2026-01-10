@@ -1,5 +1,5 @@
 import { COUCHE_DE_DONNEES_LISTE } from "constant";
-import { coucheDeDonneesElementConfig_T } from "types/AppT";
+import { coucheDeDonneesElementConfig_T } from "types";
 import { create } from "zustand";
 
 interface Props_T {
