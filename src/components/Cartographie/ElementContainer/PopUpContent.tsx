@@ -20,11 +20,16 @@ interface PopUpContentProps {
     selectedFields?: string[];
 }
 
+// Fields to hide by default
+const DEFAULT_HIDDEN_FIELDS = ['LG', 'LT', 'latitude', 'longitude'];
+
 const PopUpContent = ({ popUpData, selectedFields }: PopUpContentProps) => {
     // Filter popUpData based on selectedFields if provided
+    // If selectedFields is provided and has items, only show those fields
+    // If selectedFields is not provided or empty, show all fields EXCEPT the default hidden ones
     const filteredPopUpData = selectedFields && selectedFields.length > 0
         ? popUpData.filter(item => selectedFields.includes(item.label))
-        : popUpData;
+        : popUpData.filter(item => !DEFAULT_HIDDEN_FIELDS.includes(item.label));
 
     return (
         <Popup>
