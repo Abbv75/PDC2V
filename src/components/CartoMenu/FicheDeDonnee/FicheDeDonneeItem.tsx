@@ -24,17 +24,19 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     const {
         allRequeteCartoSelected,
         toogleElementInSelectedListe,
-        requetesData
+        requetesData,
+        data: storeData
     } = useRequeteCartoStore();
     const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
     const [configModalOpen, setConfigModalOpen] = useState(false);
 
-    // Find matching item in store to get current values
-    const storeItem = allRequeteCartoSelected.find(
+    // Get settings from storeData (preserved even when deselected)
+    const storeItem = storeData.find(
         item => item.data.Nom_View === value.data.Nom_View
     );
 
+    // Priority: storeItem settings > value props > defaults
     const currentIcon = storeItem?.icon || value.icon || iconList[0];
     const currentSize = storeItem?.iconSize || value.iconSize || 40;
     const currentSelectedFields = storeItem?.selectedFields || value.selectedFields || [];
@@ -45,8 +47,21 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     );
     const currentDataList = requeteDataItem?.data || dataList || [];
 
+    const saveSettingsToStoreData = (updates: { icon?: any; iconSize?: number; selectedFields?: string[] }) => {
+        // Update the store's data array to preserve settings when deselected
+        const updatedData = storeData.map(item =>
+            item.data.Nom_View === value.data.Nom_View
+                ? { ...item, ...updates }
+                : item
+        );
+        setRequeteCartoData({ data: updatedData });
+    };
+
     const updateDataIcon = (icon: any) => {
-        // Update the store's allRequeteCartoSelected with the new icon
+        // Update store's data array to preserve icon
+        saveSettingsToStoreData({ icon });
+        
+        // Also update allRequeteCartoSelected if item is currently selected
         const updatedSelected = allRequeteCartoSelected.map(item =>
             item.data.Nom_View === value.data.Nom_View
                 ? { ...item, icon }
@@ -56,7 +71,10 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     };
 
     const updateDataIconSize = (size: number) => {
-        // Update the store's allRequeteCartoSelected with the new size
+        // Update store's data array to preserve size
+        saveSettingsToStoreData({ iconSize: size });
+        
+        // Also update allRequeteCartoSelected if item is currently selected
         const updatedSelected = allRequeteCartoSelected.map(item =>
             item.data.Nom_View === value.data.Nom_View
                 ? { ...item, iconSize: size }
@@ -66,7 +84,10 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     };
 
     const updateSelectedFields = (fields: string[]) => {
-        // Update the store's allRequeteCartoSelected with the selected fields
+        // Update store's data array to preserve selected fields
+        saveSettingsToStoreData({ selectedFields: fields });
+        
+        // Also update allRequeteCartoSelected if item is currently selected
         const updatedSelected = allRequeteCartoSelected.map(item =>
             item.data.Nom_View === value.data.Nom_View
                 ? { ...item, selectedFields: fields }
@@ -75,9 +96,9 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
         setRequeteCartoData({ allRequeteCartoSelected: updatedSelected });
     };
 
-    // Create item value with current settings for toggle
+    // Create item value with preserved settings for toggle
     const getItemValue = () => ({
-        ...value,
+        data: value.data,
         icon: currentIcon,
         iconSize: currentSize,
         selectedFields: currentSelectedFields

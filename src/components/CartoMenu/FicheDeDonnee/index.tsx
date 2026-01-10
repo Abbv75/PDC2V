@@ -17,7 +17,7 @@ const FicheDeDonnee = () => {
 
     const {
         allRequeteCartoSelected,
-        data
+        data: storeData
     } = useRequeteCartoStore();
     const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
@@ -30,14 +30,27 @@ const FicheDeDonnee = () => {
             const res = await getAllRequeteCarte();
             if (!res) return;
 
-            setRequeteCartoData({
-                data: res.map(value => ({
-                    data: value,
-                    icon: iconList[0],
-                    iconSize: 40,
-                    selectedFields: []
-                }))
-            })
+            // Merge with existing settings if item already exists
+            setRequeteCartoData((state) => {
+                const existingByNomView = new Map(state.data.map(item => [item.data.Nom_View, item]));
+                
+                const newData = res.map(value => {
+                    const existing = existingByNomView.get(value.Nom_View);
+                    if (existing) {
+                        // Preserve existing settings
+                        return existing;
+                    }
+                    // New item with defaults
+                    return {
+                        data: value,
+                        icon: iconList[0],
+                        iconSize: 40,
+                        selectedFields: []
+                    };
+                });
+                
+                return { data: newData };
+            });
 
         } finally {
             setloadingState(null);
@@ -45,7 +58,7 @@ const FicheDeDonnee = () => {
     }
 
     const toutCocherHandle = () => {
-        setRequeteCartoData({ allRequeteCartoSelected: isAllCocher ? [] : data });
+        setRequeteCartoData({ allRequeteCartoSelected: isAllCocher ? [] : storeData });
         setisAllCocher(!isAllCocher);
     }
 
@@ -58,10 +71,10 @@ const FicheDeDonnee = () => {
 
     useEffect(
         () => {
-            let res = data.filter((element) => allRequeteCartoSelected.find(({ data }) => data.Nom_View === element.data.Nom_View));
+            let res = storeData.filter((element) => allRequeteCartoSelected.find(({ data }) => data.Nom_View === element.data.Nom_View));
             setRequeteCartoData({ allRequeteCartoSelected: res });
         },
-        [data]
+        [storeData]
     )
 
     useEffect(() => {
@@ -124,8 +137,8 @@ const FicheDeDonnee = () => {
                 {loadingState && (<LinearProgress color="success" />)}
 
                 {
-                    data.map((value, index) => (
-                        <Item index={index} value={value} key={index} />
+                    storeData.map((value, index) => (
+                        <Item index={index} value={value} key={value.data.Nom_View} />
                     ))
                 }
 
