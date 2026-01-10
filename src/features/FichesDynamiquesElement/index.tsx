@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import ElementContainer from 'components/Cartographie/ElementContainer';
@@ -12,6 +13,18 @@ const FichesDynamiquesElement = () => {
     } = useFicheDynamiquesStore();
     const setficheDynamiquesData = useFicheDynamiquesStore((state) => state.set);
 
+    // Create a map for quick lookup of settings by title
+    const settingsByTitle = useMemo(() => {
+        const map = new Map();
+        ficheDynamiquesData.forEach((item: any) => {
+            map.set(item.title, {
+                icon: item.icon,
+                iconSize: item.iconSize,
+                selectedFields: item.selectedFields
+            });
+        });
+        return map;
+    }, [ficheDynamiquesData]);
 
     const restructureData = useMemo(() => {
         try {
@@ -34,16 +47,20 @@ const FichesDynamiquesElement = () => {
 
     const loadListe = useCallback(() => {
         try {
+            // Clear the list first to avoid stale data
             setficheDynamiquesData({elementListe: []});            
 
             if (!ficheTitleSelected.length || !getAllFicheData) return;
+
+            // Build new element list based on selected titles
+            const newElementListe: typeof elementListe = [];
 
             ficheTitleSelected.forEach(title => {
                 const fiche = restructureData.find(({ feuille }) => feuille.Libelle_Feuille == title);
 
                 if (!fiche) return;
 
-                let keyList = Object.keys(fiche?.data[0] || []);
+                let keyList = Object.keys(fiche?.data[0] || {});
                 let dataToPush: any[] = [];
 
                 fiche?.data.forEach(element => {
@@ -55,29 +72,29 @@ const FichesDynamiquesElement = () => {
                     dataToPush.push(objectFinal);
                 });
 
-                // 🟢 Chercher l'icône associée
-                const foundIcon = ficheDynamiquesData.find((item: any) => item.feuille === title)?.icon;
+                // Get settings from store
+                const settings = settingsByTitle.get(title) || {};
+                
+                newElementListe.push({
+                    title,
+                    data: dataToPush,
+                    icon: settings.icon,
+                    iconSize: settings.iconSize,
+                    selectedFields: settings.selectedFields
+                });
+            });
 
-                setficheDynamiquesData((prev) => ({
-                    elementListe: [
-                        ...prev.elementListe,
-                        {
-                            title,
-                            data: dataToPush,
-                            icon: foundIcon
-                        }
-                    ]
-                }));
-            })
+            // Update store once with all elements
+            setficheDynamiquesData({ elementListe: newElementListe });
         } catch (error) {
             toast.error("Une erreur est survenue lors du traitement");
         }
-    }, [restructureData, ficheDynamiquesData, ficheTitleSelected, getAllFicheData]);
+    }, [ficheTitleSelected, getAllFicheData, settingsByTitle, restructureData]);
 
 
     useEffect(() => {
         loadListe();
-    }, [ficheTitleSelected, getAllFicheData, ficheDynamiquesData]);
+    }, [loadListe]);
 
     if (!getAllFicheData) {
         return <React.Fragment />;
@@ -93,6 +110,8 @@ const FichesDynamiquesElement = () => {
                     show
                     nomListe={value?.title}
                     icon={value?.icon}
+                    iconSize={value?.iconSize}
+                    selectedFields={value?.selectedFields}
                 />
             ))}
         </>
@@ -100,3 +119,4 @@ const FichesDynamiquesElement = () => {
 }
 
 export default FichesDynamiquesElement;
+

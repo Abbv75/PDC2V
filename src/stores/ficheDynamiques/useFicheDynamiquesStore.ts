@@ -1,10 +1,13 @@
+
 import { GET_ALL_FEUILLE, GET_REQUETE_CARTE_T, LOADING_STATE_T } from "types";
 import { create } from "zustand";
 
 interface REQUETE_DATA_T {
     title?: string,
     data: GET_REQUETE_CARTE_T[],
-    icon?: any
+    icon?: any,
+    iconSize?: number,
+    selectedFields?: string[]
 }
 
 interface Props_T {
@@ -13,11 +16,18 @@ interface Props_T {
         (state: Props_T | ((state: Props_T) => Props_T), replace: true): void;
     }
     getAllFicheData: GET_ALL_FEUILLE | null,
-    ficheDynamiquesData: { title: string, icon: any }[],
+    ficheDynamiquesData: {
+        title: string,
+        icon: any,
+        iconSize?: number,
+        selectedFields?: string[]
+    }[],
     ficheTitleSelected: string[],
     ficheTitle: string[],
     elementListe: REQUETE_DATA_T[],
     loadingState: LOADING_STATE_T,
+    // Cache for storing fetched data by title
+    ficheDataCache: { [title: string]: any },
     toogleElementInFicheTitleSelected: (element: string) => void
 }
 
@@ -29,6 +39,7 @@ export default create<Props_T>((set, get) => ({
     elementListe: [],
     ficheTitle: [],
     loadingState: null,
+    ficheDataCache: {},
     toogleElementInFicheTitleSelected: (element: string) => {
         const isInList = get().ficheTitleSelected.includes(element);
 
@@ -39,3 +50,4 @@ export default create<Props_T>((set, get) => ({
         }
     },
 }));
+

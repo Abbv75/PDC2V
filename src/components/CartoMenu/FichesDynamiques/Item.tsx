@@ -1,10 +1,14 @@
+
 import { Avatar, Radio, Stack } from "@mui/joy";
 import { CardMedia } from "@mui/material";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
+import FicheDynamiqueConfig from "./FicheDynamiqueConfig";
 
-export default ({ value }: {
+interface ItemProps {
     value: {
         feuille: {
             Libelle_Classeur: string;
@@ -26,57 +30,111 @@ export default ({ value }: {
             [key: string]: string | null;
         }[];
     }
-}) => {
+}
 
-    const {
-        ficheTitleSelected,
+export default ({ value }: ItemProps) => {
+    const { iconList } = useIconMapStore();
+    const { 
+        ficheTitleSelected, 
         toogleElementInFicheTitleSelected,
-        ficheDynamiquesData
+        ficheDynamiquesData,
+        getAllFicheData,
+        set
     } = useFicheDynamiquesStore();
     const setficheDynamiquesData = useFicheDynamiquesStore((state) => state.set);
 
-    const {iconList, } = useIconMapStore();
-    const setIconMapData = useIconMapStore((state) => state.set);
+    const [configModalOpen, setConfigModalOpen] = useState(false);
 
-    const updateIcon = (icon: any) => {
-        const feuille = value.feuille.Libelle_Feuille;
+    const title = value.feuille.Libelle_Feuille;
+    
+    // Get settings from store
+    const storeItem = ficheDynamiquesData.find((item: any) => item.title === title);
+    
+    // Priority: storeItem settings > defaults
+    const currentIcon = storeItem?.icon || iconList[0];
+    const currentSize = storeItem?.iconSize || 40;
+    const currentSelectedFields = storeItem?.selectedFields || [];
+
+    // Get data list for config
+    const currentDataList = value.data || [];
+
+    const updateIcon = (icon: string) => {
+        // Update store's data array to preserve icon
         setficheDynamiquesData({
-            ficheDynamiquesData: ficheDynamiquesData.some((item: any) => item.feuille === feuille)
-                ? ficheDynamiquesData.map((item: any) => item.feuille === feuille ? { ...item, icon } : item)
-                : [...ficheDynamiquesData, { feuille, icon }]
+            ficheDynamiquesData: ficheDynamiquesData.some((item: any) => item.title === title)
+                ? ficheDynamiquesData.map((item: any) => item.title === title ? { ...item, icon } : item)
+                : [...ficheDynamiquesData, { title, icon, iconSize: 40, selectedFields: [] }]
         });
-
-        setselectedIcon(icon);
     };
 
-    const [selectedIcon, setselectedIcon] = useState(iconList[0]);
+    const updateIconSize = (size: number) => {
+        setficheDynamiquesData({
+            ficheDynamiquesData: ficheDynamiquesData.map((item: any) => 
+                item.title === title ? { ...item, iconSize: size } : item
+            )
+        });
+    };
+
+    const updateSelectedFields = (fields: string[]) => {
+        setficheDynamiquesData({
+            ficheDynamiquesData: ficheDynamiquesData.map((item: any) => 
+                item.title === title ? { ...item, selectedFields: fields } : item
+            )
+        });
+    };
 
     return (
-        <Stack
-            direction={"row"}
-            justifyContent={"space-between"}
-            alignItems="center"
-        >
-            <Radio
-                value={value.feuille.Libelle_Feuille}
-                label={value.feuille.Libelle_Feuille}
-                sx={{ fontSize: 10 }}
-                checked={ficheTitleSelected.includes(value.feuille.Libelle_Feuille)}
-                onClick={() => toogleElementInFicheTitleSelected(value.feuille.Libelle_Feuille)}
-            />
-
-            <Avatar>
-                <CardMedia
-                    component='img'
-                    src={selectedIcon}
-                    onClick={()=>{
-                        setIconMapData({
-                            showImagePicker : true,
-                            onChange: updateIcon
-                        })
-                    }}
+        <>
+            <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                alignItems="center"
+            >
+                <Radio
+                    value={title}
+                    label={title}
+                    sx={{ fontSize: 10 }}
+                    checked={ficheTitleSelected.includes(title)}
+                    onClick={() => toogleElementInFicheTitleSelected(title)}
                 />
-            </Avatar>
-        </Stack>
+
+                <Stack direction="row" gap={0.5}>
+                    <Avatar
+                        size="sm"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setConfigModalOpen(true);
+                        }}
+                        variant="soft"
+                        sx={{
+                            p: 0.2,
+                            width: 25,
+                            height: 25,
+                            border: `1px solid`,
+                            cursor: 'pointer',
+                            bgcolor: 'background.level2'
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faCog} style={{ fontSize: 10 }} />
+                    </Avatar>
+                    
+                </Stack>
+            </Stack>
+
+            <FicheDynamiqueConfig
+                open={configModalOpen}
+                onClose={() => setConfigModalOpen(false)}
+                title={title}
+                icon={currentIcon}
+                iconSize={currentSize}
+                selectedFields={currentSelectedFields}
+                onIconChange={updateIcon}
+                onIconSizeChange={updateIconSize}
+                onSelectedFieldsChange={updateSelectedFields}
+                data={currentDataList}
+                fieldKeyListe="*"
+            />
+        </>
     )
 }
+

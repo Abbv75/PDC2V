@@ -1,3 +1,4 @@
+
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, LinearProgress, Stack } from "@mui/joy";
 import { useContext, useEffect } from "react";
 import { AppContext } from "providers";
@@ -6,6 +7,7 @@ import { CardMedia } from "@mui/material";
 import useFicheDynamiquesStore from "stores/ficheDynamiques/useFicheDynamiquesStore";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 import Item from "./Item";
+import ImagePicker2 from "components/ImagePicker2";
 
 const FichesDynamiques = () => {
     const {
@@ -32,13 +34,31 @@ const FichesDynamiques = () => {
             if (!res) return;
 
             const titles = Object.keys(res);
-            setficheDynamiquesData({ficheTitle: titles});
-
-            // Initialiser les icônes par défaut
-            setficheDynamiquesData({ficheDynamiquesData: titles.map(title => ({
-                title,
-                icon: iconList[0]
-            }))});
+            
+            // Merge with existing settings if item already exists
+            setficheDynamiquesData((state) => {
+                const existingByTitle = new Map(state.ficheDynamiquesData.map(item => [item.title, item]));
+                
+                const newData = titles.map(title => {
+                    const existing = existingByTitle.get(title);
+                    if (existing) {
+                        // Preserve existing settings
+                        return existing;
+                    }
+                    // New item with defaults
+                    return {
+                        title,
+                        icon: iconList[0],
+                        iconSize: 40,
+                        selectedFields: []
+                    };
+                });
+                
+                return { 
+                    ficheTitle: titles,
+                    ficheDynamiquesData: newData
+                };
+            });
   
             setficheDynamiquesData({ getAllFicheData: res });
         } finally {
@@ -55,7 +75,7 @@ const FichesDynamiques = () => {
             const legendContent = (
                 <Stack gap={0.5}>
                     {ficheTitleSelected.map((feuille, idx) => {
-                        const found = ficheDynamiquesData.find((item:any) => item.feuille === feuille);
+                        const found = ficheDynamiquesData.find((item:any) => item.title === feuille);
                         return (
                             <Stack key={idx} direction="row" alignItems="center" gap={0.5}>
                                 {found?.icon && (
@@ -115,8 +135,12 @@ const FichesDynamiques = () => {
                     </Accordion>
                 ))}
             </AccordionGroup>
+
+            {/* ImagePicker2 component for icon selection */}
+            <ImagePicker2 />
         </Stack >
     )
 }
 
 export default FichesDynamiques;
+
