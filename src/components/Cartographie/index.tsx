@@ -14,6 +14,7 @@ import LocaliteElement from "features/LocaliteElement";
 import RapportCartoElement from "features/RapportCartoElement";
 import CountryMask from "./CountryMask";
 import useMapStore from "stores/map/useMapStore";
+import ConfigZone from "./ConfigZone";
 
 const Cartographie = () => {
     const {
@@ -46,7 +47,7 @@ const Cartographie = () => {
                     maxBounds={mainCouche.bound as any}
                     maxBoundsViscosity={1} // 1.0 = Bloque totalement. 0.5 = Effet élastique.
                 >
-                    {/* <ConfigZone /> */}
+                    <ConfigZone />
 
                     <CurrentVillageElement />
 
