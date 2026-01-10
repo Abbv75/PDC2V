@@ -1,21 +1,27 @@
-import { Divider, Stack, Typography } from "@mui/joy";
-import { blue, green } from "@mui/material/colors";
+import { green } from "@mui/material/colors";
 import { ICON } from "constant";
 import { getCustomeIcon } from "helper/getCustomeIcon";
 import { getCustomeTextIcon } from "helper/getCustomeTextIcon";
-import { Fragment, useCallback, useEffect, useState, useRef } from "react";
-import { Marker, Popup } from "react-leaflet";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Marker } from "react-leaflet";
 import { toast } from "react-toastify";
-
-// Définition des types pour les données traitées par le worker
-interface PopUpDataItem {
-    label: string;
-    value: any;
-}
+import PopUpContent, { type PopUpDataItem } from "./PopUpContent";
 
 export interface ProcessedPoint {
     coor: [number, number];
     popUpData: PopUpDataItem[];
+}
+
+interface ElementContainerProps {
+    data: { [key: string]: any, longitude?: number | string, latitude?: number | string }[],
+    fieldKeyListe: { originaleName: string, renamed?: string }[] | '*',
+    show?: boolean,
+    nomListe?: string,
+    icon?: string,
+    markerText?: {
+        field: string,
+        color?: string
+    }
 }
 
 const ElementContainer = ({
@@ -25,17 +31,7 @@ const ElementContainer = ({
     nomListe,
     icon = ICON.location1,
     markerText
-}: {
-    data: { [key: string]: any, longitude?: number | string, latitude?: number | string }[],
-    fieldKeyListe: { originaleName: string, renamed?: string }[] | '*',
-    show: boolean,
-    nomListe?: string,
-    icon?: string,
-    markerText?: {
-        field: string,
-        color?: string
-    }
-}) => {
+}: ElementContainerProps) => {
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
     const workerRef = useRef<Worker | null>(null);
     const mountedRef = useRef(true);
@@ -57,7 +53,7 @@ const ElementContainer = ({
             // Clean up any existing worker before creating a new one
             cleanWorker();
 
-            const worker = new Worker(new URL('../../workers/ElementContainerWorker.ts', import.meta.url));
+            const worker = new Worker(new URL('../../../workers/ElementContainerWorker.ts', import.meta.url));
             workerRef.current = worker;
 
             worker.postMessage({ data, fieldKeyListe });
@@ -101,63 +97,17 @@ const ElementContainer = ({
         }
     }, [show, icon, cleanWorker]);
 
-    const renderPopupContent = useCallback((popUpData: PopUpDataItem[]) => (
-        <Popup>
-            <Stack
-                gap={1}
-                sx={{
-                    "& *": {
-                        height: "fit-content",
-                    },
-                    maxHeight: 250,
-                    overflowY: "scroll"
-                }}
-                width={300}
-            >
-                {popUpData.map((item, idx) => (
-                    <Fragment key={idx}>
-                        <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            justifyContent={"space-between"}
-                            gap={3}
-                        >
-                            <Typography
-                                maxWidth={"75%"}
-                                textColor={blue[600]}
-                                fontSize={11}
-                                fontWeight={700}
-                            >
-                                {item.label}
-                            </Typography>
-                            <Typography
-                                textAlign={"right"}
-                                minWidth={"25%"}
-                                fontSize={11}
-                            >
-                                {item.value}
-                            </Typography>
-                        </Stack>
-                        <Divider />
-                    </Fragment>
-                ))}
-            </Stack>
-        </Popup>
-    ), []);
-
-
     useEffect(() => {
         console.log('====================================');
         console.log(processedPoints);
         console.log('====================================');
-    }, [processedPoints])
+    }, [processedPoints]);
 
     if (!show) {
         return <></>;
     }
 
     console.log('Rendering ElementContainer. Current processedPoints count:', processedPoints.length);
-
 
     return (
         <>
@@ -176,7 +126,7 @@ const ElementContainer = ({
                             : getCustomeIcon(icon || ICON.location1)
                     }
                 >
-                    {renderPopupContent(value.popUpData)}
+                    <PopUpContent popUpData={value.popUpData} />
                 </Marker>
             ))}
         </>
@@ -184,3 +134,4 @@ const ElementContainer = ({
 }
 
 export default ElementContainer;
+
