@@ -1,3 +1,4 @@
+
 import { Accordion, AccordionDetails, AccordionSummary, Checkbox, LinearProgress, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../providers";
@@ -43,21 +44,21 @@ const LocaliteCouche = () => {
                 break;
 
             case 'departement':
-                setLocaliteData({localiteDepartementsSelected : localiteRegionsSelected.includes(element) 
+                setLocaliteData({localiteDepartementsSelected : localiteDepartementsSelected.includes(element) 
                     ? localiteDepartementsSelected.filter(item => item.code_departement !== element.code_departement) 
-                    : [...localiteRegionsSelected, element]});
+                    : [...localiteDepartementsSelected, element]});
                 break;
 
             case 'commune':
-                setLocaliteData({localiteCommunesSelected : localiteRegionsSelected.includes(element) 
+                setLocaliteData({localiteCommunesSelected : localiteCommunesSelected.includes(element) 
                     ? localiteCommunesSelected.filter(item => item.code_commune !== element.code_commune) 
-                    : [...localiteRegionsSelected, element]});
+                    : [...localiteCommunesSelected, element]});
                 break;
 
             case 'village':
-                setLocaliteData({localiteVillagesSelected : localiteRegionsSelected.includes(element) 
+                setLocaliteData({localiteVillagesSelected : localiteVillagesSelected.includes(element) 
                     ? localiteVillagesSelected.filter(item => item.nom_village !== element.nom_village) 
-                    : [...localiteRegionsSelected, element]});
+                    : [...localiteVillagesSelected, element]});
                 break;
 
             default:
@@ -156,3 +157,5 @@ const LocaliteCouche = () => {
 };
 
 export default LocaliteCouche;
+
+

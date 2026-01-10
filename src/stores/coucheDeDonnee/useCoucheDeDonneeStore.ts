@@ -16,6 +16,7 @@ export default create<Props_T>((set, get) => ({
     coucheDeDonneesSelectedListe: [],
     coucheDeDonneesElementConfig: {
         showShapefileName: true,
-        showShapefilePopup: false
+        showShapefilePopup: false,
+        selectedFields: []
     }
 }));

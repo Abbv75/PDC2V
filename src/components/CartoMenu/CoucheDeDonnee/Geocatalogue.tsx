@@ -1,4 +1,6 @@
-import { Box, Button, ButtonGroup, Checkbox, LinearProgress, Sheet, Stack } from "@mui/joy";
+import { Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, Input, LinearProgress, Modal, ModalClose, ModalDialog, Sheet, Stack, Typography } from "@mui/joy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../providers";
 import { SHAPE_OBJECT_T } from "types";
@@ -25,6 +27,48 @@ const Geocatalogue = () => {
     const setCoucheDeDonneeData = useCoucheDeDonneeStore((state) => state.set);
 
     const [coucheDonneIsAllCocher, setcoucheDonneIsAllCocher] = useState<boolean>(false);
+
+    // State for element-specific config modal
+    const [configModalOpen, setConfigModalOpen] = useState(false);
+    const [configElementIndex, setConfigElementIndex] = useState<number | null>(null);
+
+    // Get available fields for current element
+    const getElementFields = (index: number): { label: string; value: string }[] => {
+        const item = data[index];
+        if (!item || !item.metaData) return [];
+        return Object.keys(item.metaData).map(key => ({ label: key, value: key }));
+    };
+
+    // Get selected fields for current element
+    const getSelectedFields = (index: number): string[] => {
+        const item = data[index];
+        return item?.selectedFields || [];
+    };
+
+    // Toggle field selection for current element
+    const toggleFieldSelection = (index: number, field: string) => {
+        const item = data[index];
+        const currentFields = item?.selectedFields || [];
+        const newFields = currentFields.includes(field)
+            ? currentFields.filter(f => f !== field)
+            : [...currentFields, field];
+
+        setGeocatalogueData({
+            data: data.map((d, idx) => {
+                if (idx === index) {
+                    return { ...d, selectedFields: newFields };
+                }
+                return d;
+            })
+        });
+    };
+
+    // Open config modal for specific element
+    const openConfigModal = (index: number, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setConfigElementIndex(index);
+        setConfigModalOpen(true);
+    };
 
     /** Charger les couches depuis l'API */
     const loadData = async () => {
@@ -67,7 +111,8 @@ const Geocatalogue = () => {
     };
 
     // pour modifier les couleurs
-    const handleEdition = async (index: number) => {
+    const handleEdition = async (index: number, e: React.MouseEvent) => {
+        e.stopPropagation();
         try {
             setshowShapeFileColorEditer(true);
             setShapeFileColorEditerDefaultValues({
@@ -158,6 +203,11 @@ const Geocatalogue = () => {
         )
     }
 
+    // Get current element data for modal
+    const currentElement = configElementIndex !== null ? data[configElementIndex] : null;
+    const currentElementFields = configElementIndex !== null ? getElementFields(configElementIndex) : [];
+    const currentSelectedFields = configElementIndex !== null ? getSelectedFields(configElementIndex) : [];
+
     return (
         <Stack
             gap={1}
@@ -196,7 +246,7 @@ const Geocatalogue = () => {
                             })}
                             color={isSelected ? "success" : "neutral"}
                             size="sm"
-                            sx={{ fontSize: 12 }}
+                            sx={{ fontSize: 12, justifyContent: 'space-between' }}
                             startDecorator={<Box
                                 sx={{
                                     width: 10,
@@ -204,17 +254,142 @@ const Geocatalogue = () => {
                                     bgcolor: value.couleur,
                                     border: `2px solid ${value.couleur_c || value.couleur || 'black'}`
                                 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEdition(index);
-                                }}
+                                onClick={(e) => handleEdition(index, e)}
                             />}
+                            endDecorator={
+                                <Box sx={{ display: 'flex', gap: 0.5 }}>
+                                    <Box
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            '&:hover': { bgcolor: 'action.hover' },
+                                            borderRadius: 1
+                                        }}
+                                        onClick={(e) => openConfigModal(index, e)}
+                                    >
+                                        <FontAwesomeIcon icon={faCog} size="xs" />
+                                    </Box>
+                                </Box>
+                            }
                         >
-                            <p style={{ width: '100%', textAlign: "left" }}>{value.nom_zone}</p>
+                            <p style={{ flex: 1, textAlign: "left" }}>{value.nom_zone}</p>
                         </Button>
                     );
                 })}
             </ButtonGroup>
+
+            {/* Element-specific Config Modal */}
+            <Modal
+                open={configModalOpen}
+                onClose={() => {
+                    setConfigModalOpen(false);
+                    setConfigElementIndex(null);
+                }}
+            >
+                <ModalDialog
+                    sx={{
+                        width: '80%',
+                        minWidth: 350,
+                        maxWidth: 600,
+                        maxHeight: '80vh',
+                        overflow: 'auto'
+                    }}
+                >
+                    <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} mb={2}>
+                        <Typography
+                            children={`Configuration: ${currentElement?.nom_zone || ''}`}
+                            level="h4"
+                        />
+                        <ModalClose />
+                    </Stack>
+
+                    {/* Section 1: Colors */}
+                    <Typography level="title-md" sx={{ mb: 1 }}>
+                        Couleurs et bordures
+                    </Typography>
+                    <Stack direction="row" spacing={2} mb={2}>
+                        <FormControl>
+                            <FormLabel children="Couleur de fond" />
+                            <Input
+                                type='color'
+                                value={currentElement?.couleur || '#000000'}
+                                onChange={({ target }) => {
+                                    if (configElementIndex !== null) {
+                                        setGeocatalogueData({
+                                            data: data.map((item, idx) => {
+                                                if (idx === configElementIndex) {
+                                                    return { ...item, couleur: target.value };
+                                                }
+                                                return item;
+                                            })
+                                        });
+                                    }
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel children="Couleur de bordure" />
+                            <Input
+                                type='color'
+                                value={currentElement?.couleur_c || currentElement?.couleur || '#000000'}
+                                onChange={({ target }) => {
+                                    if (configElementIndex !== null) {
+                                        setGeocatalogueData({
+                                            data: data.map((item, idx) => {
+                                                if (idx === configElementIndex) {
+                                                    return { ...item, couleur_c: target.value };
+                                                }
+                                                return item;
+                                            })
+                                        });
+                                    }
+                                }}
+                            />
+                        </FormControl>
+                    </Stack>
+
+                    {/* Section 2: Fields Selection */}
+                    <Typography level="title-md" sx={{ mb: 1 }}>
+                        Champs affichables
+                    </Typography>
+                    {currentElementFields.length > 0 ? (
+                        <Stack spacing={1}>
+                            {currentElementFields.map((field) => (
+                                <Checkbox
+                                    key={field.value}
+                                    checked={currentSelectedFields.includes(field.value)}
+                                    onChange={() => {
+                                        if (configElementIndex !== null) {
+                                            toggleFieldSelection(configElementIndex, field.value);
+                                        }
+                                    }}
+                                    label={field.label}
+                                />
+                            ))}
+                        </Stack>
+                    ) : (
+                        <Typography level="body-sm" sx={{ py: 2, textAlign: 'center' }}>
+                            Aucun champ disponible
+                        </Typography>
+                    )}
+
+                    <Stack direction="row" justifyContent="flex-end" gap={2} mt={3}>
+                        <Button
+                            color="success"
+                            onClick={() => {
+                                setConfigModalOpen(false);
+                                setConfigElementIndex(null);
+                            }}
+                        >
+                            Fermer
+                        </Button>
+                    </Stack>
+                </ModalDialog>
+            </Modal>
         </Stack>
     );
 };

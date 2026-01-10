@@ -3,7 +3,6 @@ import LocaliteCouche from "./LocaliteCouche";
 import Geocatalogue from "./Geocatalogue";
 
 const CoucheDeDonnee = () => {
-
     return (
         <Stack
             gap={1}
@@ -51,3 +50,4 @@ const CoucheDeDonnee = () => {
 };
 
 export default CoucheDeDonnee;
+

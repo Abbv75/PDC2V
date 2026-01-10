@@ -2,13 +2,11 @@ import { Stack } from "@mui/joy"
 import Cartographie from "./components/Cartographie"
 //@ts-ignore
 import "./assets/css/leaflet.css"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { ICON } from "./constant"
+import { useEffect, useRef, useState } from "react"
 import SideBar from "./components/SideBar"
 import { ToastContainer } from "react-toastify"
 import { AppContext } from "providers"
 import AddIconForm from "features/AddIconForm"
-import getAllIcon from "functions/API/icon/getAllIcon"
 import Header from "components/Header"
 import ShapeFileColorEditer from "components/ShapeFileColorEditer"
 import CartoMenu from "components/CartoMenu"
@@ -91,3 +89,5 @@ const App = () => {
 }
 
 export default App
+
+

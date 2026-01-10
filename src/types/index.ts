@@ -99,6 +99,8 @@ export interface COUCHE_DE_DONNEE_T {
     shapefile: string,
     description?: string,
     superficie: string,
+    selectedFields?: string[],
+    metaData?: { [key: string]: any },
     [key: string]: any;
 }
 
@@ -149,7 +151,9 @@ export interface LOCALITE_REGION_T {
     abrege_region: string;
     zone_r: string;
     couleur: string;
+    couleur_c?: string;
     coord_gps: string;
+    selectedFields?: string[];
     departements: {
         id_departement: string | number;
         nom_departement: string;

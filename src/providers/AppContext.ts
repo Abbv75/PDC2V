@@ -1,27 +1,41 @@
-import { createContext } from "react";
-import { COMMUNE_T, GET_ALL_FEUILLE, GET_ALL_REQUETE_CARTE_T, PROVINCE_T, RAPORT_CARTO_T, REGION_T, SHAPE_OBJECT_T, USE_STATE_T, VILLAGE_T } from "../types";
-import { FOND_DE_CARTE } from "../constant";
-import { coucheDeDonneesElementConfig_T } from "types/AppT";
+import { createContext, useRef } from "react";
+import { ShapeFileColorEditerSubmitFunctionT } from "types";
 
-export const AppContext = createContext({} as {
-    mapRef: React.RefObject<HTMLDivElement>,
-    legendeSection: {
-        coucheDeDonnee?: JSX.Element,
-        ficheDeDonnee?: JSX.Element,
-        ficheDynamique?: JSX.Element,
-        rapportCarto?: JSX.Element
-    }, setlegendeSection: USE_STATE_T,
-    addImageIsOpen: boolean, setaddImageIsOpen: USE_STATE_T,
-    showFiligram?: boolean, setshowFiligram?: USE_STATE_T,
-    showShapeFileColorEditer: boolean, setshowShapeFileColorEditer: USE_STATE_T<boolean>,
-    ShapeFileColorEditerSubmitFunction?: ((borderColor?: string, backgroundColor?: string, reset?: boolean) => any),
-    setShapeFileColorEditerSubmitFunction: USE_STATE_T<((borderColor?: string, backgroundColor?: string, reset?: boolean) => any) | undefined>,
-    ShapeFileColorEditerDefaultValues?: {
-        borderColor?: string,
-        backgroundColor?: string
-    },
-    setShapeFileColorEditerDefaultValues: USE_STATE_T<{
-        borderColor?: string,
-        backgroundColor?: string
-    } | undefined>,
+interface AppContextProps {
+    mapRef: React.RefObject<HTMLDivElement>;
+    legendeSection: any;
+    setlegendeSection: React.Dispatch<React.SetStateAction<{}>>;
+    addImageIsOpen: boolean;
+    setaddImageIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    showFiligram: boolean;
+    setshowFiligram: React.Dispatch<React.SetStateAction<boolean>>;
+    showShapeFileColorEditer: boolean;
+    setshowShapeFileColorEditer: React.Dispatch<React.SetStateAction<boolean>>;
+    setShapeFileColorEditerSubmitFunction: (fn: ShapeFileColorEditerSubmitFunctionT) => void;
+    ShapeFileColorEditerSubmitFunction: ShapeFileColorEditerSubmitFunctionT;
+    ShapeFileColorEditerDefaultValues: {
+        borderColor?: string;
+        backgroundColor?: string;
+    } | undefined;
+    setShapeFileColorEditerDefaultValues: (values: {
+        borderColor?: string;
+        backgroundColor?: string;
+    } | undefined) => void;
+}
+
+export const AppContext = createContext<AppContextProps>({
+    mapRef: { current: null },
+    legendeSection: {},
+    setlegendeSection: () => {},
+    addImageIsOpen: false,
+    setaddImageIsOpen: () => {},
+    showFiligram: false,
+    setshowFiligram: () => {},
+    showShapeFileColorEditer: false,
+    setshowShapeFileColorEditer: () => {},
+    setShapeFileColorEditerSubmitFunction: () => {},
+    ShapeFileColorEditerSubmitFunction: () => {},
+    ShapeFileColorEditerDefaultValues: undefined,
+    setShapeFileColorEditerDefaultValues: () => {},
 });
+
