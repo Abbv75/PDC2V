@@ -1,6 +1,6 @@
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Grid, Modal, ModalClose, ModalDialog } from '@mui/joy'
+import { Box, Grid, Modal, ModalClose, ModalDialog } from '@mui/joy'
 import { useContext } from 'react'
 import { AppContext } from 'providers'
 import IconItem from './IconItem'
@@ -18,27 +18,34 @@ export default () => {
         >
             <ModalDialog>
                 <ModalClose/>
-                
-                <Grid container alignItems={'center'} justifyContent={'center'} spacing={1} >
-                    <Grid xs={4} >
-                        <FontAwesomeIcon
-                            icon={faPlusCircle}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setaddImageIsOpen(true);
-                            }}
-                            fontSize={60}
-                        />
-                    </Grid>
 
-                    {iconList.map((value, index) => (
-                        <Grid key={index} xs={4} >
-                            <IconItem
-                                value={value}
+                <Box sx={{
+                    maxHeight: 400,
+                    overflowY: 'auto',
+                    pr: 1
+                }}>
+                    <Grid container alignItems={'center'} justifyContent={'center'} spacing={1} >
+                        <Grid xs={3} >
+                            <FontAwesomeIcon
+                                icon={faPlusCircle}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setaddImageIsOpen(true);
+                                }}
+                                fontSize={40}
+                                style={{ cursor: 'pointer' }}
                             />
                         </Grid>
-                    ))}
-                </Grid>
+
+                        {iconList.map((value, index) => (
+                            <Grid key={index} xs={3} >
+                                <IconItem
+                                    value={value}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
             </ModalDialog>
         </Modal>
     )
