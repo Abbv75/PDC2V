@@ -38,15 +38,19 @@ const ElementContainer = ({
 }) => {
     const [processedPoints, setProcessedPoints] = useState<ProcessedPoint[]>([]);
     const workerRef = useRef<Worker | null>(null);
+    const mountedRef = useRef(true);
+    const loadPointRef = useRef<(() => void) | null>(null);
 
-    const cleanWorker = () => {
+    const cleanWorker = useCallback(() => {
         if (workerRef.current) {
             workerRef.current.terminate();
             workerRef.current = null;
         }
-    }
+    }, []);
 
-    const loadPoint = async () => {
+    const loadPoint = useCallback(() => {
+        if (!mountedRef.current) return;
+
         try {
             // toast.info(`Compilation des ${nomListe}`);
 
@@ -59,6 +63,7 @@ const ElementContainer = ({
             worker.postMessage({ data, fieldKeyListe });
 
             worker.onmessage = (event) => {
+                if (!mountedRef.current) return;
                 const newPointsChunk: ProcessedPoint[] = event.data;
                 console.log('La liste des points recu par le worker:', newPointsChunk);
                 setProcessedPoints(prevPoints => [...prevPoints, ...newPointsChunk]);
@@ -71,22 +76,30 @@ const ElementContainer = ({
         } catch (error) {
             toast.error('Une erreur est survenue lors de la compilation');
         }
-    }
+    }, [data, fieldKeyListe, nomListe, cleanWorker]);
+
+    // Store loadPoint in ref to avoid recreating it on every render
+    useEffect(() => {
+        loadPointRef.current = loadPoint;
+    }, [loadPoint]);
+
+    useEffect(() => {
+        mountedRef.current = true;
+        return () => {
+            mountedRef.current = false;
+            cleanWorker();
+        };
+    }, [cleanWorker]);
 
     useEffect(() => {
         if (show) {
             setProcessedPoints([]);
-            loadPoint();
-
-            return () => {
-                cleanWorker()
-            };
+            loadPointRef.current?.();
         } else {
-            // Si show est false, vider les points et terminer le worker
             setProcessedPoints([]);
             cleanWorker();
         }
-    }, [data, show, icon]);
+    }, [show, icon, cleanWorker]);
 
     const renderPopupContent = useCallback((popUpData: PopUpDataItem[]) => (
         <Popup>

@@ -21,20 +21,29 @@ export default ({ value, index }: {
     const {
         allRequeteCartoSelected,
         toogleElementInSelectedListe,
-        data: storeData
     } = useRequeteCartoStore();
     const setRequeteCartoData = useRequeteCartoStore(state => state.set);
 
     const [selectedIcon, setselectedIcon] = useState(iconList[0]);
 
+    // Update selected icon when prop value.icon changes
+    useEffect(() => {
+        if (value.icon) {
+            setselectedIcon(value.icon);
+        }
+    }, [value.icon]);
+
     const updateDataIcon = (icon: any) => {
-        // value contains the actual data from props, not from empty local state
-        const updatedItem = { ...value, icon };
         setselectedIcon(icon);
         
-        // Update the store with the new icon
-        const updatedData = storeData.map((item, idx) => idx === index ? updatedItem : item);
-        setRequeteCartoData({ data: updatedData });
+        // Update the store's allRequeteCartoSelected with the new icon
+        // This preserves the selected items without triggering unnecessary data reloads
+        const updatedSelected = allRequeteCartoSelected.map(item => 
+            item.data.Nom_View === value.data.Nom_View 
+                ? { ...item, icon } 
+                : item
+        );
+        setRequeteCartoData({ allRequeteCartoSelected: updatedSelected });
     }
 
     return (
