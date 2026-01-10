@@ -30,7 +30,7 @@ export default () => {
             });
 
         } catch (error) {
-            toast.error("Une erreur est survenue lors de la recuperation des elements");
+            // toast.error("Une erreur est survenue lors de la recuperation des elements");
         }
     }
 
