@@ -53,3 +53,18 @@ code {
   width: auto !important;
   height: auto;
 }
+
+.leaflet-popup {
+  /* position: absolute;
+  bottom: auto !important;
+  left: 0 !important;
+  transform: none !important; */
+}
+
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+.popup-resize-container {
+  position: relative;
+}

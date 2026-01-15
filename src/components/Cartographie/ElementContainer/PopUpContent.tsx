@@ -73,7 +73,7 @@ const PopUpContent = ({ popUpData, selectedFields }: PopUpContentProps) => {
             <Box 
                 className="popup-resize-container"
                 ref={containerRef}
-                style={{ position: 'relative' }}
+                // style={{ position: 'relative' }}
             >
                 <TableContainer
                     sx={{
