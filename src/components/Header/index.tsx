@@ -15,7 +15,7 @@ const Header = () => {
                 alignItems: 'center'
             }} >
                 <Stack direction={'row'} alignItems={'center'} gap={1} >
-                    {[IMAGE.logo, IMAGE.bankMondiale, IMAGE.armorieLogo].map(value => (
+                    {[IMAGE.armorieLogo, IMAGE.bankMondiale, IMAGE.logo,].map(value => (
                         <CardMedia
                             src={value}
                             sx={{ height: '50px', width: '50px', objectFit: 'contain' }}

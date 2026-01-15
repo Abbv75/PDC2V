@@ -33,7 +33,7 @@ const PopUpContent = ({ popUpData, selectedFields }: PopUpContentProps) => {
 
     return (
         <Popup>
-            <TableContainer sx={{ maxHeight: 200, width: 280 }}>
+            <TableContainer sx={{ maxHeight: 250, width: 400 }}>
                 <Table size="small" stickyHeader>
                     <TableHead>
                         <TableRow>

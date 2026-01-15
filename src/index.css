@@ -26,7 +26,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+.leaflet-popup-content-wrapper{
+  width: 440px ;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
