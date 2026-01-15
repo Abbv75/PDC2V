@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { GET_REQUETE_CARTE_T, REQUETE_DATA_T } from '../../types';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
+import aggregerParRegion from 'helper/aggregerParRegion';
+import aggregerParDepartement from 'helper/aggregerParDepartement';
 
 const FicheDeDonneeElement = () => {    
     const { allRequeteCartoSelected, requetesData, requetesDataCache, set } = useRequeteCartoStore();
@@ -117,7 +119,7 @@ const FicheDeDonneeElement = () => {
                                     selectedFields: element.selectedFields
                                 });
                                 // Cache the fetched data
-                                newCacheEntries[nomView] = res;
+                                newCacheEntries[nomView] = res;                                
                             }
                         } catch (error) {
                             toast.error(`Une erreur est survenue lors du chargement des ${element.data.intitule}`);
