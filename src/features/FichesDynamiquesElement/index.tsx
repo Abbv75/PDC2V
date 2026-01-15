@@ -1,10 +1,16 @@
 
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { green } from '@mui/material/colors';
 import ElementContainer from 'components/Cartographie/ElementContainer';
 import useFicheDynamiquesStore from 'stores/ficheDynamiques/useFicheDynamiquesStore';
+import useMapStore from 'stores/map/useMapStore';
+import aggregerParRegion from 'helper/aggregerParRegion';
+import aggregerParDepartement from 'helper/aggregerParDepartement';
 
 const FichesDynamiquesElement = () => {
+    const { zoomLevel } = useMapStore();
+    
     const {
         ficheDynamiquesData,
         ficheTitleSelected,
@@ -13,6 +19,9 @@ const FichesDynamiquesElement = () => {
     } = useFicheDynamiquesStore();
     const setficheDynamiquesData = useFicheDynamiquesStore((state) => state.set);
 
+    // Track previous ficheDynamiquesData to detect changes
+    const prevFicheDynamiquesDataRef = useRef<string>('');
+
     // Create a map for quick lookup of settings by title
     const settingsByTitle = useMemo(() => {
         const map = new Map();
@@ -20,7 +29,8 @@ const FichesDynamiquesElement = () => {
             map.set(item.title, {
                 icon: item.icon,
                 iconSize: item.iconSize,
-                selectedFields: item.selectedFields
+                selectedFields: item.selectedFields,
+                markerTextFont: item.markerTextFont
             });
         });
         return map;
@@ -80,7 +90,8 @@ const FichesDynamiquesElement = () => {
                     data: dataToPush,
                     icon: settings.icon,
                     iconSize: settings.iconSize,
-                    selectedFields: settings.selectedFields
+                    selectedFields: settings.selectedFields,
+                    markerTextFont: settings.markerTextFont
                 });
             });
 
@@ -94,7 +105,20 @@ const FichesDynamiquesElement = () => {
 
     useEffect(() => {
         loadListe();
-    }, [loadListe]);
+    }, [loadListe, zoomLevel]);
+
+    // Update elementListe when ficheDynamiquesData changes (for font config updates)
+    useEffect(() => {
+        const currentDataString = JSON.stringify(ficheDynamiquesData);
+        
+        if (prevFicheDynamiquesDataRef.current !== currentDataString && prevFicheDynamiquesDataRef.current !== '') {
+            // Data has changed, reload
+            loadListe();
+        }
+        
+        // Update the ref
+        prevFicheDynamiquesDataRef.current = currentDataString;
+    }, [ficheDynamiquesData, loadListe]);
 
     if (!getAllFicheData) {
         return <React.Fragment />;
@@ -102,7 +126,79 @@ const FichesDynamiquesElement = () => {
 
     return (
         <>
-            {elementListe.map((value, index) => (
+            {zoomLevel < 9 && elementListe.map((value, index) => (
+                <ElementContainer
+                    key={index}
+                    data={aggregerParRegion(value.data as any, 'Département')
+                        .filter(({ count }) => count > 0)
+                        .map(
+                            element => ({
+                                ...element,
+                                latitude: element.centroid.lat,
+                                longitude: element.centroid.lng
+                            })
+                        )}
+                    fieldKeyListe={[
+                        {
+                            originaleName: 'name',
+                            renamed: 'Région'
+                        },
+                        {
+                            originaleName: 'count',
+                            renamed: `Nombre d'éléments`
+                        }
+                    ]}
+                    markerText={{
+                        field: `Nombre d'éléments`,
+                        color: value.markerTextFont?.bgColor || green[700],
+                        fontSize: value.markerTextFont?.fontSize || 'normal',
+                        fontWeight: value.markerTextFont?.fontWeight || 'normal',
+                        fontFamily: value.markerTextFont?.fontFamily || 'Arial',
+                        fontColor: value.markerTextFont?.fontColor || '#000000'
+                    }}
+                    show
+                    icon={value?.icon}
+                    iconSize={value?.iconSize}
+                />
+            ))}
+
+            {zoomLevel >= 9 && zoomLevel < 12 && elementListe.map((value, index) => (
+                <ElementContainer
+                    key={index}
+                    data={aggregerParDepartement(value.data as any, 'Département')
+                        .filter(({ count }) => count > 0)
+                        .map(
+                            element => ({
+                                ...element,
+                                latitude: element.centroid.lat,
+                                longitude: element.centroid.lng
+                            })
+                        )}
+                    fieldKeyListe={[
+                        {
+                            originaleName: 'name',
+                            renamed: 'Département'
+                        },
+                        {
+                            originaleName: 'count',
+                            renamed: `Nombre d'éléments`
+                        }
+                    ]}
+                    markerText={{
+                        field: `Nombre d'éléments`,
+                        color: value.markerTextFont?.bgColor || green[700],
+                        fontSize: value.markerTextFont?.fontSize || 'normal',
+                        fontWeight: value.markerTextFont?.fontWeight || 'normal',
+                        fontFamily: value.markerTextFont?.fontFamily || 'Arial',
+                        fontColor: value.markerTextFont?.fontColor || '#000000'
+                    }}
+                    show
+                    icon={value?.icon}
+                    iconSize={value?.iconSize}
+                />
+            ))}
+
+            {zoomLevel >= 12 && elementListe.map((value, index) => (
                 <ElementContainer
                     key={index}
                     data={value.data.map(element => ({ ...element, latitude: element?.LT, longitude: element?.LG }))}

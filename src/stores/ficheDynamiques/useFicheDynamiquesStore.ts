@@ -7,7 +7,22 @@ interface REQUETE_DATA_T {
     data: GET_REQUETE_CARTE_T[],
     icon?: any,
     iconSize?: number,
-    selectedFields?: string[]
+    selectedFields?: string[],
+    markerTextFont?: {
+        fontSize: number | 'normal';
+        fontWeight: 'normal' | 700;
+        fontFamily: string;
+        fontColor?: string;
+        bgColor?: string;
+    }
+}
+
+interface MarkerTextFontConfig {
+    fontSize: number | 'normal';
+    fontWeight: 'normal' | 700;
+    fontFamily: string;
+    fontColor?: string;
+    bgColor?: string;
 }
 
 interface Props_T {
@@ -20,7 +35,8 @@ interface Props_T {
         title: string,
         icon: any,
         iconSize?: number,
-        selectedFields?: string[]
+        selectedFields?: string[],
+        markerTextFont?: MarkerTextFontConfig
     }[],
     ficheTitleSelected: string[],
     ficheTitle: string[],

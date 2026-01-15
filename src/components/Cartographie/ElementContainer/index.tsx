@@ -22,7 +22,11 @@ interface ElementContainerProps {
     selectedFields?: string[],
     markerText?: {
         field: string,
-        color?: string
+        color?: string,
+        fontSize?: number | 'normal',
+        fontWeight?: 'normal' | 700,
+        fontFamily?: string,
+        fontColor?: string
     }
 }
 
@@ -122,7 +126,11 @@ const ElementContainer = ({
                             ? getCustomeTextIcon({
                                 text: value.popUpData.find(item => item.label === markerText.field)?.value,
                                 bgcolor: markerText.color || green[600],
-                                padding: '5px 10px'
+                                padding: '5px 10px',
+                                fontSize: markerText.fontSize || 'normal',
+                                fontWeight: markerText.fontWeight || 'normal',
+                                fontFamily: markerText.fontFamily || 'Arial',
+                                fontColor: markerText.fontColor || 'black'
                             })
                             : getCustomeIcon(icon || ICON.location1, iconSize)
                     }
