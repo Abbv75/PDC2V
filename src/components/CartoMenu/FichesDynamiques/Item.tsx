@@ -34,8 +34,8 @@ interface ItemProps {
 
 export default ({ value }: ItemProps) => {
     const { iconList } = useIconMapStore();
-    const { 
-        ficheTitleSelected, 
+    const {
+        ficheTitleSelected,
         toogleElementInFicheTitleSelected,
         ficheDynamiquesData,
         getAllFicheData,
@@ -46,14 +46,21 @@ export default ({ value }: ItemProps) => {
     const [configModalOpen, setConfigModalOpen] = useState(false);
 
     const title = value.feuille.Libelle_Feuille;
-    
+
     // Get settings from store
     const storeItem = ficheDynamiquesData.find((item: any) => item.title === title);
-    
+
     // Priority: storeItem settings > defaults
     const currentIcon = storeItem?.icon || iconList[0];
     const currentSize = storeItem?.iconSize || 40;
     const currentSelectedFields = storeItem?.selectedFields || [];
+    const currentMarkerTextFont = storeItem?.markerTextFont || {
+        fontSize: 'normal',
+        fontWeight: 'normal' as const,
+        fontFamily: 'Arial',
+        fontColor: '#000000',
+        bgColor: 'green'
+    };
 
     // Get data list for config
     const currentDataList = value.data || [];
@@ -63,13 +70,19 @@ export default ({ value }: ItemProps) => {
         setficheDynamiquesData({
             ficheDynamiquesData: ficheDynamiquesData.some((item: any) => item.title === title)
                 ? ficheDynamiquesData.map((item: any) => item.title === title ? { ...item, icon } : item)
-                : [...ficheDynamiquesData, { title, icon, iconSize: 40, selectedFields: [] }]
+                : [...ficheDynamiquesData, {
+                    title,
+                    icon,
+                    iconSize: 40,
+                    selectedFields: [],
+                    markerTextFont: currentMarkerTextFont
+                }]
         });
     };
 
     const updateIconSize = (size: number) => {
         setficheDynamiquesData({
-            ficheDynamiquesData: ficheDynamiquesData.map((item: any) => 
+            ficheDynamiquesData: ficheDynamiquesData.map((item: any) =>
                 item.title === title ? { ...item, iconSize: size } : item
             )
         });
@@ -77,8 +90,25 @@ export default ({ value }: ItemProps) => {
 
     const updateSelectedFields = (fields: string[]) => {
         setficheDynamiquesData({
-            ficheDynamiquesData: ficheDynamiquesData.map((item: any) => 
+            ficheDynamiquesData: ficheDynamiquesData.map((item: any) =>
                 item.title === title ? { ...item, selectedFields: fields } : item
+            )
+        });
+    };
+
+    const updateMarkerTextFont = (fontConfig: {
+        fontSize: number | 'normal';
+        fontWeight: 'normal' | 700;
+        fontFamily: string;
+        fontColor?: string;
+        bgColor?: string;
+    }) => {
+        setficheDynamiquesData({
+            ficheDynamiquesData: ficheDynamiquesData.map((item: any) =>
+                item.title === title ? {
+                    ...item,
+                    markerTextFont: fontConfig
+                } : item
             )
         });
     };
@@ -117,7 +147,7 @@ export default ({ value }: ItemProps) => {
                     >
                         <FontAwesomeIcon icon={faCog} style={{ fontSize: 10 }} />
                     </Avatar>
-                    
+
                 </Stack>
             </Stack>
 
@@ -131,6 +161,8 @@ export default ({ value }: ItemProps) => {
                 onIconChange={updateIcon}
                 onIconSizeChange={updateIconSize}
                 onSelectedFieldsChange={updateSelectedFields}
+                onMarkerTextFontChange={updateMarkerTextFont}
+                markerTextFont={currentMarkerTextFont}
                 data={currentDataList}
                 fieldKeyListe="*"
             />

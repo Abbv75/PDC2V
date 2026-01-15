@@ -25,6 +25,7 @@ import {
     TextField
 } from "@mui/material";
 import { CardMedia } from "@mui/material";
+import { green } from "@mui/material/colors";
 import { useState, useEffect, useMemo, useRef } from "react";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 
@@ -120,7 +121,7 @@ export default ({
             setFontWeight(markerTextFont.fontWeight);
             setFontFamily(markerTextFont.fontFamily);
             setFontColor(markerTextFont.fontColor || '#000000');
-            setBgColor(markerTextFont.bgColor || 'green');
+            setBgColor(markerTextFont.bgColor || green[600]);
             fontInitializedRef.current = true;
         }
         

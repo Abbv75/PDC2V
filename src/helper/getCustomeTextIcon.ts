@@ -1,3 +1,4 @@
+import { green } from '@mui/material/colors';
 import L from 'leaflet';
 
 export const getCustomeTextIcon = (
@@ -12,7 +13,7 @@ export const getCustomeTextIcon = (
         fontColor?: string
     } = {
             text: 'text',
-            bgcolor: 'green',
+            bgcolor: green[600],
             fontWeight: 'normal',
             fontStyle: 'normal',
             fontSize: 'normal',
