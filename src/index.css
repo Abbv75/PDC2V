@@ -26,10 +26,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.leaflet-popup-content-wrapper{
-  width: 440px ;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -42,4 +38,18 @@ code {
 
 .leaflet-control-attribution {
   display: none !important;
+}
+
+/* Popup resize styles */
+.leaflet-popup-content-wrapper {
+  overflow: visible;
+  width: auto !important;
+  height: auto;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 8px;
+  width: auto !important;
+  height: auto;
 }
