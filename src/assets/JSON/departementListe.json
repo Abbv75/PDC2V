@@ -1,0 +1,510 @@
+{
+    "country": "Côte d'Ivoire",
+    "level": "department",
+    "data": [
+        {
+            "code": "CI-DEP-01",
+            "name": "Abengourou",
+            "codeRegion": "CI-REG-16",
+            "centroid": {
+                "lat": 6.73,
+                "lng": -3.49
+            }
+        },
+        {
+            "code": "CI-DEP-02",
+            "name": "Abidjan",
+            "codeRegion": "CI-REG-11",
+            "centroid": {
+                "lat": 5.35,
+                "lng": -4.02
+            }
+        },
+        {
+            "code": "CI-DEP-03",
+            "name": "Aboisso",
+            "codeRegion": "CI-REG-26",
+            "centroid": {
+                "lat": 5.47,
+                "lng": -3.21
+            }
+        },
+        {
+            "code": "CI-DEP-04",
+            "name": "Adiaké",
+            "codeRegion": "CI-REG-26",
+            "centroid": {
+                "lat": 5.29,
+                "lng": -3.32
+            }
+        },
+        {
+            "code": "CI-DEP-05",
+            "name": "Adzopé",
+            "codeRegion": "CI-REG-01",
+            "centroid": {
+                "lat": 6.11,
+                "lng": -3.86
+            }
+        },
+        {
+            "code": "CI-DEP-06",
+            "name": "Agboville",
+            "codeRegion": "CI-REG-01",
+            "centroid": {
+                "lat": 5.93,
+                "lng": -4.22
+            }
+        },
+        {
+            "code": "CI-DEP-07",
+            "name": "Agnibilékrou",
+            "codeRegion": "CI-REG-16",
+            "centroid": {
+                "lat": 7.15,
+                "lng": -3.20
+            }
+        },
+        {
+            "code": "CI-DEP-08",
+            "name": "Akoupé",
+            "codeRegion": "CI-REG-01",
+            "centroid": {
+                "lat": 6.37,
+                "lng": -3.87
+            }
+        },
+        {
+            "code": "CI-DEP-09",
+            "name": "Alépé",
+            "codeRegion": "CI-REG-20",
+            "centroid": {
+                "lat": 5.63,
+                "lng": -3.66
+            }
+        },
+        {
+            "code": "CI-DEP-10",
+            "name": "Bangolo",
+            "codeRegion": "CI-REG-28",
+            "centroid": {
+                "lat": 7.02,
+                "lng": -7.49
+            }
+        },
+        {
+            "code": "CI-DEP-11",
+            "name": "Béoumi",
+            "codeRegion": "CI-REG-07",
+            "centroid": {
+                "lat": 7.67,
+                "lng": -5.58
+            }
+        },
+        {
+            "code": "CI-DEP-12",
+            "name": "Biankouma",
+            "codeRegion": "CI-REG-28",
+            "centroid": {
+                "lat": 7.74,
+                "lng": -7.61
+            }
+        },
+        {
+            "code": "CI-DEP-13",
+            "name": "Bingerville",
+            "codeRegion": "CI-REG-11",
+            "centroid": {
+                "lat": 5.36,
+                "lng": -3.90
+            }
+        },
+        {
+            "code": "CI-DEP-14",
+            "name": "Bloléquin",
+            "codeRegion": "CI-REG-12",
+            "centroid": {
+                "lat": 6.57,
+                "lng": -7.36
+            }
+        },
+        {
+            "code": "CI-DEP-15",
+            "name": "Bocanda",
+            "codeRegion": "CI-REG-23",
+            "centroid": {
+                "lat": 7.05,
+                "lng": -4.51
+            }
+        },
+        {
+            "code": "CI-DEP-16",
+            "name": "Bondoukou",
+            "codeRegion": "CI-REG-10",
+            "centroid": {
+                "lat": 8.04,
+                "lng": -2.80
+            }
+        },
+        {
+            "code": "CI-DEP-17",
+            "name": "Bongouanou",
+            "codeRegion": "CI-REG-21",
+            "centroid": {
+                "lat": 6.65,
+                "lng": -4.21
+            }
+        },
+        {
+            "code": "CI-DEP-18",
+            "name": "Bouaflé",
+            "codeRegion": "CI-REG-19",
+            "centroid": {
+                "lat": 6.99,
+                "lng": -5.74
+            }
+        },
+        {
+            "code": "CI-DEP-19",
+            "name": "Bouaké",
+            "codeRegion": "CI-REG-07",
+            "centroid": {
+                "lat": 7.69,
+                "lng": -5.03
+            }
+        },
+        {
+            "code": "CI-DEP-20",
+            "name": "Bouna",
+            "codeRegion": "CI-REG-04",
+            "centroid": {
+                "lat": 9.27,
+                "lng": -2.99
+            }
+        },
+        {
+            "code": "CI-DEP-21",
+            "name": "Boundiali",
+            "codeRegion": "CI-REG-24",
+            "centroid": {
+                "lat": 9.52,
+                "lng": -6.49
+            }
+        },
+        {
+            "code": "CI-DEP-22",
+            "name": "Dabakala",
+            "codeRegion": "CI-REG-13",
+            "centroid": {
+                "lat": 8.37,
+                "lng": -4.43
+            }
+        },
+        {
+            "code": "CI-DEP-23",
+            "name": "Dabou",
+            "codeRegion": "CI-REG-11",
+            "centroid": {
+                "lat": 5.32,
+                "lng": -4.38
+            }
+        },
+        {
+            "code": "CI-DEP-24",
+            "name": "Daloa",
+            "codeRegion": "CI-REG-14",
+            "centroid": {
+                "lat": 6.88,
+                "lng": -6.45
+            }
+        },
+        {
+            "code": "CI-DEP-25",
+            "name": "Daoukro",
+            "codeRegion": "CI-REG-02",
+            "centroid": {
+                "lat": 7.06,
+                "lng": -3.97
+            }
+        },
+        {
+            "code": "CI-DEP-26",
+            "name": "Dimbokro",
+            "codeRegion": "CI-REG-23",
+            "centroid": {
+                "lat": 6.65,
+                "lng": -4.71
+            }
+        },
+        {
+            "code": "CI-DEP-27",
+            "name": "Divo",
+            "codeRegion": "CI-REG-18",
+            "centroid": {
+                "lat": 5.84,
+                "lng": -5.36
+            }
+        },
+        {
+            "code": "CI-DEP-28",
+            "name": "Duekoué",
+            "codeRegion": "CI-REG-12",
+            "centroid": {
+                "lat": 6.74,
+                "lng": -7.35
+            }
+        },
+        {
+            "code": "CI-DEP-29",
+            "name": "Ferkessédougou",
+            "codeRegion": "CI-REG-27",
+            "centroid": {
+                "lat": 9.60,
+                "lng": -5.19
+            }
+        },
+        {
+            "code": "CI-DEP-30",
+            "name": "Gagnoa",
+            "codeRegion": "CI-REG-09",
+            "centroid": {
+                "lat": 6.13,
+                "lng": -5.93
+            }
+        },
+        {
+            "code": "CI-DEP-31",
+            "name": "Grand-Bassam",
+            "codeRegion": "CI-REG-20",
+            "centroid": {
+                "lat": 5.21,
+                "lng": -3.75
+            }
+        },
+        {
+            "code": "CI-DEP-32",
+            "name": "Grand-Lahou",
+            "codeRegion": "CI-REG-11",
+            "centroid": {
+                "lat": 5.14,
+                "lng": -5.00
+            }
+        },
+        {
+            "code": "CI-DEP-33",
+            "name": "Guiglo",
+            "codeRegion": "CI-REG-12",
+            "centroid": {
+                "lat": 6.54,
+                "lng": -7.49
+            }
+        },
+        {
+            "code": "CI-DEP-34",
+            "name": "Issia",
+            "codeRegion": "CI-REG-14",
+            "centroid": {
+                "lat": 6.49,
+                "lng": -6.58
+            }
+        },
+        {
+            "code": "CI-DEP-35",
+            "name": "Kani",
+            "codeRegion": "CI-REG-29",
+            "centroid": {
+                "lat": 8.47,
+                "lng": -6.61
+            }
+        },
+        {
+            "code": "CI-DEP-36",
+            "name": "Katiola",
+            "codeRegion": "CI-REG-13",
+            "centroid": {
+                "lat": 8.14,
+                "lng": -5.10
+            }
+        },
+        {
+            "code": "CI-DEP-37",
+            "name": "Kong",
+            "codeRegion": "CI-REG-27",
+            "centroid": {
+                "lat": 9.15,
+                "lng": -4.61
+            }
+        },
+        {
+            "code": "CI-DEP-38",
+            "name": "Korhogo",
+            "codeRegion": "CI-REG-24",
+            "centroid": {
+                "lat": 9.46,
+                "lng": -5.64
+            }
+        },
+        {
+            "code": "CI-DEP-39",
+            "name": "Lakota",
+            "codeRegion": "CI-REG-18",
+            "centroid": {
+                "lat": 5.85,
+                "lng": -5.68
+            }
+        },
+        {
+            "code": "CI-DEP-40",
+            "name": "M'Bahiakro",
+            "codeRegion": "CI-REG-23",
+            "centroid": {
+                "lat": 7.46,
+                "lng": -4.34
+            }
+        },
+        {
+            "code": "CI-DEP-41",
+            "name": "Man",
+            "codeRegion": "CI-REG-28",
+            "centroid": {
+                "lat": 7.41,
+                "lng": -7.55
+            }
+        },
+        {
+            "code": "CI-DEP-42",
+            "name": "Mankono",
+            "codeRegion": "CI-REG-29",
+            "centroid": {
+                "lat": 8.45,
+                "lng": -6.87
+            }
+        },
+        {
+            "code": "CI-DEP-43",
+            "name": "Minignan",
+            "codeRegion": "CI-REG-17",
+            "centroid": {
+                "lat": 9.82,
+                "lng": -7.62
+            }
+        },
+        {
+            "code": "CI-DEP-44",
+            "name": "Odienné",
+            "codeRegion": "CI-REG-17",
+            "centroid": {
+                "lat": 9.51,
+                "lng": -7.57
+            }
+        },
+        {
+            "code": "CI-DEP-45",
+            "name": "Oumé",
+            "codeRegion": "CI-REG-09",
+            "centroid": {
+                "lat": 6.38,
+                "lng": -5.42
+            }
+        },
+        {
+            "code": "CI-DEP-46",
+            "name": "San-Pédro",
+            "codeRegion": "CI-REG-25",
+            "centroid": {
+                "lat": 4.75,
+                "lng": -6.64
+            }
+        },
+        {
+            "code": "CI-DEP-47",
+            "name": "Sassandra",
+            "codeRegion": "CI-REG-25",
+            "centroid": {
+                "lat": 5.13,
+                "lng": -6.08
+            }
+        },
+        {
+            "code": "CI-DEP-48",
+            "name": "Séguéla",
+            "codeRegion": "CI-REG-29",
+            "centroid": {
+                "lat": 7.96,
+                "lng": -6.67
+            }
+        },
+        {
+            "code": "CI-DEP-49",
+            "name": "Sinfra",
+            "codeRegion": "CI-REG-19",
+            "centroid": {
+                "lat": 6.62,
+                "lng": -5.91
+            }
+        },
+        {
+            "code": "CI-DEP-50",
+            "name": "Soubré",
+            "codeRegion": "CI-REG-22",
+            "centroid": {
+                "lat": 5.78,
+                "lng": -6.60
+            }
+        },
+        {
+            "code": "CI-DEP-51",
+            "name": "Tabou",
+            "codeRegion": "CI-REG-25",
+            "centroid": {
+                "lat": 4.42,
+                "lng": -7.35
+            }
+        },
+        {
+            "code": "CI-DEP-52",
+            "name": "Tanda",
+            "codeRegion": "CI-REG-10",
+            "centroid": {
+                "lat": 7.80,
+                "lng": -3.17
+            }
+        },
+        {
+            "code": "CI-DEP-53",
+            "name": "Tiapoum",
+            "codeRegion": "CI-REG-26",
+            "centroid": {
+                "lat": 5.34,
+                "lng": -2.98
+            }
+        },
+        {
+            "code": "CI-DEP-54",
+            "name": "Touba",
+            "codeRegion": "CI-REG-03",
+            "centroid": {
+                "lat": 8.28,
+                "lng": -7.69
+            }
+        },
+        {
+            "code": "CI-DEP-55",
+            "name": "Yamoussoukro",
+            "codeRegion": "CI-REG-02",
+            "centroid": {
+                "lat": 6.83,
+                "lng": -5.29
+            }
+        },
+        {
+            "code": "CI-DEP-56",
+            "name": "Zuénoula",
+            "codeRegion": "CI-REG-19",
+            "centroid": {
+                "lat": 7.42,
+                "lng": -6.05
+            }
+        }
+    ]
+}

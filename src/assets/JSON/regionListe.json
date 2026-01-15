@@ -1,0 +1,238 @@
+{
+    "country": "Côte d'Ivoire",
+    "level": "region",
+    "data": [
+        {
+            "code": "CI-REG-01",
+            "name": "Agnéby-Tiassa",
+            "centroid": {
+                "lat": 5.790,
+                "lng": -4.600
+            }
+        },
+        {
+            "code": "CI-REG-02",
+            "name": "Bélier",
+            "centroid": {
+                "lat": 7.100,
+                "lng": -5.000
+            }
+        },
+        {
+            "code": "CI-REG-03",
+            "name": "Béré",
+            "centroid": {
+                "lat": 8.400,
+                "lng": -6.600
+            }
+        },
+        {
+            "code": "CI-REG-04",
+            "name": "Bounkani",
+            "centroid": {
+                "lat": 9.100,
+                "lng": -2.900
+            }
+        },
+        {
+            "code": "CI-REG-05",
+            "name": "Cavally",
+            "centroid": {
+                "lat": 6.850,
+                "lng": -7.600
+            }
+        },
+        {
+            "code": "CI-REG-06",
+            "name": "Folôn",
+            "centroid": {
+                "lat": 9.500,
+                "lng": -7.600
+            }
+        },
+        {
+            "code": "CI-REG-07",
+            "name": "Gbêkê",
+            "centroid": {
+                "lat": 7.700,
+                "lng": -5.000
+            }
+        },
+        {
+            "code": "CI-REG-08",
+            "name": "Gbôklé",
+            "centroid": {
+                "lat": 5.900,
+                "lng": -6.900
+            }
+        },
+        {
+            "code": "CI-REG-09",
+            "name": "Gôh",
+            "centroid": {
+                "lat": 6.250,
+                "lng": -5.950
+            }
+        },
+        {
+            "code": "CI-REG-10",
+            "name": "Gontougo",
+            "centroid": {
+                "lat": 8.850,
+                "lng": -3.500
+            }
+        },
+        {
+            "code": "CI-REG-11",
+            "name": "Grands Ponts",
+            "centroid": {
+                "lat": 5.700,
+                "lng": -4.700
+            }
+        },
+        {
+            "code": "CI-REG-12",
+            "name": "Guémon",
+            "centroid": {
+                "lat": 6.900,
+                "lng": -7.300
+            }
+        },
+        {
+            "code": "CI-REG-13",
+            "name": "Hambol",
+            "centroid": {
+                "lat": 8.000,
+                "lng": -5.200
+            }
+        },
+        {
+            "code": "CI-REG-14",
+            "name": "Haut-Sassandra",
+            "centroid": {
+                "lat": 6.850,
+                "lng": -6.450
+            }
+        },
+        {
+            "code": "CI-REG-15",
+            "name": "Iffou",
+            "centroid": {
+                "lat": 7.900,
+                "lng": -3.900
+            }
+        },
+        {
+            "code": "CI-REG-16",
+            "name": "Indénié-Djuablin",
+            "centroid": {
+                "lat": 6.800,
+                "lng": -3.450
+            }
+        },
+        {
+            "code": "CI-REG-17",
+            "name": "Kabadougou",
+            "centroid": {
+                "lat": 9.300,
+                "lng": -7.100
+            }
+        },
+        {
+            "code": "CI-REG-18",
+            "name": "Loh-Djiboua",
+            "centroid": {
+                "lat": 5.950,
+                "lng": -5.650
+            }
+        },
+        {
+            "code": "CI-REG-19",
+            "name": "Marahoué",
+            "centroid": {
+                "lat": 7.050,
+                "lng": -5.950
+            }
+        },
+        {
+            "code": "CI-REG-20",
+            "name": "Mé",
+            "centroid": {
+                "lat": 5.900,
+                "lng": -4.250
+            }
+        },
+        {
+            "code": "CI-REG-21",
+            "name": "Moronou",
+            "centroid": {
+                "lat": 6.900,
+                "lng": -3.950
+            }
+        },
+        {
+            "code": "CI-REG-22",
+            "name": "Nawa",
+            "centroid": {
+                "lat": 5.850,
+                "lng": -6.250
+            }
+        },
+        {
+            "code": "CI-REG-23",
+            "name": "N'Zi",
+            "centroid": {
+                "lat": 7.200,
+                "lng": -4.350
+            }
+        },
+        {
+            "code": "CI-REG-24",
+            "name": "Poro",
+            "centroid": {
+                "lat": 9.500,
+                "lng": -5.650
+            }
+        },
+        {
+            "code": "CI-REG-25",
+            "name": "San-Pédro",
+            "centroid": {
+                "lat": 4.900,
+                "lng": -6.600
+            }
+        },
+        {
+            "code": "CI-REG-26",
+            "name": "Sud-Comoé",
+            "centroid": {
+                "lat": 5.300,
+                "lng": -3.300
+            }
+        },
+        {
+            "code": "CI-REG-27",
+            "name": "Tchologo",
+            "centroid": {
+                "lat": 9.700,
+                "lng": -5.350
+            }
+        },
+        {
+            "code": "CI-REG-28",
+            "name": "Tonkpi",
+            "centroid": {
+                "lat": 7.300,
+                "lng": -7.450
+            }
+        },
+        {
+            "code": "CI-REG-29",
+            "name": "Worodougou",
+            "centroid": {
+                "lat": 8.350,
+                "lng": -6.450
+            }
+        }
+    ]
+}
