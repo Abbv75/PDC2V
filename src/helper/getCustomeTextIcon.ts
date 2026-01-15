@@ -7,14 +7,16 @@ export const getCustomeTextIcon = (
         fontWeight?: 'normal' | 700,
         fontStyle?: 'normal' | 'italic',
         fontSize?: number | 'normal',
+        fontFamily?: string,
         padding?: '5px 10px' | string,
-        fontColor?: 'black'
+        fontColor?: string
     } = {
             text: 'text',
             bgcolor: 'green',
             fontWeight: 'normal',
             fontStyle: 'normal',
             fontSize: 'normal',
+            fontFamily: 'Arial',
             padding: '5px 10px',
             fontColor: 'black'
         }
@@ -33,6 +35,7 @@ export const getCustomeTextIcon = (
                 font-weight : ${data.fontWeight};
                 font-style : ${data.fontStyle};
                 font-size : ${data.fontSize == "normal" ? "normal" : data.fontSize + 'px'};
+                font-family : ${data.fontFamily || 'Arial'};
                 color : ${data.fontColor};
             "
         >

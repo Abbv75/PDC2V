@@ -17,10 +17,15 @@ import {
     Box,
     Checkbox,
     FormControlLabel,
-    FormGroup
+    FormGroup,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    TextField
 } from "@mui/material";
 import { CardMedia } from "@mui/material";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import useIconMapStore from "stores/iconMap/useIconMapStore";
 
 interface ElementConfigProps {
@@ -33,9 +38,36 @@ interface ElementConfigProps {
     onIconChange: (icon: string) => void;
     onIconSizeChange: (size: number) => void;
     onSelectedFieldsChange: (fields: string[]) => void;
+    onMarkerTextFontChange?: (fontConfig: {
+        fontSize: number | 'normal';
+        fontWeight: 'normal' | 700;
+        fontFamily: string;
+        fontColor?: string;
+        bgColor?: string;
+    }) => void;
     data: { [key: string]: any }[];
     fieldKeyListe: { originaleName: string, renamed?: string }[] | '*';
+    markerTextFont?: {
+        fontSize: number | 'normal';
+        fontWeight: 'normal' | 700;
+        fontFamily: string;
+        fontColor?: string;
+        bgColor?: string;
+    };
 }
+
+const FONT_FAMILIES = [
+    'Arial',
+    'Roboto',
+    'Helvetica',
+    'Georgia',
+    'Times New Roman',
+    'Verdana',
+    'Courier New',
+    'Comic Sans MS',
+    'Impact',
+    'Tahoma'
+];
 
 export default ({
     open,
@@ -47,13 +79,25 @@ export default ({
     onIconChange,
     onIconSizeChange,
     onSelectedFieldsChange,
+    onMarkerTextFontChange,
     data,
-    fieldKeyListe
+    fieldKeyListe,
+    markerTextFont
 }: ElementConfigProps) => {
     const { set: setIconMapData } = useIconMapStore();
     const [size, setSize] = useState(iconSize);
     const [localSelectedFields, setLocalSelectedFields] = useState<Set<string>>(new Set());
     const [selectAll, setSelectAll] = useState(true);
+    
+    // Font configuration state
+    const [fontSize, setFontSize] = useState<number | 'normal'>((markerTextFont?.fontSize as number) || 'normal');
+    const [fontWeight, setFontWeight] = useState<'normal' | 700>(markerTextFont?.fontWeight || 'normal');
+    const [fontFamily, setFontFamily] = useState(markerTextFont?.fontFamily || 'Arial');
+    const [fontColor, setFontColor] = useState(markerTextFont?.fontColor || '#000000');
+    const [bgColor, setBgColor] = useState(markerTextFont?.bgColor || 'green');
+    
+    // Track if font settings have been initialized from props
+    const fontInitializedRef = useRef(false);
 
     // Initialize selected fields from props
     useEffect(() => {
@@ -68,6 +112,23 @@ export default ({
             setLocalSelectedFields(new Set(allKeys));
         }
     }, [data, selectedFields]);
+
+    // Initialize font settings from props only once when dialog opens
+    useEffect(() => {
+        if (open && !fontInitializedRef.current && markerTextFont) {
+            setFontSize(markerTextFont.fontSize);
+            setFontWeight(markerTextFont.fontWeight);
+            setFontFamily(markerTextFont.fontFamily);
+            setFontColor(markerTextFont.fontColor || '#000000');
+            setBgColor(markerTextFont.bgColor || 'green');
+            fontInitializedRef.current = true;
+        }
+        
+        // Reset initialization flag when dialog closes
+        if (!open) {
+            fontInitializedRef.current = false;
+        }
+    }, [open, markerTextFont]);
 
     const handleSizeChange = (e: Event, newValue: number | number[]) => {
         setSize(newValue as number);
@@ -98,6 +159,78 @@ export default ({
         } else {
             setLocalSelectedFields(new Set());
             onSelectedFieldsChange([]);
+        }
+    };
+
+    const handleFontSizeChange = (e: Event, newValue: number | number[]) => {
+        setFontSize(newValue as number);
+    };
+
+    const handleFontSizeChangeCommitted = (e: Event, newValue: number | number[]) => {
+        if (onMarkerTextFontChange) {
+            onMarkerTextFontChange({
+                fontSize: newValue as number,
+                fontWeight,
+                fontFamily,
+                fontColor,
+                bgColor
+            });
+        }
+    };
+
+    const handleFontWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newWeight = (event.target.checked ? 700 : 'normal') as 'normal' | 700;
+        setFontWeight(newWeight);
+        if (onMarkerTextFontChange) {
+            onMarkerTextFontChange({
+                fontSize,
+                fontWeight: newWeight,
+                fontFamily,
+                fontColor,
+                bgColor
+            });
+        }
+    };
+
+    const handleFontFamilyChange = (event: any) => {
+        const newFamily = event.target.value as string;
+        setFontFamily(newFamily);
+        if (onMarkerTextFontChange) {
+            onMarkerTextFontChange({
+                fontSize,
+                fontWeight,
+                fontFamily: newFamily,
+                fontColor,
+                bgColor
+            });
+        }
+    };
+
+    const handleFontColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newColor = event.target.value;
+        setFontColor(newColor);
+        if (onMarkerTextFontChange) {
+            onMarkerTextFontChange({
+                fontSize,
+                fontWeight,
+                fontFamily,
+                fontColor: newColor,
+                bgColor
+            });
+        }
+    };
+
+    const handleBgColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newColor = event.target.value;
+        setBgColor(newColor);
+        if (onMarkerTextFontChange) {
+            onMarkerTextFontChange({
+                fontSize,
+                fontWeight,
+                fontFamily,
+                fontColor,
+                bgColor: newColor
+            });
         }
     };
 
@@ -204,6 +337,150 @@ export default ({
                             />
                         </Box>
                     </Box>
+
+                    {/* Font Configuration for Numbers */}
+                    {onMarkerTextFontChange && (
+                        <Box>
+                            <Typography variant="subtitle2" gutterBottom>
+                                Police des nombres affichés
+                            </Typography>
+                            
+                            <Stack spacing={2}>
+                                {/* Font Family */}
+                                <FormControl size="small">
+                                    <InputLabel>Police</InputLabel>
+                                    <Select
+                                        value={fontFamily}
+                                        label="Police"
+                                        onChange={handleFontFamilyChange}
+                                    >
+                                        {FONT_FAMILIES.map((font) => (
+                                            <MenuItem key={font} value={font} sx={{ fontFamily: font }}>
+                                                {font}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                {/* Font Size */}
+                                <Box>
+                                    <Typography variant="caption" gutterBottom>
+                                        Taille de la police: {fontSize === 'normal' ? 'Normal' : fontSize + 'px'}
+                                    </Typography>
+                                    <Slider
+                                        value={fontSize === 'normal' ? 14 : fontSize as number}
+                                        min={8}
+                                        max={32}
+                                        step={1}
+                                        onChange={handleFontSizeChange}
+                                        onChangeCommitted={(e, newValue) => handleFontSizeChangeCommitted(e as any, newValue)}
+                                        valueLabelDisplay="auto"
+                                        valueLabelFormat={(value) => value === 14 ? 'Normal' : value + 'px'}
+                                    />
+                                </Box>
+
+                                {/* Font Weight */}
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={fontWeight === 700}
+                                                onChange={handleFontWeightChange}
+                                            />
+                                        }
+                                        label="Gras"
+                                    />
+                                </FormGroup>
+
+                                {/* Font Color */}
+                                <Box>
+                                    <Typography variant="caption" gutterBottom>
+                                        Couleur de la police: {fontColor}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+                                        <input
+                                            type="color"
+                                            value={fontColor}
+                                            onChange={handleFontColorChange}
+                                            title="Couleur de la police"
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                cursor: 'pointer',
+                                                border: '1px solid #ccc',
+                                                borderRadius: 4
+                                            }}
+                                        />
+                                        <TextField
+                                            size="small"
+                                            value={fontColor}
+                                            onChange={handleFontColorChange}
+                                            sx={{ width: 100 }}
+                                            placeholder="#000000"
+                                        />
+                                    </Box>
+                                </Box>
+
+                                {/* Background Color */}
+                                <Box>
+                                    <Typography variant="caption" gutterBottom>
+                                        Couleur de fond: {bgColor}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+                                        <input
+                                            type="color"
+                                            value={bgColor}
+                                            onChange={handleBgColorChange}
+                                            title="Couleur de fond"
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                cursor: 'pointer',
+                                                border: '1px solid #ccc',
+                                                borderRadius: 4
+                                            }}
+                                        />
+                                        <TextField
+                                            size="small"
+                                            value={bgColor}
+                                            onChange={handleBgColorChange}
+                                            sx={{ width: 100 }}
+                                            placeholder="green"
+                                        />
+                                    </Box>
+                                </Box>
+
+                                {/* Font Preview */}
+                                <Box
+                                    sx={{
+                                        p: 2,
+                                        border: '1px solid #e0e0e0',
+                                        borderRadius: 1,
+                                        bgcolor: '#f9f9f9'
+                                    }}
+                                >
+                                    <Typography variant="caption" color="text.secondary">
+                                        Aperçu:
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            fontFamily: fontFamily,
+                                            fontSize: fontSize === 'normal' ? 14 : fontSize + 'px',
+                                            fontWeight: fontWeight,
+                                            color: fontColor,
+                                            backgroundColor: bgColor,
+                                            padding: '5px 10px',
+                                            borderRadius: '50px',
+                                            mt: 1,
+                                            display: 'inline-block'
+                                        }}
+                                    >
+                                        123 - Exemple
+                                    </Box>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    )}
 
                     {/* Field Selection */}
                     <Box>

@@ -201,12 +201,21 @@ export type ShapeFileColorEditerSubmitFunctionT =
     | undefined
     | ((borderColor?: string, backgroundColor?: string, reset?: boolean) => any)
 
+export interface MARKER_TEXT_FONT_T {
+    fontSize: number | 'normal';
+    fontWeight: 'normal' | 700;
+    fontFamily: string;
+    fontColor?: string;
+    bgColor?: string;
+}
+
 export interface REQUETE_DATA_T {
     title?: string,
     data: GET_REQUETE_CARTE_T[],
     icon?: any,
     iconSize?: number,
-    selectedFields?: string[]
+    selectedFields?: string[],
+    markerTextFont?: MARKER_TEXT_FONT_T
 }
 
 export interface coucheDeDonneesElementConfig_T {

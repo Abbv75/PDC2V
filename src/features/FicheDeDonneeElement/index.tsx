@@ -52,6 +52,10 @@ const FicheDeDonneeElement = () => {
                         updated.selectedFields = matchingItem.selectedFields;
                         needsUpdate = true;
                     }
+                    if (JSON.stringify(matchingItem.markerTextFont) !== JSON.stringify(reqData.markerTextFont)) {
+                        updated.markerTextFont = matchingItem.markerTextFont;
+                        needsUpdate = true;
+                    }
 
                     return needsUpdate ? updated : reqData;
                 }
@@ -63,7 +67,8 @@ const FicheDeDonneeElement = () => {
                 const orig = requetesData[idx];
                 return item.icon !== orig?.icon ||
                     item.iconSize !== orig?.iconSize ||
-                    JSON.stringify(item.selectedFields) !== JSON.stringify(orig?.selectedFields);
+                    JSON.stringify(item.selectedFields) !== JSON.stringify(orig?.selectedFields) ||
+                    JSON.stringify(item.markerTextFont) !== JSON.stringify(orig?.markerTextFont);
             });
             if (propsChanged) {
                 setrequetesData({ requetesData: updatedData });
@@ -95,7 +100,8 @@ const FicheDeDonneeElement = () => {
                         title: element.data.intitule,
                         icon: element.icon,
                         iconSize: element.iconSize,
-                        selectedFields: element.selectedFields
+                        selectedFields: element.selectedFields,
+                        markerTextFont: element.markerTextFont
                     });
                 } else {
                     // Check if data is already in requetesData (from a previous load before being unselected)
@@ -107,7 +113,8 @@ const FicheDeDonneeElement = () => {
                             title: element.data.intitule,
                             icon: element.icon,
                             iconSize: element.iconSize,
-                            selectedFields: element.selectedFields
+                            selectedFields: element.selectedFields,
+                            markerTextFont: element.markerTextFont
                         });
                         newCacheEntries[nomView] = existingEntry.data;
                     } else {
@@ -120,7 +127,8 @@ const FicheDeDonneeElement = () => {
                                     title: element.data.intitule,
                                     icon: element.icon,
                                     iconSize: element.iconSize,
-                                    selectedFields: element.selectedFields
+                                    selectedFields: element.selectedFields,
+                                    markerTextFont: element.markerTextFont
                                 });
                                 // Cache the fetched data
                                 newCacheEntries[nomView] = res;
@@ -159,6 +167,10 @@ const FicheDeDonneeElement = () => {
         return <React.Fragment />;
     }
 
+    // Get font configuration from the first selected item
+    const firstItem = allRequeteCartoSelected[0];
+    const markerTextFont = firstItem?.markerTextFont;
+
     return (
         <>
             {zoomLevel < 9 && requetesData.map((value, index) => (
@@ -182,7 +194,14 @@ const FicheDeDonneeElement = () => {
                             renamed: `Nombre d'éléments`
                         }
                     ]}
-                    markerText={{ field: `Nombre d'éléments`, color: green[700] }}
+                    markerText={{ 
+                        field: `Nombre d'éléments`, 
+                        color: markerTextFont?.bgColor || green[700],
+                        fontSize: markerTextFont?.fontSize || 'normal',
+                        fontWeight: markerTextFont?.fontWeight || 'normal',
+                        fontFamily: markerTextFont?.fontFamily || 'Arial',
+                        fontColor: markerTextFont?.fontColor || '#000000'
+                    }}
                     show
                 />
             ))}
@@ -208,7 +227,14 @@ const FicheDeDonneeElement = () => {
                             renamed: `Nombre d'éléments`
                         }
                     ]}
-                    markerText={{ field: `Nombre d'éléments`, color: green[700] }}
+                    markerText={{ 
+                        field: `Nombre d'éléments`, 
+                        color: markerTextFont?.bgColor || green[700],
+                        fontSize: markerTextFont?.fontSize || 'normal',
+                        fontWeight: markerTextFont?.fontWeight || 'normal',
+                        fontFamily: markerTextFont?.fontFamily || 'Arial',
+                        fontColor: markerTextFont?.fontColor || '#000000'
+                    }}
                     show
                 />
             ))}
