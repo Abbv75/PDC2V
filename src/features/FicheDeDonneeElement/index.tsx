@@ -4,11 +4,17 @@ import { toast } from 'react-toastify';
 import { GET_REQUETE_CARTE_T, REQUETE_DATA_T } from '../../types';
 import getRequeteCarte from 'functions/API/requeteCartographique/getRequeteCarte';
 import useRequeteCartoStore from 'stores/requeteCarto/useRequeteCartoStore';
+import aggregerParRegion from 'helper/aggregerParRegion';
+import aggregerParDepartement from 'helper/aggregerParDepartement';
+import useMapStore from 'stores/map/useMapStore';
+import { green } from '@mui/material/colors';
 
-const FicheDeDonneeElement = () => {    
+const FicheDeDonneeElement = () => {
+    const { zoomLevel } = useMapStore();
+
     const { allRequeteCartoSelected, requetesData, requetesDataCache, set } = useRequeteCartoStore();
     const setrequetesData = useRequeteCartoStore(state => state.set);
-    
+
     // Track previous selected items to avoid unnecessary reloads
     const prevSelectedRef = useRef<string[]>([]);
 
@@ -18,7 +24,7 @@ const FicheDeDonneeElement = () => {
         const prevIds = prevSelectedRef.current;
 
         // Check if the actual items changed (not just icons, sizes, or selectedFields)
-        const itemsChanged = 
+        const itemsChanged =
             currentIds.length !== prevIds.length ||
             currentIds.some(id => !prevIds.includes(id));
 
@@ -33,7 +39,7 @@ const FicheDeDonneeElement = () => {
                 if (matchingItem) {
                     let needsUpdate = false;
                     let updated = { ...reqData };
-                    
+
                     if (matchingItem.icon !== reqData.icon) {
                         updated.icon = matchingItem.icon;
                         needsUpdate = true;
@@ -46,18 +52,23 @@ const FicheDeDonneeElement = () => {
                         updated.selectedFields = matchingItem.selectedFields;
                         needsUpdate = true;
                     }
-                    
+                    if (JSON.stringify(matchingItem.markerTextFont) !== JSON.stringify(reqData.markerTextFont)) {
+                        updated.markerTextFont = matchingItem.markerTextFont;
+                        needsUpdate = true;
+                    }
+
                     return needsUpdate ? updated : reqData;
                 }
                 return reqData;
             });
-            
+
             // Only update if props actually changed
             const propsChanged = updatedData.some((item, idx) => {
                 const orig = requetesData[idx];
-                return item.icon !== orig?.icon || 
-                       item.iconSize !== orig?.iconSize ||
-                       JSON.stringify(item.selectedFields) !== JSON.stringify(orig?.selectedFields);
+                return item.icon !== orig?.icon ||
+                    item.iconSize !== orig?.iconSize ||
+                    JSON.stringify(item.selectedFields) !== JSON.stringify(orig?.selectedFields) ||
+                    JSON.stringify(item.markerTextFont) !== JSON.stringify(orig?.markerTextFont);
             });
             if (propsChanged) {
                 setrequetesData({ requetesData: updatedData });
@@ -75,13 +86,13 @@ const FicheDeDonneeElement = () => {
             // Build results - use cache when available, fetch when not
             const results: REQUETE_DATA_T[] = [];
             const newCacheEntries: { [Nom_View: string]: GET_REQUETE_CARTE_T[] } = {};
-            
+
             for (const element of allRequeteCartoSelected) {
                 const nomView = element.data.Nom_View;
-                
+
                 // Check if we have cached data for this Nom_View
                 let cachedData = requetesDataCache[nomView];
-                
+
                 if (cachedData) {
                     // Use cached data
                     results.push({
@@ -89,7 +100,8 @@ const FicheDeDonneeElement = () => {
                         title: element.data.intitule,
                         icon: element.icon,
                         iconSize: element.iconSize,
-                        selectedFields: element.selectedFields
+                        selectedFields: element.selectedFields,
+                        markerTextFont: element.markerTextFont
                     });
                 } else {
                     // Check if data is already in requetesData (from a previous load before being unselected)
@@ -101,7 +113,8 @@ const FicheDeDonneeElement = () => {
                             title: element.data.intitule,
                             icon: element.icon,
                             iconSize: element.iconSize,
-                            selectedFields: element.selectedFields
+                            selectedFields: element.selectedFields,
+                            markerTextFont: element.markerTextFont
                         });
                         newCacheEntries[nomView] = existingEntry.data;
                     } else {
@@ -114,7 +127,8 @@ const FicheDeDonneeElement = () => {
                                     title: element.data.intitule,
                                     icon: element.icon,
                                     iconSize: element.iconSize,
-                                    selectedFields: element.selectedFields
+                                    selectedFields: element.selectedFields,
+                                    markerTextFont: element.markerTextFont
                                 });
                                 // Cache the fetched data
                                 newCacheEntries[nomView] = res;
@@ -153,9 +167,79 @@ const FicheDeDonneeElement = () => {
         return <React.Fragment />;
     }
 
+    // Get font configuration from the first selected item
+    const firstItem = allRequeteCartoSelected[0];
+    const markerTextFont = firstItem?.markerTextFont;
+
     return (
         <>
-            {requetesData.map((value, index) => (
+            {zoomLevel < 9 && requetesData.map((value, index) => (
+                <ElementContainer
+                    data={aggregerParRegion(value.data as any, 'Département')
+                        .filter(({ count }) => count > 0)
+                        .map(
+                            element => ({
+                                ...element,
+                                latitude: element.centroid.lat,
+                                longitude: element.centroid.lng
+                            })
+                        )}
+                    fieldKeyListe={[
+                        {
+                            originaleName: 'name',
+                            renamed: 'Region'
+                        },
+                        {
+                            originaleName: 'count',
+                            renamed: `Nombre d'éléments`
+                        }
+                    ]}
+                    markerText={{ 
+                        field: `Nombre d'éléments`, 
+                        color: markerTextFont?.bgColor || green[700],
+                        fontSize: markerTextFont?.fontSize || 'normal',
+                        fontWeight: markerTextFont?.fontWeight || 'normal',
+                        fontFamily: markerTextFont?.fontFamily || 'Arial',
+                        fontColor: markerTextFont?.fontColor || '#000000'
+                    }}
+                    show
+                />
+            ))}
+
+            {zoomLevel >= 9 && zoomLevel < 12 && requetesData.map((value, index) => (
+                <ElementContainer
+                    data={aggregerParDepartement(value.data as any, 'Département')
+                        .filter(({ count }) => count > 0)
+                        .map(
+                            element => ({
+                                ...element,
+                                latitude: element.centroid.lat,
+                                longitude: element.centroid.lng
+                            })
+                        )}
+                    fieldKeyListe={[
+                        {
+                            originaleName: 'name',
+                            renamed: 'Département'
+                        },
+                        {
+                            originaleName: 'count',
+                            renamed: `Nombre d'éléments`
+                        }
+                    ]}
+                    markerText={{ 
+                        field: `Nombre d'éléments`, 
+                        color: markerTextFont?.bgColor || green[700],
+                        fontSize: markerTextFont?.fontSize || 'normal',
+                        fontWeight: markerTextFont?.fontWeight || 'normal',
+                        fontFamily: markerTextFont?.fontFamily || 'Arial',
+                        fontColor: markerTextFont?.fontColor || '#000000'
+                    }}
+                    show
+                />
+            ))}
+
+            {zoomLevel >= 12 && requetesData.map((value, index) => (
                 <ElementContainer
                     data={value.data.map(element => ({ ...element, latitude: element?.LT, longitude: element?.LG }))}
                     fieldKeyListe={'*'}

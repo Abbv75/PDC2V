@@ -12,6 +12,13 @@ interface FicheDeDonneeItemProps {
         icon?: any;
         iconSize?: number;
         selectedFields?: string[];
+        markerTextFont?: {
+            fontSize: number | 'normal';
+            fontWeight: 'normal' | 700;
+            fontFamily: string;
+            fontColor?: string;
+            bgColor?: string;
+        };
         data: GET_ALL_REQUETE_CARTE_T;
     };
     dataList?: GET_REQUETE_CARTE_T[];
@@ -40,6 +47,13 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     const currentIcon = storeItem?.icon || value.icon || iconList[0];
     const currentSize = storeItem?.iconSize || value.iconSize || 40;
     const currentSelectedFields = storeItem?.selectedFields || value.selectedFields || [];
+    const currentMarkerTextFont = storeItem?.markerTextFont || value.markerTextFont || {
+        fontSize: 'normal',
+        fontWeight: 'normal' as const,
+        fontFamily: 'Arial',
+        fontColor: '#000000',
+        bgColor: 'green'
+    };
 
     // Find the data list for this item from requetesData
     const requeteDataItem = requetesData.find(
@@ -47,7 +61,18 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
     );
     const currentDataList = requeteDataItem?.data || dataList || [];
 
-    const saveSettingsToStoreData = (updates: { icon?: any; iconSize?: number; selectedFields?: string[] }) => {
+    const saveSettingsToStoreData = (updates: { 
+        icon?: any; 
+        iconSize?: number; 
+        selectedFields?: string[];
+        markerTextFont?: {
+            fontSize: number | 'normal';
+            fontWeight: 'normal' | 700;
+            fontFamily: string;
+            fontColor?: string;
+            bgColor?: string;
+        };
+    }) => {
         // Update the store's data array to preserve settings when deselected
         const updatedData = storeData.map(item =>
             item.data.Nom_View === value.data.Nom_View
@@ -96,12 +121,32 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
         setRequeteCartoData({ allRequeteCartoSelected: updatedSelected });
     };
 
+    const updateMarkerTextFont = (fontConfig: {
+        fontSize: number | 'normal';
+        fontWeight: 'normal' | 700;
+        fontFamily: string;
+        fontColor?: string;
+        bgColor?: string;
+    }) => {
+        // Update store's data array to preserve font settings
+        saveSettingsToStoreData({ markerTextFont: fontConfig });
+        
+        // Also update allRequeteCartoSelected if item is currently selected
+        const updatedSelected = allRequeteCartoSelected.map(item =>
+            item.data.Nom_View === value.data.Nom_View
+                ? { ...item, markerTextFont: fontConfig }
+                : item
+        );
+        setRequeteCartoData({ allRequeteCartoSelected: updatedSelected });
+    };
+
     // Create item value with preserved settings for toggle
     const getItemValue = () => ({
         data: value.data,
         icon: currentIcon,
         iconSize: currentSize,
-        selectedFields: currentSelectedFields
+        selectedFields: currentSelectedFields,
+        markerTextFont: currentMarkerTextFont
     });
 
     return (
@@ -150,6 +195,8 @@ export default ({ value, dataList, index }: FicheDeDonneeItemProps) => {
                 onIconChange={updateDataIcon}
                 onIconSizeChange={updateDataIconSize}
                 onSelectedFieldsChange={updateSelectedFields}
+                onMarkerTextFontChange={updateMarkerTextFont}
+                markerTextFont={currentMarkerTextFont}
                 data={currentDataList}
                 fieldKeyListe="*"
             />
